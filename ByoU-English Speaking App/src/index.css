@@ -44,3 +44,19 @@ input,
 button {
   font-family: inherit;
 }
+
+[data-screen].hidden,
+#tabnav.hidden,
+.hidden {
+  display: none !important;
+}
+
+.bg-success-500\/8 {
+  background-color: rgb(22 163 74 / 0.08);
+}
+.bg-amber-500\/8 {
+  background-color: rgb(217 119 6 / 0.08);
+}
+.bg-accent-500\/8 {
+  background-color: rgb(249 115 22 / 0.08);
+}

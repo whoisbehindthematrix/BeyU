@@ -1,0 +1,27 @@
+---
+description: ByoU project rules — always apply
+alwaysApply: true
+---
+
+# What this project is
+ByoU is a mobile-first AI English speaking coach for Indian job seekers who can read/write English but freeze when speaking. It runs in a mobile browser on mid-range Android phones. The core mechanic is speaking aloud; typing is only a fallback.
+
+# Stack (do not substitute)
+- Frontend: plain HTML + CSS + vanilla JS ES modules. NO React, NO framework, NO bundler unless I explicitly ask.
+- Backend: Supabase only (Postgres, Auth, Storage, Edge Functions in Deno/TypeScript). No Express, no Node server.
+- Supabase JS client loaded from CDN: https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm
+- STT: Web Speech API (default) → Sarvam Saarika via Edge Function (upgrade). LLM: Claude Haiku via Edge Function.
+- Schema changes go in supabase/migrations/*.sql, never only in the dashboard.
+
+# Hard rules
+- NEVER put API keys, service_role key, or secrets in any file except .env (gitignored) or Supabase secrets.
+- Every user-data table has user_id and RLS policies.
+- Feedback shown to users must never contain: wrong, mistake, grammar, error, incorrect, poor, bad, fail.
+- Keep the existing marigold-on-indigo design; do not restyle.
+- Preserve existing element IDs and class names unless the task is to rename them.
+
+# How to work with me
+- Before editing more than 2 files, list the plan as bullets and wait for my "go".
+- Make the smallest change that works. No refactors I didn't ask for.
+- After changes, tell me exactly how to verify (what to click, what to expect in console/Supabase).
+- If something needs a dashboard action (Supabase, Google Console), say so explicitly instead of guessing.
