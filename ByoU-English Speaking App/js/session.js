@@ -837,6 +837,7 @@ export const store = {
     lastSpeechAt: 0,
     silenceTimeout: false,
     sttFailed: false,
+    hearingVoice: false,
   },
   flash: { idx: 0, flipped: false, learned: 0, done: false, exitDir: null, cards: null, drill: "idle", retry: [], dealtOn: null, shownIds: [], loadError: null, nudge: false, spokenCount: 0 },
 };
@@ -905,6 +906,7 @@ export function resetForNext() {
   store.practice.elapsedSec = 0;
   store.practice.silenceTimeout = false;
   store.practice.sttFailed = false;
+  store.practice.hearingVoice = false;
   store.practice.lastSpeechAt = 0;
   stopTimer();
 }
