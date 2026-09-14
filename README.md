@@ -70,11 +70,12 @@ git clone https://github.com/whoisbehindthematrix/BeyU.git
 cd "BeyU/ByoU-English Speaking App"
 
 # 2. Add your Supabase keys
-#    Copy js/config.js and drop in your own Project URL + anon key
-#    (the anon key is safe in the browser — RLS does the protecting)
+   Copy js/config.js and drop in your own Project URL + anon key
+   (the anon key is safe in the browser — RLS does the protecting)
 
 # 3. Serve the static files (any static server works)
-npx serve .          # or the VS Code Live Server extension
+npx serve .          
+or the VS Code Live Server extension
 
 For the backend, point the Supabase CLI at your own project and apply the migrations in supabase/migrations/, then set SARVAM_API_KEY (and your LLM key) as Edge Function secrets. The full step-by-step build is documented in ByoU_Build_Handbook.md.
 
