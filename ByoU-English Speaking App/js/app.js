@@ -1,210 +1,180 @@
 import {
   store,
-  hooks,
-  APP_CONFIG,
-  AUTH_COPY,
   ONBOARDING_TOUR,
-  FLASHCARDS,
   COURSES,
-  FREE_TIER_MAX_DAY,
-  saveAuth,
-  clearAuth,
-  persistProgress,
+  isDayLocked,
+  mondayOfWeek,
+  saveDisplayName,
+  markTourSeen,
   practiceQuestions,
   startPractice,
-  stopTimer,
-  resetForNext,
   handlePracticeComplete,
   practiceExit,
   handleFlashcardComplete,
+  resetForNext,
+  submitAnswer,
+  handleLogout,
+  handleCourseSelect,
+  handleSelectPlan,
+  advanceDayForTest,
+  resetFlashIfNewDay,
+  refreshHomeData,
+  loadSavedFeedback,
+  wireSession,
 } from "./session.js";
 import {
   speechController,
   startListening,
   stopListening,
+  stopRecording,
+  stopTimer,
   handleTypedSubmit,
+  wireVoice,
 } from "./voice.js";
 import {
   $,
   route,
   renderPractice,
+  patchLiveTranscript,
+  patchRecordingTimer,
   spawnConfetti,
   renderTour,
   renderCourseChooser,
-  renderFlashcard,
   renderCoursePlan,
-  renderPlans,
   renderRewards,
   renderProfile,
+  renderFlashcard,
+  flashDeck,
+  loadFlashDeck,
+  startFlashListen,
+  resetFlashDrill,
+  dismissFlashNudge,
   renderSettings,
-  renderDeleteSheet,
-  updateSignupSubmit,
-  setCheck,
+  renderHome,
+  showToast,
+  showDailyDigest,
+  renderFeedbackLog,
   openSheet,
   closeSheet,
   handleSwipe,
   setOfflineBanner,
+  showScreen,
+  showTabNav,
 } from "./ui.js";
+import { signInWithGoogle, signInWithEmail, onAuthChange, loadBootState } from "./auth.js";
+import { submitFeedback } from "./feedback.js";
+import { track } from "./track.js";
 
-hooks.route = route;
-hooks.renderPractice = renderPractice;
-hooks.spawnPracticeConfetti = () => spawnConfetti($("practice-confetti"));
+wireSession({ stopTimer, route, renderPractice, spawnConfetti, showToast, showDailyDigest, $ });
+wireVoice({ renderPractice, submitAnswer, patchLiveTranscript, patchRecordingTimer });
 
-function handleSignUp() {
-  const name = $("signup-name").value.trim();
-  const email = $("signup-email").value.trim();
-  const pw = $("signup-pw").value;
-  const pwValid = pw.length >= 8;
-  const canSubmit = name && email && pwValid && store.consentVoice && store.consentTerms;
-  if (!canSubmit) {
-    $("signup-helper").textContent = (!store.consentVoice || !store.consentTerms) ? "Please check both boxes to continue." : "Please fill in all fields.";
-    $("signup-helper").classList.remove("hidden");
-    return;
-  }
-  $("signup-helper").classList.add("hidden");
-  store.pendingUser = { id: crypto.randomUUID(), email, name, goal: "", createdAt: Date.now(), courseId: null, plan: "free" };
-  store.pendingEmail = email;
-  store.authScreen = "otp";
-  $("otp-subtitle").textContent = AUTH_COPY.otp.subtitle(email);
-  $("otp-form-view").classList.remove("hidden");
-  $("otp-celebrate").classList.add("hidden");
+const PULSE_RATING = { nervous: 2, okay: 3, good: 4, great: 5 };
+
+function openFeedbackHistory(from) {
+  store.feedbackLogFrom = from || store.tab || "home";
+  store.overlay = "feedbackLog";
   route();
+  renderFeedbackLog([], { loading: true });
+  loadSavedFeedback().then(({ data, error }) => {
+    if (error) showToast("Couldn't load feedback.");
+    renderFeedbackLog(data ?? []);
+  }).catch((err) => {
+    console.error(err);
+    showToast("Couldn't load feedback.");
+    renderFeedbackLog([]);
+  });
 }
 
-function handleGoogleSignUp() {
-  const user = { id: crypto.randomUUID(), email: "you@gmail.com", name: "You", goal: "", createdAt: Date.now(), courseId: null, plan: "free" };
-  store.auth = { user, rememberMe: true };
-  saveAuth(store.auth);
-  store.tourStep = 0;
+function startFlashcards() {
+  resetFlashIfNewDay();
+  store.flash.idx = 0;
+  store.flash.flipped = false;
+  store.flash.learned = 0;
+  store.flash.done = false;
+  store.flash.nudge = false;
+  store.flash.cards = null;
+  store.flash.drill = "idle";
+  store.flash.loadError = null;
+  store.overlay = "flashcard";
+  resetFlashDrill();
   route();
+  loadFlashDeck().then((cards) => {
+    if (store.overlay !== "flashcard") return;
+    if (store.flash.loadError) {
+      renderFlashcard();
+      return;
+    }
+    if (!cards.length) store.flash.done = true;
+    renderFlashcard();
+  });
 }
 
-function handleOtpVerified() {
-  if (store.pendingUser) {
-    store.auth = { user: store.pendingUser, rememberMe: true };
-    saveAuth(store.auth);
-    store.pendingUser = null;
-    store.tourStep = 0;
-    route();
-  }
+function sendFeedback(payload) {
+  submitFeedback(payload).then(({ error }) => { if (error) console.error(error); });
 }
 
-function handleLogin(email, remember) {
-  const user = {
-    id: crypto.randomUUID(), email, name: email.split("@")[0].charAt(0).toUpperCase() + email.split("@")[0].slice(1),
-    goal: "", createdAt: Date.now(), courseId: null, plan: "free",
-  };
-  store.auth = { user, rememberMe: remember };
-  if (remember) saveAuth(store.auth);
-  store.tourStep = 0;
-  route();
+function handleHelpful(rating) {
+  sendFeedback({
+    sessionId: store.practice.sessionId,
+    kind: "post_session",
+    rating: Number(rating),
+    comment: null,
+  });
+  store.feedback.helpful = "thanks";
+  if (store.practice.showMood) renderPractice();
+  else if (store.tab === "rewards") renderRewards();
+  else if (store.tab === "home") renderHome();
+  setTimeout(() => {
+    store.feedback.helpful = "hidden";
+    if (store.practice.showMood) practiceExit();
+    else if (store.tab === "rewards") renderRewards();
+    else if (store.tab === "home") renderHome();
+  }, 1000);
 }
 
-function handleLogout() {
-  clearAuth();
-  store.auth = { user: null, rememberMe: false };
-  store.authScreen = "welcome";
-  store.tab = "home";
-  store.overlay = null;
-  route();
+function handleReportOpen() {
+  store.feedback.reportOpen = true;
 }
 
-function handleCourseSelect(courseId) {
-  if (!store.auth.user) return;
-  store.auth = { ...store.auth, user: { ...store.auth.user, courseId } };
-  saveAuth(store.auth);
-  store.progress = { ...store.progress, courseDay: 1, completedDays: [], dayScores: {} };
-  store.overlay = null;
-  route();
-}
-
-function handleSelectPlan(plan) {
-  if (!store.auth.user) return;
-  store.auth = { ...store.auth, user: { ...store.auth.user, plan } };
-  saveAuth(store.auth);
-  store.overlay = null;
-  route();
+function handleReportSend() {
+  const comment = store.feedback.reportText.trim();
+  if (!comment) return false;
+  sendFeedback({
+    sessionId: store.practice.sessionId,
+    kind: "bug",
+    rating: null,
+    comment,
+  });
+  store.feedback.reportOpen = false;
+  store.feedback.reportText = "";
+  return true;
 }
 
 function bind() {
-  $("welcome-get-started").onclick = () => { store.authScreen = "signup"; route(); };
-  $("welcome-login").onclick = () => { store.authScreen = "login"; route(); };
-  $("signup-google").onclick = handleGoogleSignUp;
-  $("signup-switch-login").onclick = () => { store.authScreen = "login"; route(); };
-  $("signup-form").onsubmit = (e) => { e.preventDefault(); handleSignUp(); };
-  ["signup-name", "signup-email", "signup-pw"].forEach((id) => $(id).addEventListener("input", updateSignupSubmit));
-  $("signup-consent-voice").onclick = () => { store.consentVoice = !store.consentVoice; setCheck($("signup-consent-voice"), store.consentVoice); updateSignupSubmit(); };
-  $("signup-consent-terms").onclick = () => { store.consentTerms = !store.consentTerms; setCheck($("signup-consent-terms"), store.consentTerms); updateSignupSubmit(); };
-  $("signup-pw-toggle").onclick = () => { const i = $("signup-pw"); i.type = i.type === "password" ? "text" : "password"; };
-
-  $("otp-back").onclick = () => { store.authScreen = "signup"; route(); };
-  $("otp-verify").onclick = () => {
-    const code = [0,1,2,3,4,5].map((i) => $(`otp-${i}`).value).join("");
-    if (code === APP_CONFIG.otpCode) {
-      $("otp-error").classList.add("hidden");
-      $("otp-form-view").classList.add("hidden");
-      $("otp-celebrate").classList.remove("hidden");
-      setTimeout(handleOtpVerified, 2200);
-    } else $("otp-error").classList.remove("hidden");
-  };
-  let resendTimer = 0;
-  $("otp-resend").onclick = () => {
-    if (resendTimer > 0) return;
-    resendTimer = 30;
-    $("otp-resend").disabled = true;
-    const iv = setInterval(() => {
-      resendTimer -= 1;
-      $("otp-resend-label").textContent = resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend code";
-      if (resendTimer <= 0) { clearInterval(iv); $("otp-resend").disabled = false; }
-    }, 1000);
-  };
-  for (let i = 0; i < 6; i++) {
-    const el = $(`otp-${i}`);
-    el.addEventListener("input", (e) => {
-      $("otp-error").classList.add("hidden");
-      let val = e.target.value.replace(/\D/g, "");
-      if (val.length > 1) {
-        const chars = val.slice(0, 6).split("");
-        chars.forEach((c, idx) => { $(`otp-${idx}`).value = c; });
-        return;
-      }
-      el.value = val;
-      el.classList.toggle("border-brand-500", !!val);
-      el.classList.toggle("border-ink-200", !val);
-      if (val && i < 5) $(`otp-${i + 1}`).focus();
-    });
-    el.addEventListener("keydown", (e) => {
-      if (e.key === "Backspace" && !el.value && i > 0) $(`otp-${i - 1}`).focus();
-    });
-  }
-
-  $("login-form").onsubmit = (e) => {
+  $("auth-google").onclick = () => { signInWithGoogle(); };
+  $("auth-email-form").onsubmit = async (e) => {
     e.preventDefault();
-    const email = $("login-email").value.trim();
-    const pw = $("login-pw").value.trim();
-    if (!email || !pw) { $("login-error").classList.remove("hidden"); return; }
-    $("login-error").classList.add("hidden");
-    handleLogin(email, store.rememberMe);
+    const email = $("auth-email").value.trim();
+    const msg = $("auth-message");
+    msg.classList.remove("hidden");
+    if (!email) {
+      msg.textContent = "Enter your email and we'll send a link.";
+      return;
+    }
+    const { error } = await signInWithEmail(email);
+    msg.textContent = error
+      ? "We couldn't send that just now. Try again in a moment."
+      : "Check your inbox — the link is on its way.";
   };
-  $("login-remember").onclick = () => {
-    store.rememberMe = !store.rememberMe;
-    const b = $("login-remember");
-    b.className = `flex h-5 w-5 items-center justify-center rounded-md border-2 transition-all ${store.rememberMe ? "border-brand-500 bg-brand-500" : "border-ink-200 bg-surface-0"}`;
-    b.innerHTML = store.rememberMe ? `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>` : "";
-  };
-  $("login-forgot").onclick = () => { store.authScreen = "forgot"; $("forgot-form-view").classList.remove("hidden"); $("forgot-sent-view").classList.add("hidden"); route(); };
-  $("login-switch-signup").onclick = () => { store.authScreen = "signup"; route(); };
-  $("login-pw-toggle").onclick = () => { const i = $("login-pw"); i.type = i.type === "password" ? "text" : "password"; };
 
-  $("forgot-back").onclick = () => { store.authScreen = "login"; route(); };
-  $("forgot-send").onclick = () => { $("forgot-form-view").classList.add("hidden"); $("forgot-sent-view").classList.remove("hidden"); };
-  $("forgot-sent-back").onclick = () => { store.authScreen = "login"; route(); };
+  $("welcome-get-started").onclick = () => { store.authScreen = "auth"; route(); };
+  $("welcome-login").onclick = () => { store.authScreen = "auth"; route(); };
 
   $("tour-next").onclick = () => {
     if (store.tourStep < ONBOARDING_TOUR.length - 1) { store.tourStep += 1; renderTour(); }
-    else { store.progress = { ...store.progress, seenTour: true }; persistProgress(); route(); }
+    else { markTourSeen().then(() => route()); }
   };
-  $("tour-skip").onclick = $("tour-skip-x").onclick = () => { store.progress = { ...store.progress, seenTour: true }; persistProgress(); route(); };
+  $("tour-skip").onclick = $("tour-skip-x").onclick = () => { markTourSeen().then(() => route()); };
 
   $("course-start").onclick = () => handleCourseSelect(store.selectedCourseId);
   $("course-list").addEventListener("click", (e) => {
@@ -225,14 +195,27 @@ function bind() {
       store.overlay = "coursePlan";
       route();
     }
-    else if (act === "flashcards") { store.flash.idx = 0; store.flash.flipped = false; store.flash.learned = 0; store.flash.done = false; store.overlay = "flashcard"; route(); }
+    else if (act === "flashcards") startFlashcards();
     else if (act === "start-mission") { startPractice(); }
+    else if (act === "progress") { store.tab = "rewards"; store.overlay = null; route(); }
     else if (act === "start-day") {
       const day = Number(btn.getAttribute("data-day"));
-      if (store.auth.user.plan === "free" && day > FREE_TIER_MAX_DAY) { store.overlay = "plans"; route(); return; }
+      if (isDayLocked(day)) { store.overlay = "plans"; route(); return; }
       startPractice({ courseDay: day });
     }
     else if (act === "upgrade") { store.overlay = "plans"; route(); }
+    else if (act === "report-open") { handleReportOpen(); renderHome(); }
+    else if (act === "report-send") { if (handleReportSend()) renderHome(); }
+    else if (act === "helpful") handleHelpful(btn.getAttribute("data-rating"));
+    else if (act === "next-day-test") {
+      advanceDayForTest()
+        .then(() => {
+          store.practice.courseQuestions = null;
+          renderHome();
+        })
+        .catch((err) => console.error("advanceDayForTest failed", err));
+    }
+    else if (act === "feedback-log") openFeedbackHistory("home");
   });
 
   $("tabnav").addEventListener("click", (e) => {
@@ -243,75 +226,123 @@ function bind() {
     else { store.tab = t; store.overlay = null; route(); }
   });
 
-  $("practice-exit").onclick = () => { stopTimer(); speechController.stopListening(); practiceExit(); };
+  $("practice-exit").onclick = () => { stopTimer(); speechController.stopListening(); stopRecording().catch(() => {}); practiceExit(); };
   $("practice-skip").onclick = () => {
-    const practice = store.practice;
     const questions = practiceQuestions();
-    const hasCourseQs = practice.courseQuestions && practice.courseQuestions.length > 0;
-    const totalPrompts = hasCourseQs ? questions.length : 3;
+    const totalPrompts = questions.length || 1;
     resetForNext();
-    if (practice.promptIdx < totalPrompts - 1) { practice.promptIdx += 1; renderPractice(); }
+    if (store.practice.promptIdx < totalPrompts - 1) {
+      store.practice.promptIdx += 1;
+      renderPractice();
+      const prompt = questions[store.practice.promptIdx % questions.length];
+      track("question_shown", {
+        q_id: store.practice.questionIds[store.practice.promptIdx] ?? prompt?.id ?? null,
+        position: store.practice.promptIdx + 1,
+      });
+    }
     else {
-      handlePracticeComplete(practice.completedCount * 15, "");
-      practiceExit();
+      handlePracticeComplete(store.practice.completedCount * 15, "");
     }
   };
   $("practice-scroll").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const act = btn.getAttribute("data-act");
-    const practice = store.practice;
     const questions = practiceQuestions();
-    const prompt = questions[practice.promptIdx % questions.length];
+    const prompt = questions[store.practice.promptIdx % questions.length];
     if (act === "replay") speechController.speak(prompt.text);
-    else if (act === "rerecord") {
-      const better = practice.feedback[1].better || prompt.text;
+    else if (act === "say-rewrite") {
+      const rewrite = store.practice.feedback?.[2]?.body || store.practice.aiFeedback?.could_have_said || "";
+      if (rewrite) speechController.speak(rewrite);
+    } else if (act === "rerecord") {
+      const better = store.practice.feedback[1].better || prompt.text;
+      store.practice.resaying = true;
       speechController.speak(better);
-      if (!practice.typingMode) startListening();
+      if (!store.practice.typingMode) startListening();
     } else if (act === "next-prompt") {
-      const hasCourseQs = practice.courseQuestions && practice.courseQuestions.length > 0;
-      const totalPrompts = hasCourseQs ? questions.length : 3;
-      practice.completedCount += 1;
-      if (practice.promptIdx < totalPrompts - 1) { practice.promptIdx += 1; resetForNext(); renderPractice(); }
-      else { practice.showMood = true; renderPractice(); }
+      const totalPrompts = questions.length || 1;
+      store.practice.completedCount += 1;
+      if (store.practice.promptIdx < totalPrompts - 1) {
+        store.practice.promptIdx += 1;
+        resetForNext();
+        renderPractice();
+        const next = questions[store.practice.promptIdx % questions.length];
+        track("question_shown", {
+          q_id: store.practice.questionIds[store.practice.promptIdx] ?? next?.id ?? null,
+          position: store.practice.promptIdx + 1,
+        });
+      }
+      else { store.practice.showMood = true; renderPractice(); }
     }
   });
   $("practice-bottom").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const act = btn.getAttribute("data-act");
-    const practice = store.practice;
-    if (act === "hint") { practice.showHint = true; renderPractice(); }
+    if (act === "hint") { store.practice.showHint = true; renderPractice(); }
     else if (act === "mic") {
-      if (practice.micState === "idle") startListening();
-      else if (practice.micState === "listening") stopListening();
+      if (store.practice.micState === "idle") startListening();
+      else if (store.practice.micState === "listening") stopListening();
     } else if (act === "type-instead") {
-      if (practice.micState === "listening") { speechController.stopListening(); stopTimer(); practice.micState = "idle"; }
-      practice.typingMode = true; renderPractice();
-    } else if (act === "switch-mic") { practice.typingMode = false; renderPractice(); }
+      if (store.practice.micState === "listening") { speechController.stopListening(); stopTimer(); store.practice.micState = "idle"; stopRecording().catch(() => {}); }
+      track("typed_fallback_used");
+      store.practice.typingMode = true; renderPractice();
+    } else if (act === "switch-mic") { store.practice.typingMode = false; renderPractice(); }
     else if (act === "typed-send") handleTypedSubmit();
   });
   $("practice-mood").addEventListener("click", (e) => {
+    const helpfulBtn = e.target.closest("[data-act=helpful]");
+    if (helpfulBtn) {
+      handleHelpful(helpfulBtn.getAttribute("data-rating"));
+      return;
+    }
     const btn = e.target.closest("[data-act=mood]");
     if (!btn) return;
+    const moodId = btn.getAttribute("data-id");
     const points = (store.practice.completedCount + 1) * 20;
-    handlePracticeComplete(points, btn.getAttribute("data-id"));
-    practiceExit();
+    sendFeedback({
+      sessionId: store.practice.sessionId,
+      kind: "readiness_pulse",
+      rating: PULSE_RATING[moodId] ?? null,
+      comment: moodId,
+    });
+    handlePracticeComplete(points, moodId);
   });
 
   $("flashcard-main").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const act = btn.getAttribute("data-act");
-    if (act === "flash-exit") { store.overlay = null; route(); }
-    else if (act === "flip-card") { store.flash.flipped = !store.flash.flipped; renderFlashcard(); }
-    else if (act === "say-word") { e.stopPropagation(); speechController.speak(FLASHCARDS[store.flash.idx].word); }
+    if (act === "flash-exit") { resetFlashDrill(); dismissFlashNudge({ render: false }); store.overlay = null; route(); }
+    else if (act === "flip-card") { resetFlashDrill(); store.flash.flipped = !store.flash.flipped; renderFlashcard(); }
+    else if (act === "say-word") {
+      e.stopPropagation();
+      const word = flashDeck()[store.flash.idx]?.word;
+      if (!word) return;
+      resetFlashDrill();
+      store.flash.flipped = false;
+      renderFlashcard();
+      const goListen = () => {
+        if (store.overlay !== "flashcard") return;
+        startFlashListen();
+      };
+      speechController.speak(word, goListen);
+      if (!("speechSynthesis" in window)) goListen();
+    }
+    else if (act === "now-say-it") {
+      e.stopPropagation();
+      if (store.flash.drill === "listen") return;
+      startFlashListen();
+    }
     else if (act === "swipe-left") handleSwipe("left");
     else if (act === "swipe-right") handleSwipe("right");
-    else if (act === "claim-cards") handleFlashcardComplete(store.flash.learned);
+    else if (act === "claim-cards") { dismissFlashNudge({ render: false }); handleFlashcardComplete(store.flash.learned); }
+    else if (act === "flash-nudge-continue") dismissFlashNudge();
+    else if (act === "flash-reload") startFlashcards();
   });
 
   $("courseplan-back").onclick = () => { store.overlay = null; route(); };
+  $("progress-back").onclick = () => { store.overlay = null; route(); };
   $("courseplan-weeks").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
@@ -338,9 +369,30 @@ function bind() {
   $("rewards-scroll").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
-    if (btn.getAttribute("data-act") === "see-badges") { store.showAllBadges = true; renderRewards(); }
-    else if (btn.getAttribute("data-act") === "toggle-leaderboard") { store.showLeaderboard = !store.showLeaderboard; renderRewards(); }
+    const act = btn.getAttribute("data-act");
+    if (act === "see-badges") { store.showAllBadges = true; renderRewards(); }
+    else if (act === "toggle-leaderboard") { store.showLeaderboard = !store.showLeaderboard; renderRewards(); }
+    else if (act === "feedback-log") openFeedbackHistory("rewards");
+    else if (act === "helpful") handleHelpful(btn.getAttribute("data-rating"));
+    else if (act === "report-open") { handleReportOpen(); renderRewards(); }
+    else if (act === "report-send") { if (handleReportSend()) renderRewards(); }
   });
+
+  $("digest-scroll").addEventListener("click", (e) => {
+    if (e.target.closest("[data-act=digest-home]")) {
+      refreshHomeData().catch((err) => {
+        console.error(err);
+        store.overlay = null;
+        store.tab = "home";
+        route();
+      });
+    }
+  });
+  $("feedback-log-back").onclick = () => {
+    store.overlay = null;
+    store.tab = store.feedbackLogFrom === "rewards" ? "rewards" : "home";
+    route();
+  };
 
   $("profile-scroll").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
@@ -349,12 +401,10 @@ function bind() {
     if (act === "settings") { renderSettings(); openSheet("settings"); }
     else if (act === "change-course") { store.overlay = "courseChooser"; route(); }
     else if (act === "manage-plan") { store.overlay = "plans"; route(); }
-    else if (act === "my-data") { store.deleteConfirmed = false; renderDeleteSheet(); openSheet("delete"); }
     else if (act === "logout") handleLogout();
-    else if (act === "advance-day") {
-      store.progress = { ...store.progress, simDateOffset: store.progress.simDateOffset + 1, courseDay: Math.min(30, store.progress.courseDay + 1) };
-      persistProgress(); renderProfile();
-    } else if (act === "edit-name") {
+    else if (act === "report-open") { handleReportOpen(); renderProfile(); }
+    else if (act === "report-send") { if (handleReportSend()) renderProfile(); }
+    else if (act === "edit-name") {
       store.nameInput = store.auth.user.name;
       store.editingName = true;
       renderProfile();
@@ -362,30 +412,28 @@ function bind() {
       if (inp) { inp.focus(); inp.addEventListener("input", (e) => { store.nameInput = e.target.value; }); }
     } else if (act === "save-name") {
       if (store.nameInput.trim()) {
-        store.auth = { ...store.auth, user: { ...store.auth.user, name: store.nameInput.trim() } };
-        saveAuth(store.auth);
-        store.editingName = false;
-        renderProfile();
+        saveDisplayName(store.nameInput.trim()).then(() => {
+          store.editingName = false;
+          renderProfile();
+        });
       }
     }
+  });
+
+  ["home-scroll", "rewards-scroll", "profile-scroll"].forEach((id) => {
+    $(id).addEventListener("input", (e) => {
+      if (e.target.id === "report-text") store.feedback.reportText = e.target.value;
+    });
   });
 
   document.querySelectorAll("[data-sheet-close]").forEach((el) => {
     el.addEventListener("click", () => {
       const id = el.getAttribute("data-sheet-close");
       closeSheet(id);
-      if (id === "delete") store.deleteConfirmed = false;
     });
   });
   $("settings-body").addEventListener("click", (e) => {
     if (e.target.closest("[data-act=toggle-notif]")) { store.notifEnabled = !store.notifEnabled; renderSettings(); }
-  });
-  $("delete-actions").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-act]");
-    if (!btn) return;
-    const act = btn.getAttribute("data-act");
-    if (act === "confirm-delete") { store.deleteConfirmed = true; renderDeleteSheet(); }
-    else if (act === "cancel-delete" || act === "done-delete") { closeSheet("delete"); store.deleteConfirmed = false; }
   });
 
   window.addEventListener("online", () => { if (store.tab === "home" && store.auth.user) setOfflineBanner(); });
@@ -393,4 +441,135 @@ function bind() {
 }
 
 bind();
-route();
+track("app_open");
+
+function oauthErrorFromUrl() {
+  const params = new URLSearchParams(location.search);
+  if (params.has("code")) return "";
+  const raw = params.get("error_description") || params.get("error");
+  if (!raw) return "";
+  return decodeURIComponent(raw.replace(/\+/g, " "));
+}
+
+function pendingOAuthFromUrl() {
+  return new URLSearchParams(location.search).has("code")
+    || location.hash.includes("access_token");
+}
+
+function applyBoot(boot) {
+  const session = boot?.session;
+  const u = session?.user;
+  if (!u) {
+    store.auth = { user: null, rememberMe: false };
+    store.progress = {
+      ...store.progress,
+      seenTour: false,
+      streak: 0,
+      points: 0,
+      lastPracticeDate: null,
+      courseDay: 1,
+      completedDays: [],
+      practiceDays: [],
+      weeklyStartDay: null,
+    };
+    return;
+  }
+
+  const profile = boot.profile;
+  const meta = u.user_metadata || {};
+  const email = u.email || "";
+  const fallbackName = meta.full_name || meta.name || (email ? email.split("@")[0] : "You");
+  const completedDays = boot.completedDays?.length
+    ? boot.completedDays
+    : (boot.maxCompletedDay
+      ? Array.from({ length: boot.maxCompletedDay }, (_, i) => i + 1)
+      : []);
+  const courseDay = boot.courseDay != null
+    ? boot.courseDay
+    : (boot.maxCompletedDay
+      ? (boot.todayDone ? boot.maxCompletedDay : Math.min(30, boot.maxCompletedDay + 1))
+      : (boot.maxDay >= 1 ? boot.maxDay : 1));
+
+  store.auth = {
+    user: {
+      id: u.id,
+      email,
+      name: profile?.display_name || fallbackName,
+      goal: "",
+      createdAt: Date.parse(u.created_at) || Date.now(),
+      courseId: boot.courseId ?? null,
+      plan: store.auth.user?.id === u.id ? (store.auth.user.plan || "free") : "free",
+    },
+    rememberMe: true,
+  };
+  store.progress = {
+    ...store.progress,
+    seenTour: !!profile,
+    streak: profile?.streak_days ?? 0,
+    points: profile?.total_points ?? 0,
+    lastPracticeDate: profile?.last_active_date ?? null,
+    courseDay,
+    completedDays,
+    practiceDays: boot.practiceDays ?? [],
+    weeklyStartDay: mondayOfWeek(store.progress.simDateOffset),
+  };
+}
+
+function showOAuthError(oauthError) {
+  showTabNav(false);
+  showScreen("auth");
+  const msg = $("auth-message");
+  msg.classList.remove("hidden");
+  msg.textContent = /exchange external code/i.test(oauthError)
+    ? "Google sign-in failed. In Google Cloud, copy Client ID and Client secret from the Web client into Supabase → Authentication → Google. Redirect URI must be exactly https://qgotpjylwhtgutgubwfe.supabase.co/auth/v1/callback"
+    : oauthError;
+  history.replaceState({}, "", location.pathname);
+}
+
+async function startApp() {
+  const boot = await loadBootState();
+  if (!boot.session && pendingOAuthFromUrl()) return;
+
+  applyBoot(boot);
+
+  if (!boot.session) {
+    const oauthError = oauthErrorFromUrl();
+    if (oauthError) {
+      showOAuthError(oauthError);
+      return;
+    }
+    store.authScreen = store.authScreen || "welcome";
+    route();
+    return;
+  }
+
+  route();
+}
+
+onAuthChange((event, session) => {
+  if (event === "INITIAL_SESSION") return;
+
+  if (event === "SIGNED_OUT" || !session?.user) {
+    applyBoot({ session: null, profile: null, todayDone: false, maxDay: 0, maxCompletedDay: 0, courseId: null });
+    store.authScreen = "welcome";
+    route();
+    return;
+  }
+
+  if (event === "SIGNED_IN") {
+    const provider = session.user.app_metadata?.provider
+      || session.user.identities?.[0]?.provider
+      || "email";
+    track("login_success", { provider });
+    if (pendingOAuthFromUrl()) {
+      const path = location.pathname.endsWith("/") ? location.pathname : `${location.pathname}/`;
+      history.replaceState({}, "", path);
+    }
+    loadBootState().then((boot) => {
+      applyBoot(boot);
+      route();
+    });
+  }
+});
+
+startApp();

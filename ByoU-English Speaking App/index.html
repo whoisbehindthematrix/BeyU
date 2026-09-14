@@ -14,6 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./css/app.css" />
     <title>ByoU — Speak English confidently</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL69X6LV8Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-CL69X6LV8Z");
+    </script>
   </head>
   <body>
     <div class="flex min-h-screen w-full items-center justify-center bg-ink-900 sm:p-6">
@@ -64,186 +71,6 @@ with confidence.</h1>
           </div>
         </section>
 
-        <!-- Sign up -->
-        <section data-screen="signup" class="hidden flex min-h-full flex-col px-6 pb-8 pt-10 animate-fade-in overflow-y-auto no-scrollbar">
-          <h1 class="text-2xl font-extrabold leading-tight text-ink-900">Create your account</h1>
-          <p class="mt-1.5 text-sm text-ink-600">Week 1 free — no card needed.</p>
-          <button id="signup-google" class="tap-target mt-6 flex w-full items-center justify-center gap-2.5 rounded-xl border border-ink-200 bg-surface-0 px-5 py-3 text-sm font-semibold text-ink-800 shadow-soft transition-all hover:bg-surface-2 active:scale-[0.98]">
-            <svg width="18" height="18" viewBox="0 0 18 18">
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
-            </svg>
-            Continue with Google
-          </button>
-          <div class="my-5 flex items-center gap-3">
-            <div class="h-px flex-1 bg-ink-200"></div>
-            <span class="text-xs font-medium text-ink-500">or</span>
-            <div class="h-px flex-1 bg-ink-200"></div>
-          </div>
-          <form id="signup-form" class="space-y-4">
-            <label class="block">
-              <span class="mb-1.5 block text-sm font-semibold text-ink-700">Name</span>
-              <div class="relative">
-                <input id="signup-name" placeholder="Your name" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-                <div class="absolute right-3 top-1/2 -translate-y-1/2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-ink-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-              </div>
-            </label>
-            <label class="block">
-              <span class="mb-1.5 block text-sm font-semibold text-ink-700">Email</span>
-              <div class="relative">
-                <input id="signup-email" type="email" placeholder="you@example.com" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-                <div class="absolute right-3 top-1/2 -translate-y-1/2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-ink-400"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-              </div>
-            </label>
-            <label class="block">
-              <span class="mb-1.5 block text-sm font-semibold text-ink-700">Password</span>
-              <div class="relative">
-                <input id="signup-pw" type="password" placeholder="At least 8 characters" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-                <button type="button" id="signup-pw-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-600">
-                  <svg data-eye width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-              </div>
-              <span id="signup-pw-hint" class="mt-1.5 block text-xs text-ink-400"></span>
-            </label>
-            <div class="rounded-xl bg-surface-2 p-3.5">
-              <p class="text-xs font-semibold text-ink-700">Before we start:</p>
-              <ul class="mt-1.5 space-y-1">
-                <li class="text-xs leading-relaxed text-ink-600">• ByoU records your voice during practice so the AI can coach you.</li>
-                <li class="text-xs leading-relaxed text-ink-600">• Your recordings are private — only you can hear them. Delete them anytime in Profile → My data.</li>
-                <li class="text-xs leading-relaxed text-ink-600">• You are 16+ and accept our Terms &amp; Privacy.</li>
-              </ul>
-            </div>
-            <label class="flex cursor-pointer items-start gap-3">
-              <button type="button" id="signup-consent-voice" class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all border-ink-300 bg-surface-0"></button>
-              <span class="text-sm font-medium text-ink-700">I agree that ByoU records my voice during practice</span>
-            </label>
-            <label class="flex cursor-pointer items-start gap-3 !mt-2">
-              <button type="button" id="signup-consent-terms" class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-all border-ink-300 bg-surface-0"></button>
-              <span class="text-sm font-medium text-ink-700">I accept the Terms &amp; Privacy Policy</span>
-            </label>
-            <p id="signup-helper" class="text-xs font-medium text-accent-500 hidden"></p>
-            <button type="submit" id="signup-submit" disabled class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-1">
-              Create account
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </button>
-            <p id="signup-fill-hint" class="text-center text-xs text-ink-600">Fill in all fields and check both boxes to continue</p>
-          </form>
-          <p class="mt-6 text-center text-sm text-ink-600">
-            Already have an account?
-            <button id="signup-switch-login" class="font-semibold text-brand-500 hover:text-brand-600">Log in</button>
-          </p>
-        </section>
-
-        <!-- OTP -->
-        <section data-screen="otp" class="hidden flex min-h-full flex-col">
-          <div id="otp-form-view" class="flex min-h-full flex-col px-6 pb-8 pt-10 animate-fade-in">
-            <button id="otp-back" class="mb-6 text-sm font-medium text-ink-600 hover:text-ink-800">← Back</button>
-            <h1 class="text-2xl font-extrabold leading-tight text-ink-900">Check your inbox</h1>
-            <p id="otp-subtitle" class="mt-1.5 text-sm text-ink-600"></p>
-            <div class="mt-8 flex justify-between gap-2">
-              <input id="otp-0" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-              <input id="otp-1" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-              <input id="otp-2" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-              <input id="otp-3" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-              <input id="otp-4" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-              <input id="otp-5" type="tel" inputmode="numeric" maxlength="1" class="h-14 w-12 rounded-xl border-2 bg-surface-0 text-center text-xl font-bold text-ink-900 outline-none transition-all focus:ring-4 focus:ring-brand-50 border-ink-200 focus:border-brand-400" />
-            </div>
-            <p id="otp-error" class="mt-3 text-xs font-medium text-accent-500 animate-fade-in hidden">Hmm, that code isn't right. Try 123456.</p>
-            <p class="mt-3 text-xs text-ink-600">Demo code: 123456</p>
-            <button id="otp-verify" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-6">
-              Verify
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </button>
-            <button id="otp-resend" class="mt-4 inline-flex items-center justify-center gap-1.5 text-sm font-medium text-ink-600 hover:text-ink-800 disabled:opacity-50">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-              <span id="otp-resend-label">Resend code</span>
-            </button>
-          </div>
-          <div id="otp-celebrate" class="hidden flex min-h-full flex-col items-center justify-center px-6 text-center bg-gradient-to-b from-brand-50 to-surface-1 animate-fade-in">
-            <div class="flex h-24 w-24 items-center justify-center rounded-full bg-brand-500 text-white shadow-pop animate-bounce-in">
-              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98v0C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg>
-            </div>
-            <h1 class="mt-8 text-3xl font-extrabold text-ink-900 animate-slide-up">Account created! 🎉</h1>
-            <p class="mt-3 max-w-[240px] text-sm text-ink-600 animate-slide-up">Welcome to Byo<span class="text-accent-500 font-bold">U</span>. Let's get you speaking with confidence.</p>
-            <div class="mt-6 flex items-center gap-1.5 text-sm font-medium text-brand-500">
-              <span class="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style="animation-delay: 0ms"></span>
-              <span class="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style="animation-delay: 150ms"></span>
-              <span class="h-2 w-2 rounded-full bg-brand-500 animate-bounce" style="animation-delay: 300ms"></span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Login -->
-        <section data-screen="login" class="hidden flex min-h-full flex-col px-6 pb-8 pt-10 animate-fade-in">
-          <h1 class="text-2xl font-extrabold leading-tight text-ink-900">Welcome back</h1>
-          <p class="mt-1.5 text-sm text-ink-600">Pick up your streak where you left off.</p>
-          <form id="login-form" class="mt-7 space-y-4">
-            <label class="block">
-              <span class="mb-1.5 block text-sm font-semibold text-ink-700">Email</span>
-              <div class="relative">
-                <input id="login-email" type="email" placeholder="you@example.com" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-                <div class="absolute right-3 top-1/2 -translate-y-1/2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-ink-400"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-              </div>
-            </label>
-            <label class="block">
-              <span class="mb-1.5 block text-sm font-semibold text-ink-700">Password</span>
-              <div class="relative">
-                <input id="login-pw" type="password" placeholder="Your password" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-                <button type="button" id="login-pw-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-600">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-              </div>
-            </label>
-            <div class="flex items-center justify-between pt-1">
-              <label class="flex cursor-pointer items-center gap-2">
-                <button type="button" id="login-remember" class="flex h-5 w-5 items-center justify-center rounded-md border-2 transition-all border-brand-500 bg-brand-500">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <span class="text-sm text-ink-600">Remember me</span>
-              </label>
-              <button type="button" id="login-forgot" class="text-sm font-medium text-brand-500 hover:text-brand-600">Forgot password?</button>
-            </div>
-            <p id="login-error" class="text-xs font-medium text-accent-500 hidden">Email or password is incorrect</p>
-            <button type="submit" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-2">
-              Log in
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </button>
-          </form>
-          <p class="mt-6 text-center text-sm text-ink-600">
-            New to Byo<span class="text-accent-500 font-bold">U</span>?
-            <button id="login-switch-signup" class="font-semibold text-brand-500 hover:text-brand-600">Create an account</button>
-          </p>
-        </section>
-
-        <!-- Forgot -->
-        <section data-screen="forgot" class="hidden flex min-h-full flex-col">
-          <div id="forgot-form-view" class="flex min-h-full flex-col px-6 pb-8 pt-10 animate-fade-in">
-            <button id="forgot-back" class="mb-6 text-sm font-medium text-ink-400 hover:text-ink-600">← Back to login</button>
-            <h1 class="text-2xl font-extrabold leading-tight text-ink-900">Reset password</h1>
-            <p class="mt-1.5 text-sm text-ink-500">Enter your email and we'll send a reset link.</p>
-            <div class="mt-7 space-y-4">
-              <label class="block">
-                <span class="mb-1.5 block text-sm font-semibold text-ink-700">Email</span>
-                <input id="forgot-email" type="email" placeholder="you@example.com" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
-              </label>
-              <button id="forgot-send" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-2">
-                Send reset link
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              </button>
-            </div>
-          </div>
-          <div id="forgot-sent-view" class="hidden flex min-h-full flex-col items-center justify-center px-6 pb-8 pt-10 animate-fade-in">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-success-500/10 text-success-500">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-            </div>
-            <h1 class="mt-6 text-xl font-bold text-ink-900">Check your email</h1>
-            <p class="mt-2 text-center text-sm text-ink-500">If that email exists, a reset link is on its way.</p>
-            <button id="forgot-sent-back" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-8">Back to login</button>
-          </div>
-        </section>
-
         <!-- Onboarding tour -->
         <section data-screen="tour" class="hidden relative flex min-h-full flex-col bg-gradient-to-b from-surface-0 to-surface-1 px-6 pb-10 pt-16">
           <button id="tour-skip-x" class="absolute right-5 top-12 rounded-lg p-2 text-ink-400 hover:bg-surface-2">
@@ -257,6 +84,44 @@ with confidence.</h1>
           </div>
           <button id="tour-next" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full">Next</button>
           <button id="tour-skip" class="mt-3 w-full py-2 text-sm font-medium text-ink-600 hover:text-ink-800">Skip tour</button>
+        </section>
+
+        <!-- Auth gate -->
+        <section data-screen="auth" class="hidden flex min-h-full flex-col bg-gradient-to-b from-brand-500 via-brand-600 to-ink-900 px-6 pb-10 pt-16 text-white">
+          <div class="flex flex-1 flex-col justify-center">
+            <div class="mb-8 flex items-center gap-2">
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm">
+                <span class="text-xl font-extrabold">B</span>
+              </div>
+              <span class="text-xl font-extrabold tracking-tight">
+                Byo<span class="text-accent-400">U</span>
+              </span>
+            </div>
+            <h1 class="text-3xl font-extrabold leading-tight tracking-tight">Let’s get you in</h1>
+            <p class="mt-2 text-sm leading-relaxed text-white/80">Continue with Google or a link to your email.</p>
+            <button id="auth-google" type="button" class="tap-target mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border border-ink-200 bg-surface-0 px-5 py-3 text-sm font-semibold text-ink-800 shadow-soft transition-all hover:bg-surface-2 active:scale-[0.98]">
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/>
+                <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/>
+              </svg>
+              Continue with Google
+            </button>
+            <div class="my-5 flex items-center gap-3">
+              <div class="h-px flex-1 bg-white/20"></div>
+              <span class="text-xs font-medium text-white/70">or</span>
+              <div class="h-px flex-1 bg-white/20"></div>
+            </div>
+            <form id="auth-email-form" class="space-y-3">
+              <input id="auth-email" type="email" autocomplete="email" placeholder="you@example.com" class="w-full rounded-xl border border-ink-200 bg-surface-0 px-4 py-3 text-sm font-medium text-ink-900 outline-none transition-all placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" />
+              <button id="auth-send" type="submit" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full !bg-accent-500 !shadow-popAccent hover:!bg-accent-600">
+                Send me a link
+              </button>
+            </form>
+            <p id="auth-message" class="mt-3 hidden text-sm font-medium text-white/90"></p>
+            <p class="mt-4 text-center text-xs font-medium text-white/70">No password needed</p>
+          </div>
         </section>
 
         <!-- Course chooser -->
@@ -309,9 +174,26 @@ with confidence.</h1>
           <div id="practice-mood" class="absolute inset-0 z-40 hidden flex-col items-center justify-center bg-surface-0 px-6 animate-fade-in"></div>
         </section>
 
+        <!-- Daily digest -->
+        <section data-screen="digest" class="hidden flex flex-1 flex-col overflow-hidden bg-surface-1">
+          <div id="digest-scroll" class="flex-1 overflow-y-auto no-scrollbar px-5 pt-10 pb-10"></div>
+        </section>
+
+        <!-- Saved feedback -->
+        <section data-screen="feedbackLog" class="hidden flex flex-1 flex-col overflow-hidden bg-surface-1">
+          <div class="flex items-center gap-3 px-5 pt-5 pb-3">
+            <button id="feedback-log-back" class="tap-target rounded-lg p-2 text-ink-400 hover:bg-surface-2">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </button>
+            <h1 class="text-lg font-extrabold text-ink-900">Daily Report</h1>
+          </div>
+          <div id="feedback-log-scroll" class="flex-1 space-y-3 overflow-y-auto no-scrollbar px-5 pb-10"></div>
+        </section>
+
         <!-- Flashcards -->
-        <section data-screen="flashcard" class="hidden flex flex-1 flex-col bg-surface-1">
-          <div id="flashcard-main" class="flex flex-1 flex-col"></div>
+        <section data-screen="flashcard" class="hidden relative flex flex-1 flex-col bg-surface-1">
+          <div id="flash-confetti" class="pointer-events-none absolute inset-0 z-30 overflow-hidden"></div>
+          <div id="flashcard-main" class="relative flex flex-1 flex-col"></div>
         </section>
 
         <!-- Course plan -->
@@ -331,6 +213,20 @@ with confidence.</h1>
             </div>
           </div>
           <div id="courseplan-weeks" class="flex-1 overflow-y-auto no-scrollbar px-5 pb-24 space-y-3"></div>
+        </section>
+
+        <!-- My progress -->
+        <section data-screen="progress" class="hidden flex flex-1 flex-col overflow-hidden bg-surface-1">
+          <div class="flex items-center gap-3 px-5 pt-5 pb-3">
+            <button id="progress-back" class="tap-target rounded-lg p-2 text-ink-400 hover:bg-surface-2">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </button>
+            <div class="flex-1 min-w-0">
+              <h1 class="truncate text-lg font-extrabold text-ink-900">My progress</h1>
+              <p class="text-xs text-ink-500">Streak, points, and the days you have practised</p>
+            </div>
+          </div>
+          <div id="progress-body" class="flex-1 overflow-y-auto no-scrollbar px-5 pb-24"></div>
         </section>
 
         <!-- Plans -->
@@ -379,23 +275,10 @@ with confidence.</h1>
             <div id="settings-body" class="space-y-3"></div>
           </div>
         </div>
-        <div id="sheet-delete" class="fixed inset-0 z-50 hidden flex items-end justify-center sm:items-center">
-          <div class="absolute inset-0 bg-ink-900/40 backdrop-blur-sm animate-fade-in" data-sheet-close="delete"></div>
-          <div class="relative z-10 w-full max-w-md rounded-t-3xl bg-surface-0 p-6 pb-8 shadow-card animate-slide-up sm:rounded-3xl">
-            <div class="mb-4 flex items-center justify-between">
-              <h3 class="text-lg font-bold text-ink-900">Delete recordings?</h3>
-              <button data-sheet-close="delete" class="tap-target ml-auto rounded-lg p-2 text-ink-400 hover:bg-surface-2">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-              </button>
-            </div>
-            <p class="text-sm leading-relaxed text-ink-500">This will permanently remove all voice recordings stored on this device. Your text transcripts and progress will remain.</p>
-            <p id="delete-done-msg" class="mt-4 text-sm font-bold text-success-600 hidden">Done! All recordings have been deleted.</p>
-            <div id="delete-actions" class="mt-6 space-y-2.5"></div>
-          </div>
-        </div>
+        <div id="app-toast" class="pointer-events-none absolute bottom-24 left-1/2 z-50 hidden w-[86%] -translate-x-1/2 rounded-xl bg-ink-900 px-4 py-3 text-center text-sm font-medium text-white shadow-card"></div>
 
       </div>
     </div>
-    <script type="module" src="./js/app.js"></script>
+    <script type="module" src="./js/app.js?v=20260913-profile"></script>
   </body>
 </html>

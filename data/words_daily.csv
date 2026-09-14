@@ -1,0 +1,201 @@
+word,meaning,example,ipa,level,category
+morning,early part of the day,I leave home early every morning.,ˈmɔːnɪŋ,1,daily
+evening,later part of the day,I cook dinner in the evening.,ˈiːvnɪŋ,1,daily
+night,time after evening when it is dark,The last bus leaves at night.,naɪt,1,daily
+breakfast,first meal of the day,I eat a light breakfast before the exam.,ˈbrekfəst,1,daily
+lunch,meal in the middle of the day,Let us have lunch after the class.,lʌntʃ,1,daily
+dinner,main meal in the evening,Dinner will be ready in ten minutes.,ˈdɪnə,1,daily
+snack,small food between meals,I packed a snack for the journey.,snæk,1,daily
+tea,hot drink often taken with milk,Would you like a cup of tea?,tiː,1,daily
+coffee,hot drink made from coffee beans,I need coffee before the first lecture.,ˈkɒfi,1,daily
+water,clear liquid we drink,Please drink more water in this heat.,ˈwɔːtə,1,daily
+hungry,wanting to eat,I get hungry around four o'clock.,ˈhʌŋɡri,1,daily
+thirsty,wanting to drink,I felt thirsty after the walk.,ˈθɜːsti,1,daily
+tired,needing rest after work,I feel tired after the night shift.,ˈtaɪəd,1,daily
+sleepy,wanting to sleep,I feel sleepy on the early bus.,ˈsliːpi,1,daily
+wake,stop sleeping,I wake at six for the metro.,weɪk,1,daily
+sleep,rest with your eyes closed,Try to sleep before the morning shift.,sliːp,1,daily
+shower,wash your body under falling water,I take a shower before leaving home.,ˈʃaʊə,1,daily
+clothes,things you wear,I kept my formal clothes ready.,kləʊðz,1,daily
+laundry,clothes that need washing,I will put the laundry out tonight.,ˈlɔːndri,2,daily
+iron,make clothes smooth with heat,Please iron this shirt for tomorrow.,ˈaɪən,1,daily
+neighbour,person living near you,My neighbour waters the plants when I travel.,ˈneɪbə,1,daily
+family,people you are related to,My family lives in a small town.,ˈfæməli,1,daily
+parents,your mother and father,My parents supported my job search.,ˈpeərənts,1,daily
+sibling,brother or sister,My sibling is still in college.,ˈsɪblɪŋ,2,daily
+relative,person in your wider family,A relative is visiting this weekend.,ˈrelətɪv,2,daily
+guest,person staying in your home,We have a guest from the village.,ɡest,1,daily
+friend,person you like and trust,A friend is picking me up at the station.,frend,1,daily
+roommate,person who shares your room,My roommate cooks on weekdays.,ˈruːmmeɪt,2,daily
+landlord,person you pay rent to,The landlord will visit this weekend.,ˈlændlɔːd,2,daily
+rent,money paid to live in a place,Rent is due in the first week.,rent,1,daily
+deposit,money kept as a safety amount,The deposit will come back when I move.,dɪˈpɒzɪt,2,daily
+electricity,power used for lights and fans,The electricity went off after the storm.,ɪˌlekˈtrɪsəti,2,daily
+bill,paper showing money you must pay,I paid the phone bill online.,bɪl,1,daily
+grocery,food bought for the home,I will get grocery after office.,ˈɡrəʊsəri,2,daily
+market,place to buy food and goods,The vegetable market opens at six.,ˈmɑːkɪt,1,daily
+vegetable,plant food such as beans or greens,We need one more vegetable for dinner.,ˈvedʒtəbəl,1,daily
+fruit,sweet plant food such as banana,I packed fruit for the train.,fruːt,1,daily
+rice,grain eaten as a main food,There is enough rice for tonight.,raɪs,1,daily
+bread,baked food often eaten at breakfast,The bread is still fresh today.,bred,1,daily
+spicy,having a hot strong taste,This curry is too spicy for me.,ˈspaɪsi,1,daily
+sweet,having a sugary taste,The tea is a little too sweet.,swiːt,1,daily
+salty,having a lot of salt,These snacks are too salty.,ˈsɔːlti,1,daily
+restaurant,place where you pay to eat,That restaurant is cheap and clean.,ˈrestrɒnt,2,daily
+menu,list of food you can order,The menu has a vegetarian section.,ˈmenjuː,1,daily
+order,ask for food or goods,I will order rice and dal.,ˈɔːdə,1,daily
+tip,extra money for good service,We left a small tip for the waiter.,tɪp,2,daily
+crowded,full of too many people,The metro is crowded after office hours.,ˈkraʊdɪd,2,daily
+queue,line of people waiting,There is a long queue at the counter.,kjuː,2,daily
+wait,stay until something happens,Please wait here for your token.,weɪt,1,daily
+late,after the expected time,I was late because of the rain.,leɪt,1,daily
+early,before the expected time,Come early to find a seat.,ˈɜːli,1,daily
+traffic,cars and buses on the road,Traffic is heavy near the flyover.,ˈtræfɪk,1,daily
+bus,large vehicle that carries many people,The bus stop is next to the hospital.,bʌs,1,daily
+train,railway vehicle for long trips,The train is running on time today.,treɪn,1,daily
+metro,city train that runs often,Take the metro to avoid the traffic.,ˈmetrəʊ,2,daily
+auto,three wheel taxi used in cities,An auto will be cheaper at this hour.,ˈɔːtəʊ,1,daily
+cab,car taxi you book or stop,I booked a cab to the airport.,kæb,1,daily
+walk,go on foot,I walk to the station every day.,wɔːk,1,daily
+bicycle,two wheel vehicle you pedal,I go to class on my bicycle.,ˈbaɪsɪkəl,1,daily
+helmet,hard hat that protects your head,Wear a helmet on the two wheeler.,ˈhelmɪt,2,daily
+fuel,petrol or gas for a vehicle,The fuel line at the pump is long.,ˈfjuːəl,2,daily
+station,place where trains or buses stop,I will meet you at the station.,ˈsteɪʃən,1,daily
+platform,raised area beside the tracks,The train will arrive on platform two.,ˈplætfɔːm,2,daily
+fare,money paid for a ride,The bus fare increased this month.,feə,2,daily
+pass,card that lets you travel cheaper,I renewed my monthly metro pass.,pɑːs,2,daily
+signal,light that tells traffic to stop or go,Turn left after the next signal.,ˈsɪɡnəl,2,daily
+crossing,place where you walk across a road,Use the crossing near the school.,ˈkrɒsɪŋ,2,daily
+weather,how hot wet or windy it is,The weather will stay humid this week.,ˈweðə,1,daily
+rain,water falling from the sky,Carry a bag that can take rain.,reɪn,1,daily
+humidity,amount of water in the air,The humidity makes the commute harder.,hjuːˈmɪdəti,3,daily
+sunny,with bright sun,It will be sunny after lunch.,ˈsʌni,1,daily
+cloudy,covered with clouds,The sky looks cloudy this morning.,ˈklaʊdi,1,daily
+storm,very strong wind and rain,The storm may delay the last bus.,stɔːm,1,daily
+umbrella,object that keeps rain off you,I forgot my umbrella at the shop.,ʌmˈbrelə,1,daily
+monsoon,season of heavy rain,The monsoon flooded the side road.,ˈmɒnsuːn,2,daily
+temperature,how hot or cold it is,The temperature dropped at night.,ˈtemprətʃə,2,daily
+fever,high body heat from illness,I stayed home because of a fever.,ˈfiːvə,1,daily
+cold,common illness with a blocked nose,I caught a cold in the rain.,kəʊld,1,daily
+cough,sudden noise from the throat,This cough is worse at night.,kɒf,1,daily
+medicine,pills or syrup taken when ill,Take this medicine after food.,ˈmedsən,1,daily
+pharmacy,shop that sells medicine,The pharmacy is open till ten.,ˈfɑːməsi,2,daily
+doctor,person who treats illness,The doctor asked me to rest today.,ˈdɒktə,1,daily
+hospital,place where sick people are treated,The hospital is a short auto ride.,ˈhɒspɪtəl,1,daily
+appointment,booked time to meet someone,My clinic appointment is at five.,əˈpɔɪntmənt,2,daily
+headache,pain in the head,The noise gave me a headache.,ˈhedeɪk,1,daily
+rest,stop work and relax,Please rest until the fever goes.,rest,1,daily
+exercise,activity that keeps the body fit,I do light exercise before breakfast.,ˈeksəsaɪz,2,daily
+gym,place with equipment for exercise,The hostel gym closes at nine.,dʒɪm,1,daily
+healthy,good for your body,Try a healthy snack instead of chips.,ˈhelθi,1,daily
+diet,usual food you eat,A simple diet helps during night shifts.,ˈdaɪət,2,daily
+allergy,bad body reaction to food or dust,I have a dust allergy in summer.,ˈælədʒi,2,daily
+bank,place that keeps and moves money,I have to visit the bank at lunch.,bæŋk,1,daily
+account,record of your money in a bank,My salary goes into this account.,əˈkaʊnt,2,daily
+cash,money in notes and coins,The shop takes cash and cards.,kæʃ,1,daily
+card,plastic used to pay or withdraw,I lost my card in the metro.,kɑːd,1,daily
+transfer,send money to another account,I will transfer the rent tonight.,ˈtrænsfɜː,2,daily
+withdraw,take money out of a bank,I need to withdraw cash for the trip.,wɪðˈdrɔː,2,daily
+savings,money you keep for later,I put a little into savings each month.,ˈseɪvɪŋz,2,daily
+loan,money you borrow and repay,The education loan has a low instalment.,ləʊn,2,daily
+instalment,one part of a loan payment,The bike instalment is due tomorrow.,ɪnˈstɔːlmənt,3,daily
+balance,money still in your account,Check the balance before you transfer.,ˈbæləns,2,daily
+receipt,paper that proves you paid,Keep the receipt for the deposit.,rɪˈsiːt,2,daily
+change,money returned after you pay,Please give me the change in coins.,tʃeɪndʒ,1,daily
+expensive,costing a lot of money,That paying guest room is too expensive.,ɪkˈspensɪv,2,daily
+cheap,costing little money,This canteen meal is cheap and filling.,tʃiːp,1,daily
+bargain,get a lower price by talking,You can bargain a little in that market.,ˈbɑːɡɪn,2,daily
+shop,place that sells goods,The shop next door has envelopes.,ʃɒp,1,daily
+mall,large building with many shops,The mall has a quiet food court.,mɔːl,1,daily
+size,how big or small something is,Do you have this shirt in my size?,saɪz,1,daily
+colour,red blue green and so on,I need a white shirt not this colour.,ˈkʌlə,1,daily
+fitting,trying clothes to check the size,The fitting room is at the back.,ˈfɪtɪŋ,2,daily
+return,give an item back to the shop,Can I return this if it is tight?,rɪˈtɜːn,1,daily
+exchange,give one item and take another,I want to exchange this for a larger size.,ɪksˈtʃeɪndʒ,2,daily
+refund,money given back after a return,The refund will come in three days.,ˈriːfʌnd,2,daily
+delivery,bringing goods to your address,The parcel delivery is expected tonight.,dɪˈlɪvəri,2,daily
+address,details of where you live,Please share the full address with the driver.,əˈdres,1,daily
+pincode,number that shows your postal area,Add the pincode so the parcel arrives.,ˈpɪnkəʊd,2,daily
+landmark,known place used to give directions,The landmark is the big water tank.,ˈlændmɑːk,2,daily
+direction,information about which way to go,Can you give me the direction to the stop?,dəˈrekʃən,2,daily
+lost,not knowing where you are,I got lost after the second turning.,lɒst,1,daily
+found,saw something that was missing,I found my keys under the seat.,faʊnd,1,daily
+help,do something useful for someone,Could you help me with this bag?,help,1,daily
+excuse,reason given for a problem,There is no excuse for missing the last bus.,ɪkˈskjuːs,2,daily
+sorry,word you say when you regret something,Sorry I stepped on your bag.,ˈsɒri,1,daily
+please,word you add to make a request polite,Please keep my seat for two minutes.,pliːz,1,daily
+thanks,word you say to show you are grateful,Thanks for waiting with my luggage.,θæŋks,1,daily
+welcome,reply after someone thanks you,You are welcome anytime after class.,ˈwelkəm,1,daily
+congratulations,kind words for someone's success,Congratulations on your new job.,kənˌɡrætʃəˈleɪʃənz,2,daily
+birthday,day you were born each year,We have a small birthday dinner at home.,ˈbɜːθdeɪ,1,daily
+wedding,ceremony when two people marry,The wedding is in our home town.,ˈwedɪŋ,1,daily
+festival,special day of celebration,The festival traffic will start tonight.,ˈfestɪvəl,2,daily
+holiday,day you do not work or study,The bank is closed for the holiday.,ˈhɒlədeɪ,1,daily
+weekend,last two days of the week,I will visit home this weekend.,ˌwiːkˈend,1,daily
+vacation,longer time away from work,We took a short vacation after exams.,vəˈkeɪʃən,2,daily
+trip,going somewhere and coming back,The temple trip is only one day.,trɪp,1,daily
+journey,travel from one place to another,The overnight journey was crowded.,ˈdʒɜːni,2,daily
+luggage,bags you take when you travel,Keep your luggage near your seat.,ˈlʌɡɪdʒ,2,daily
+booking,reserved ticket or room,I made the train booking last night.,ˈbʊkɪŋ,2,daily
+reservation,seat or room kept for you,The reservation is under my name.,ˌrezəˈveɪʃən,3,daily
+arrive,reach a place,What time does the bus arrive?,əˈraɪv,1,daily
+depart,leave a place,The train will depart in five minutes.,dɪˈpɑːt,2,daily
+passenger,person travelling in a vehicle,Each passenger must carry an identity card.,ˈpæsɪndʒə,2,daily
+seat,place where you sit,Is this seat free till the next stop?,siːt,1,daily
+window,glass opening in a wall or vehicle,I prefer a window seat on the bus.,ˈwɪndəʊ,1,daily
+aisle,path between rows of seats,Please keep the aisle clear for people.,aɪl,2,daily
+crowd,large group of people,A crowd was waiting at the gate.,kraʊd,1,daily
+noise,loud sound that disturbs you,The noise from the road kept me awake.,nɔɪz,1,daily
+quiet,with little or no sound,This paying guest is quiet at night.,ˈkwaɪət,1,daily
+privacy,being free from other people watching,I need a little privacy for this call.,ˈprɪvəsi,2,daily
+phone,device used to call and message,My phone battery is very low.,fəʊn,1,daily
+call,speak to someone on a phone,I will call you after I reach.,kɔːl,1,daily
+message,short written note on a phone,Send me a message when you start.,ˈmesɪdʒ,1,daily
+chat,informal talk by text or voice,We can chat after dinner.,tʃæt,1,daily
+recharge,add money or power to something,I need to recharge my phone plan.,ˌriːˈtʃɑːdʒ,2,daily
+network,service that carries phone signals,The network is weak inside the lift.,ˈnetwɜːk,2,daily
+coverage,area where a phone signal works,There is poor coverage in the basement.,ˈkʌvərɪdʒ,3,daily
+pack,set of mobile data or calls,This pack will last till month end.,pæk,2,daily
+battery,power stored in a device,Charge the battery before you leave.,ˈbætəri,1,daily
+charger,object used to add power,Can I borrow your charger for an hour?,ˈtʃɑːdʒə,1,daily
+screenshot,picture of what is on a screen,Send a screenshot of the ticket.,ˈskriːnʃɒt,3,daily
+download,save a file from the internet,Download the form before you go.,ˈdaʊnləʊd,2,daily
+upload,send a file to the internet,Please upload the photo for the pass.,ˈʌpləʊd,2,daily
+username,name you use to enter an account,I forgot the username for this app.,ˈjuːzəneɪm,2,daily
+profile,page with your basic details,Update your profile with a clear photo.,ˈprəʊfaɪl,2,daily
+post,message you put on social media,Do not post the offer letter online.,pəʊst,1,daily
+comment,short written reply under a post,I left a comment on the housing group.,ˈkɒment,2,daily
+like,show you agree with a post,You can like the notice if you are coming.,laɪk,1,daily
+forward,send a message on to someone else,Please forward the location to me.,ˈfɔːwəd,2,daily
+video,moving pictures with sound,I watched a short cooking video.,ˈvɪdiəʊ,1,daily
+photo,picture taken with a camera,The photo on the id is old.,ˈfəʊtəʊ,1,daily
+camera,device that takes photos or video,The camera on this phone is enough.,ˈkæmərə,1,daily
+internet,system that connects computers and phones,The internet is slow after nine.,ˈɪntənet,1,daily
+website,set of pages on the internet,The railway website is down right now.,ˈwebsaɪt,2,daily
+link,address that opens a page,Open the link I sent on chat.,lɪŋk,1,daily
+spam,unwanted messages sent to many people,Do not click links in spam mail.,spæm,2,daily
+code,short number used to prove it is you,The login code came on my phone.,kəʊd,1,daily
+scam,trick used to steal money,That job message looks like a scam.,skæm,2,daily
+safe,not in danger,Keep your bag in a safe place.,seɪf,1,daily
+careful,taking care to avoid problems,Be careful with your phone in the crowd.,ˈkeəfəl,1,daily
+hurry,move or act very quickly,Do not hurry on the wet stairs.,ˈhʌri,1,daily
+slowly,not quickly,Please speak slowly I missed the stop.,ˈsləʊli,1,daily
+enough,as much as you need,There is enough rice for everyone.,ɪˈnʌf,1,daily
+leftover,food remaining after a meal,I will take the leftover curry for lunch.,ˈleftəʊvə,2,daily
+fresh,newly made or recently picked,Buy fresh milk on the way home.,freʃ,1,daily
+stale,no longer fresh,This bread is stale so make toast.,steɪl,2,daily
+clean,not dirty,Keep the kitchen clean after cooking.,kliːn,1,daily
+dirty,not clean,These plates are still dirty.,ˈdɜːti,1,daily
+repair,fix something that is broken,The plumber will repair the tap tomorrow.,rɪˈpeə,2,daily
+broken,not working or in pieces,The geyser is broken again.,ˈbrəʊkən,1,daily
+leak,unwanted escape of water,There is a leak under the sink.,liːk,2,daily
+tap,handle that lets water flow,Do not leave the tap open.,tæp,1,daily
+bucket,open container for carrying water,Fill one bucket before the supply stops.,ˈbʌkɪt,1,daily
+power,electricity in a building,The power may go during the storm.,ˈpaʊə,1,daily
+outage,time when electricity stops,The outage lasted two hours last night.,ˈaʊtɪdʒ,3,daily
+inverter,device that gives power during an outage,The inverter kept the fan running.,ɪnˈvɜːtə,3,daily
+lift,box that carries people between floors,The lift is not working so use the stairs.,lɪft,1,daily
+stairs,set of steps between floors,I take the stairs to the second floor.,steəz,1,daily
+floor,level of a building,My room is on the third floor.,flɔː,1,daily
+balcony,small outdoor space on an upper floor,The clothes are drying on the balcony.,ˈbælkəni,2,daily
+kitchen,room where you cook,The kitchen tap needs a new washer.,ˈkɪtʃɪn,1,daily

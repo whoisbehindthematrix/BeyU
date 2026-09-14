@@ -1,0 +1,103 @@
+-- Seed Day 1–7 curriculum. Questions resolve course_day_id via (course_id, day_number).
+
+insert into public.courses (id, name, price_monthly_inr, is_default) values
+  ('interview', 'Interview Preparation', 99, false),
+  ('conversation', 'General Conversation', 99, false),
+  ('bundle', 'Interview + Conversation', 149, true);
+
+insert into public.course_days (course_id, day_number, title, theme) values
+  ('interview', 1, 'Tell me about yourself', 'self-intro'),
+  ('interview', 2, 'Your education story', 'education'),
+  ('interview', 3, 'Your skills', 'skills'),
+  ('interview', 4, 'Your goal', 'goal'),
+  ('interview', 5, 'Your work or training', 'work'),
+  ('interview', 6, 'Your 60-second introduction', 'intro'),
+  ('interview', 7, 'Week 1 review — mini mock', 'review'),
+  ('conversation', 1, 'Greetings that go further', 'greetings'),
+  ('conversation', 2, 'Your weekend', 'weekend'),
+  ('conversation', 3, 'Your daily routine', 'routine'),
+  ('conversation', 4, 'Small talk starters', 'small-talk'),
+  ('conversation', 5, 'Food you love', 'food'),
+  ('conversation', 6, 'Your city', 'city'),
+  ('conversation', 7, 'Free talk Friday', 'free-talk'),
+  ('bundle', 1, 'Tell me about yourself', 'self-intro'),
+  ('bundle', 2, 'Your education story', 'education'),
+  ('bundle', 3, 'Your skills', 'skills'),
+  ('bundle', 4, 'Your goal', 'goal'),
+  ('bundle', 5, 'Your weekend', 'weekend'),
+  ('bundle', 6, 'Your daily routine', 'routine'),
+  ('bundle', 7, 'Mixed review — mini mock', 'review');
+
+insert into public.questions (course_day_id, position, prompt, hint)
+select d.id, q.position, q.prompt, q.hint
+from (
+  values
+    -- interview
+    ('interview', 1, 1, 'Tell me about yourself.', 'I''m ___. I completed ___ in ___.'),
+    ('interview', 1, 2, 'What did you study?', 'I studied ___ at ___.'),
+    ('interview', 1, 3, 'Where did you grow up, and what is one thing people know you for?', 'Name the place, then one simple fact about you.'),
+    ('interview', 2, 1, 'Why did you choose that course?', 'I chose ___ because ___.'),
+    ('interview', 2, 2, 'What did you enjoy most in your studies?', 'The part I enjoyed most was ___.'),
+    ('interview', 2, 3, 'Would you choose the same course again? Why?', 'Say yes or no, then give one reason.'),
+    ('interview', 3, 1, 'What are you good at?', 'I''m good at ___.'),
+    ('interview', 3, 2, 'Give me an example of using that skill.', 'For example, once I ___.'),
+    ('interview', 3, 3, 'How did you get better at that skill?', 'Mention practice, a person, or a project.'),
+    ('interview', 4, 1, 'What kind of job are you looking for?', 'I''m looking for a role in ___.'),
+    ('interview', 4, 2, 'Why this field?', 'This field suits me because ___.'),
+    ('interview', 4, 3, 'Where do you see yourself in two years?', 'In two years I hope to ___.'),
+    ('interview', 5, 1, 'Tell me about your last project or training.', 'In my training, I worked on ___.'),
+    ('interview', 5, 2, 'What was your responsibility?', 'I was responsible for ___.'),
+    ('interview', 5, 3, 'What did you learn from that project or training?', 'The main thing I learned was ___.'),
+    ('interview', 6, 1, 'Introduce yourself in one minute.', 'To introduce myself, ___.'),
+    ('interview', 6, 2, 'What makes you a good hire?', 'In short, I can ___.'),
+    ('interview', 6, 3, 'Why should we hire you, in two sentences?', 'Keep it warm and specific — one skill, one example.'),
+    ('interview', 7, 1, 'Tell me about yourself.', 'Review: name, study, one strength.'),
+    ('interview', 7, 2, 'What are you good at?', 'I''m good at ___.'),
+    ('interview', 7, 3, 'Why this field?', 'This field suits me because ___.'),
+    -- conversation
+    ('conversation', 1, 1, 'How are you doing today, really?', 'Honestly, today has been ___.'),
+    ('conversation', 1, 2, 'How was your morning?', 'My morning was ___ because ___.'),
+    ('conversation', 1, 3, 'What has been the best part of your week so far?', 'The best part was ___.'),
+    ('conversation', 2, 1, 'What did you do this weekend?', 'This weekend I ___.'),
+    ('conversation', 2, 2, 'What was the best part?', 'The best part was ___.'),
+    ('conversation', 2, 3, 'What will you do next weekend?', 'Next weekend I plan to ___.'),
+    ('conversation', 3, 1, 'Walk me through your normal day.', 'Usually I start my day with ___.'),
+    ('conversation', 3, 2, 'What part of the day do you like most?', 'After that, I ___.'),
+    ('conversation', 3, 3, 'What do you do after work or college?', 'After work I usually ___.'),
+    ('conversation', 4, 1, 'How''s the weather there today?', 'It''s quite ___ today.'),
+    ('conversation', 4, 2, 'How do you travel to work or college?', 'I usually take the ___.'),
+    ('conversation', 4, 3, 'How long does your commute take?', 'It takes me about ___.'),
+    ('conversation', 5, 1, 'What''s your favourite food?', 'My favourite food is ___.'),
+    ('conversation', 5, 2, 'How is it made?', 'First you ___, then you ___.'),
+    ('conversation', 5, 3, 'When do you usually eat it, and who with?', 'I usually have it ___ with ___.'),
+    ('conversation', 6, 1, 'Tell me about your city or neighbourhood.', 'I live in ___, which is known for ___.'),
+    ('conversation', 6, 2, 'What should a visitor see?', 'You should definitely visit ___.'),
+    ('conversation', 6, 3, 'Where do you go often nearby?', 'I often go to ___ because ___.'),
+    ('conversation', 7, 1, 'Pick any topic and talk for one minute.', 'Let me tell you about ___.'),
+    ('conversation', 7, 2, 'Tell me about something you learned this week.', 'This week I learned ___.'),
+    ('conversation', 7, 3, 'What are you looking forward to?', 'I''m looking forward to ___.'),
+    -- bundle: D1–D4 interview, D5 conversation weekend, D6 conversation routine, D7 mixed
+    ('bundle', 1, 1, 'Tell me about yourself.', 'I''m ___. I completed ___ in ___.'),
+    ('bundle', 1, 2, 'What did you study?', 'I studied ___ at ___.'),
+    ('bundle', 1, 3, 'Where did you grow up, and what is one thing people know you for?', 'Name the place, then one simple fact about you.'),
+    ('bundle', 2, 1, 'Why did you choose that course?', 'I chose ___ because ___.'),
+    ('bundle', 2, 2, 'What did you enjoy most in your studies?', 'The part I enjoyed most was ___.'),
+    ('bundle', 2, 3, 'Would you choose the same course again? Why?', 'Say yes or no, then give one reason.'),
+    ('bundle', 3, 1, 'What are you good at?', 'I''m good at ___.'),
+    ('bundle', 3, 2, 'Give me an example of using that skill.', 'For example, once I ___.'),
+    ('bundle', 3, 3, 'How did you get better at that skill?', 'Mention practice, a person, or a project.'),
+    ('bundle', 4, 1, 'What kind of job are you looking for?', 'I''m looking for a role in ___.'),
+    ('bundle', 4, 2, 'Why this field?', 'This field suits me because ___.'),
+    ('bundle', 4, 3, 'Where do you see yourself in two years?', 'In two years I hope to ___.'),
+    ('bundle', 5, 1, 'What did you do this weekend?', 'This weekend I ___.'),
+    ('bundle', 5, 2, 'What was the best part?', 'The best part was ___.'),
+    ('bundle', 5, 3, 'What will you do next weekend?', 'Next weekend I plan to ___.'),
+    ('bundle', 6, 1, 'Walk me through your normal day.', 'Usually I start my day with ___.'),
+    ('bundle', 6, 2, 'What part of the day do you like most?', 'After that, I ___.'),
+    ('bundle', 6, 3, 'What do you do after work or college?', 'After work I usually ___.'),
+    ('bundle', 7, 1, 'Tell me about yourself.', 'Review: name, study, one strength.'),
+    ('bundle', 7, 2, 'What did you do this weekend?', 'This weekend I ___.'),
+    ('bundle', 7, 3, 'What are you good at?', 'I''m good at ___.')
+) as q(course_id, day_number, position, prompt, hint)
+join public.course_days d
+  on d.course_id = q.course_id and d.day_number = q.day_number;

@@ -1,0 +1,601 @@
+word,meaning,example,ipa,level,category
+lecture,talk given by a teacher to a class,The lecture on statistics is at ten.,ˈlektʃə,2,academic
+semester,half of an academic year,This semester ends next month.,sɪˈmestə,2,academic
+assignment,work a teacher asks you to finish,The assignment is due this week.,əˈsaɪnmənt,2,academic
+exam,formal test of what you know,My last exam is next week.,ɪɡˈzæm,1,academic
+syllabus,list of topics in a course,Check the syllabus before you start reading.,ˈsɪləbəs,3,academic
+campus,land and buildings of a college,The library is at the back of campus.,ˈkæmpəs,2,academic
+faculty,teachers in a college department,The faculty will post the timetable today.,ˈfækəlti,3,academic
+hostel,student housing on or near campus,The hostel mess closes at nine.,ˈhɒstel,2,academic
+scholarship,money given to help you study,I applied for a merit scholarship.,ˈskɒləʃɪp,3,academic
+thesis,long research paper for a degree,My thesis is on small shop sales.,ˈθiːsɪs,4,academic
+tutorial,small class for extra help,The tutorial will cover last week's sums.,tjuːˈtɔːriəl,3,academic
+laboratory,room used for scientific tests,We have laboratory work this week.,ləˈbɒrətri,3,academic
+experiment,test done to learn something,The experiment failed on the first try.,ɪkˈsperɪmənt,3,academic
+hypothesis,idea you test in research,Our hypothesis was only partly right.,haɪˈpɒθəsɪs,4,academic
+theory,set of ideas that explain something,This theory is easier with a diagram.,ˈθɪəri,3,academic
+study,spend time learning a subject,I study for two hours after class.,ˈstʌdi,1,academic
+revise,go over work again before a test,I will revise the formulas tonight.,rɪˈvaɪz,2,academic
+teacher,person who helps you learn,My teacher explained the graph twice.,ˈtiːtʃə,1,academic
+student,person who is learning,Each student must carry the id card.,ˈstjuːdənt,1,academic
+classmate,person in the same class as you,A classmate shared the lecture notes.,ˈklɑːsmeɪt,1,academic
+notes,short written points from a class,I missed the notes from yesterday.,nəʊts,1,academic
+revision,time spent going over work again,Morning revision helps before the viva.,rɪˈvɪʒən,2,academic
+marks,points scored in a test,I need ten more marks to pass.,mɑːks,1,academic
+grade,letter or number for your result,A better grade needs more practice tests.,ɡreɪd,1,academic
+degree,qualification from a university,I will finish my degree this year.,dɪˈɡriː,2,academic
+diploma,course certificate below a degree,I did a diploma in computer skills.,dɪˈpləʊmə,2,academic
+bachelor,first university degree,I have a bachelor degree in commerce.,ˈbætʃələ,3,academic
+master,higher degree after a bachelor,I plan a master degree after work.,ˈmɑːstə,3,academic
+doctorate,highest university research degree,A doctorate takes several years of research.,ˈdɒktərət,4,academic
+curriculum,full set of courses in a programme,The new curriculum includes spoken practice.,kəˈrɪkjələm,4,academic
+module,one unit inside a larger course,This module has two internal tests.,ˈmɒdjuːl,3,academic
+credit,point you earn for finishing a course,I still need four credits this year.,ˈkredɪt,3,academic
+attendance,record of being present in class,Seventy five percent attendance is required.,əˈtendəns,2,academic
+practical,class where you do the work yourself,The chemistry practical is in the lab.,ˈpræktɪkəl,2,academic
+viva,oral exam where you answer questions,My viva is with two examiners.,ˈvaɪvə,3,academic
+lecturer,college teacher who gives lectures,The lecturer posted extra reading.,ˈlektʃərə,2,academic
+tutor,person who gives extra teaching,A tutor is helping me with accounts.,ˈtjuːtə,2,academic
+principal,head of a school or college,The principal will sign the bonafide letter.,ˈprɪnsəpəl,2,academic
+library,place where you borrow books,The library is quiet after lunch.,ˈlaɪbrəri,1,academic
+textbook,main book used for a course,The textbook has the sample papers.,ˈtekstbʊk,2,academic
+chapter,one main part of a book,Read chapter four before the class.,ˈtʃæptə,1,academic
+paragraph,group of sentences on one idea,Write one paragraph on the graph.,ˈpærəɡrɑːf,2,academic
+essay,short piece of writing on a topic,The essay should be about three pages.,ˈeseɪ,2,academic
+article,piece of writing in a paper or journal,We must read one article this week.,ˈɑːtɪkəl,2,academic
+journal,magazine of research papers,This journal is available in the library.,ˈdʒɜːnəl,3,academic
+paper,written exam or research article,The accounts paper is in the morning.,ˈpeɪpə,1,academic
+citation,note that shows where an idea came from,Add a citation for every number you use.,saɪˈteɪʃən,4,academic
+bibliography,list of books and papers you used,Put the bibliography on the last page.,ˌbɪbliˈɒɡrəfi,4,academic
+plagiarism,using someone's words as your own,Plagiarism can cancel your assignment marks.,ˈpleɪdʒərɪzəm,4,academic
+outline,simple plan of what you will write,Make an outline before the essay.,ˈaʊtlaɪn,2,academic
+abstract,short summary at the start of a paper,The abstract should be under two hundred words.,ˈæbstrækt,4,academic
+conclusion,final part that closes your argument,The conclusion should answer the question.,kənˈkluːʒən,3,academic
+argument,reasoned point you try to prove,Give one clear argument in each paragraph.,ˈɑːɡjəmənt,3,academic
+evidence,facts that support your point,Use evidence from the table not guesses.,ˈevɪdəns,3,academic
+analysis,careful study of parts and meaning,Your analysis of the graph is clear.,əˈnæləsɪs,3,academic
+summary,short version of the main points,Write a summary in five lines.,ˈsʌməri,2,academic
+paraphrase,say the same idea in new words,Paraphrase the definition do not copy it.,ˈpærəfreɪz,4,academic
+definition,exact meaning of a word or idea,Learn the definition not only the formula.,ˌdefɪˈnɪʃən,2,academic
+concept,main idea in a subject,This concept will come in the viva.,ˈkɒnsept,2,academic
+principle,basic rule that something follows,The first principle is to show your working.,ˈprɪnsəpəl,3,academic
+formula,rule written with symbols,Keep the formula sheet for last minute revision.,ˈfɔːmjələ,2,academic
+equation,math sentence that two sides are equal,Solve the equation step by step.,ɪˈkweɪʒən,3,academic
+calculate,find a number using maths,Calculate the average of these five marks.,ˈkælkjəleɪt,2,academic
+graph,drawing that shows numbers as lines,Label both axes on the graph.,ɡrɑːf,2,academic
+chart,picture that shows numbers clearly,The pie chart shows subject-wise marks.,tʃɑːt,2,academic
+table,numbers arranged in rows and columns,Copy the table from the question paper.,ˈteɪbəl,1,academic
+diagram,simple drawing that explains something,Draw a diagram of the circuit.,ˈdaɪəɡræm,2,academic
+axis,line used as a scale on a graph,Write the units on each axis.,ˈæksɪs,3,academic
+variable,value that can change in a problem,Name the variable you are measuring.,ˈveəriəbəl,3,academic
+statistics,subject that studies numbers and chance,Statistics is useful for survey work.,stəˈtɪstɪks,3,academic
+percentage,amount out of one hundred,What percentage of the class passed?,pəˈsentɪdʒ,2,academic
+ratio,comparison of two amounts,Simplify the ratio before you answer.,ˈreɪʃiəʊ,3,academic
+estimate,sensible guess of a number,Estimate the answer before you calculate.,ˈestɪmət,2,academic
+compare,say how two things are similar,Compare the two methods in one paragraph.,kəmˈpeə,2,academic
+contrast,say how two things are different,Contrast last year's result with this one.,ˈkɒntrɑːst,3,academic
+evaluate,judge how good something is,Evaluate the method not only the answer.,ɪˈvæljueɪt,3,academic
+critique,careful judgment of a piece of work,Write a short critique of the article.,krɪˈtiːk,4,academic
+interpret,explain what something means,Interpret the graph in two sentences.,ɪnˈtɜːprɪt,3,academic
+infer,reach an idea from the given facts,What can you infer from this table?,ɪnˈfɜː,4,academic
+conclude,reach a final judgment,What do you conclude from the experiment?,kənˈkluːd,3,academic
+prove,show that something is true,Prove the identity using the first method.,pruːv,3,academic
+method,ordered way of doing something,Show the method not only the final number.,ˈmeθəd,2,academic
+approach,way you choose to solve a problem,A slower approach may be more accurate.,əˈprəʊtʃ,3,academic
+technique,practical skill used to do something,This technique saves time in long sums.,tekˈniːk,3,academic
+strategy,plan for how you will study or answer,My exam strategy is easy questions first.,ˈstrætədʒi,3,academic
+objective,clear result you want to reach,The objective of this lab is measurement.,əbˈdʒektɪv,3,academic
+aim,what you hope to do,The aim of this unit is basic algebra.,eɪm,1,academic
+purpose,reason something is done,The purpose of the test is to check basics.,ˈpɜːpəs,2,academic
+topic,subject of a class or paper,Pick a topic you can explain simply.,ˈtɒpɪk,1,academic
+theme,main idea that runs through a text,The theme of the poem is hope.,θiːm,2,academic
+subject,area of study such as maths,Commerce is my main subject.,ˈsʌbdʒɪkt,1,academic
+major,main field of study in college,My major is computer applications.,ˈmeɪdʒə,2,academic
+minor,second smaller field of study,I took economics as a minor.,ˈmaɪnə,3,academic
+elective,optional course you can choose,I chose a spoken language elective.,ɪˈlektɪv,3,academic
+core,required course everyone must take,Accounts is a core paper this year.,kɔː,2,academic
+foundation,first course that builds basic knowledge,The foundation class starts next week.,faʊnˈdeɪʃən,3,academic
+advanced,at a higher and harder level,This is an advanced module in tax.,ədˈvɑːnst,3,academic
+basic,at the simple starting level,I still need basic algebra practice.,ˈbeɪsɪk,1,academic
+beginner,person just starting to learn,This spoken class is for beginners.,bɪˈɡɪnə,1,academic
+intermediate,level between beginner and advanced,I am intermediate in spreadsheet skills.,ˌɪntəˈmiːdiət,3,academic
+proficient,able to do something well,I am proficient in two languages.,prəˈfɪʃənt,4,academic
+literacy,ability to read and write,Digital literacy is part of the course.,ˈlɪtərəsi,3,academic
+numeracy,ability to work with numbers,Numeracy is tested in the entrance paper.,ˈnjuːmərəsi,4,academic
+comprehension,ability to understand a text,The comprehension passage is on page two.,ˌkɒmprɪˈhenʃən,3,academic
+term,word with a special subject meaning,Learn the term before you use it.,tɜːm,2,academic
+phrase,small group of words,Underline the key phrase in the question.,freɪz,2,academic
+sentence,group of words with a full meaning,Write the answer in a full sentence.,ˈsentəns,1,academic
+spelling,way letters are put in a word,Check the spelling of technical words.,ˈspelɪŋ,1,academic
+fluency,ease and flow when you speak,Daily practice improved my fluency.,ˈfluːənsi,3,academic
+listening,skill of understanding spoken language,The listening test uses short audio clips.,ˈlɪsənɪŋ,2,academic
+speaking,skill of talking in a language,The speaking test is a short conversation.,ˈspiːkɪŋ,1,academic
+reading,skill of understanding written text,Reading the question twice saves marks.,ˈriːdɪŋ,1,academic
+writing,skill of putting ideas in words,Writing needs a clear first sentence.,ˈraɪtɪŋ,1,academic
+translation,changing words from one language to another,Do not depend on word by word translation.,trænzˈleɪʃən,3,academic
+language,system of words people use to speak,The language of the class is not local.,ˈlæŋɡwɪdʒ,1,academic
+literature,stories poems and plays studied in class,This literature paper has two unseen poems.,ˈlɪtrətʃə,3,academic
+science,study of the natural world,I took science in the twelfth year.,ˈsaɪəns,1,academic
+commerce,study of business and accounts,Commerce students have an accounts paper.,ˈkɒmɜːs,2,academic
+arts,study of humanities and social subjects,She moved from arts to a media course.,ɑːts,2,academic
+engineering,study of how to design and build,He is in the second year of engineering.,ˌendʒɪˈnɪərɪŋ,2,academic
+management,study of how organisations are run,I want a management course after this degree.,ˈmænɪdʒmənt,2,academic
+computer,machine used to store and process data,The computer lab is booked till four.,kəmˈpjuːtə,1,academic
+mathematics,study of numbers and shapes,Mathematics is my strongest paper.,ˌmæθəˈmætɪks,2,academic
+physics,study of matter energy and motion,The physics numericals need more practice.,ˈfɪzɪks,2,academic
+chemistry,study of substances and how they change,Chemistry has a long practical record.,ˈkemɪstri,2,academic
+biology,study of living things,Biology diagrams must be labelled clearly.,baɪˈɒlədʒi,2,academic
+history,study of the past,This history chapter is on trade routes.,ˈhɪstri,1,academic
+geography,study of places land and climate,Geography map work is this week.,dʒiˈɒɡrəfi,2,academic
+economics,study of money work and markets,Economics helps in bank exam prep.,ˌiːkəˈnɒmɪks,3,academic
+accounting,keeping and checking money records,Accounting entries must always balance.,əˈkaʊntɪŋ,3,academic
+psychology,study of how people think and feel,Psychology is an elective this semester.,saɪˈkɒlədʒi,3,academic
+law,study of rules a society follows,She wants to study law after graduation.,lɔː,2,academic
+medical,related to health and treatment,The medical entrance is highly competitive.,ˈmedɪkəl,2,academic
+architecture,study of designing buildings,Architecture students have a studio class.,ˈɑːkɪtektʃə,3,academic
+design,plan for how something should look,The design assignment needs three sketches.,dɪˈzaɪn,2,academic
+lab,short name for a laboratory,Meet me outside the computer lab.,læb,1,academic
+specimen,sample used for study or tests,Handle the specimen with care.,ˈspesɪmən,4,academic
+microscope,tool that makes small things look large,Clean the microscope after the practical.,ˈmaɪkrəskəʊp,3,academic
+observation,something you notice during a test,Write one observation for each trial.,ˌɒbzəˈveɪʃən,3,academic
+finding,result you discover in a study,The main finding is in paragraph three.,ˈfaɪndɪŋ,3,academic
+seminar,class where students discuss a topic,I have to present in tomorrow's seminar.,ˈsemɪnɑː,3,academic
+webinar,seminar held on the internet,The webinar link will come on mail.,ˈwebɪnɑː,3,academic
+online,done through the internet,The extra class is online tonight.,ˌɒnˈlaɪn,1,academic
+offline,done in person not on the internet,The test will be offline in the hall.,ˌɒfˈlaɪn,2,academic
+distance,study done away from the campus,I did one distance course last year.,ˈdɪstəns,2,academic
+correspondence,study done by post or online materials,The correspondence course has weekend contact classes.,ˌkɒrəˈspɒndəns,4,academic
+enrolment,act of joining a course,Enrolment closes at the end of this week.,ɪnˈrəʊlmənt,3,academic
+admission,being accepted into a college,Admission lists will be on the notice board.,ədˈmɪʃən,2,academic
+entrance,exam used to get into a course,The entrance form is still open.,ˈentrəns,2,academic
+cut-off,minimum marks needed to get in,The cut-off rose by two marks.,ˈkʌt ɒf,3,academic
+merit,high marks that win a seat or award,Seats are given on merit this year.,ˈmerɪt,3,academic
+rank,your place in an ordered list of scores,My rank is enough for the local college.,ræŋk,2,academic
+counselling,session where seats and courses are allotted,Counselling is in the main hall tomorrow.,ˈkaʊnsəlɪŋ,3,academic
+stream,group of subjects you choose in school,I took the commerce stream after tenth.,striːm,2,academic
+board,body that sets school exams,The board result will come next month.,bɔːd,2,academic
+university,institution that grants degrees,The university posted the revaluation dates.,ˌjuːnɪˈvɜːsəti,2,academic
+college,place for higher study after school,My college is a twenty minute bus ride.,ˈkɒlɪdʒ,1,academic
+school,place for study before college,I still visit my school teachers.,skuːl,1,academic
+classroom,room where a class is held,The classroom fan is not working.,ˈklɑːsruːm,1,academic
+blackboard,dark board a teacher writes on,Copy the sums from the blackboard.,ˈblækbɔːd,2,academic
+projector,machine that shows slides on a wall,The projector is not connecting today.,prəˈdʒektə,3,academic
+slide,one screen in a class presentation,Keep one idea on each slide.,slaɪd,2,academic
+handout,paper given to the class,The handout has the practice questions.,ˈhændaʊt,2,academic
+photocopy,paper copy of a document,Please take a photocopy of the hall ticket.,ˈfəʊtəʊkɒpi,2,academic
+stationery,pens paper and other class supplies,The stationery shop is near the gate.,ˈsteɪʃənri,2,academic
+backpack,bag worn on your back,My backpack is too heavy today.,ˈbækpæk,1,academic
+timetable,plan of classes by day and time,The new timetable starts next week.,ˈtaɪmteɪbəl,2,academic
+period,one class session in the day,The third period is cancelled.,ˈpɪəriəd,1,academic
+break,short rest between classes,Meet me in the canteen at break.,breɪk,1,academic
+recess,longer break in the school day,Recess is twenty minutes after noon.,rɪˈses,2,academic
+canteen,place on campus that sells food,The canteen is full after the lecture.,kænˈtiːn,2,academic
+mess,dining hall in a hostel,Hostel mess food is simple but filling.,mes,2,academic
+senior,student in a higher year,A senior shared last year's papers.,ˈsiːniə,2,academic
+junior,student in a lower year,I will help a junior with the lab record.,ˈdʒuːniə,2,academic
+batch,group of students from the same year,Our batch has the exam on the same day.,bætʃ,2,academic
+alumni,people who studied at the college before,Alumni came to talk about first jobs.,ˈæljənaɪ,4,academic
+convocation,ceremony where degrees are given,Convocation is in the main auditorium.,ˌkɒnvəˈkeɪʃən,4,academic
+medal,prize given for a top result,She won a medal for the highest marks.,ˈmedəl,2,academic
+distinction,very high pass in an exam,He passed the paper with distinction.,dɪˈstɪŋkʃən,3,academic
+qualify,reach the marks needed to go further,I need forty to qualify for the next paper.,ˈkwɒlɪfaɪ,2,academic
+reappear,take an exam again after not passing,I will reappear for accounts in the next term.,ˌriːəˈpɪə,3,academic
+supplementary,extra exam given after the main one,The supplementary form is at the office.,ˌsʌplɪˈmentəri,4,academic
+arrear,paper you still have to pass,I have one arrear from last semester.,əˈrɪə,3,academic
+present,in class and marked as attending,Mark me present I reached after the bell.,ˈprezənt,1,academic
+group,set of students working together,Our group meets after the last period.,ɡruːp,1,academic
+pair,two students working together,Work in a pair for this experiment.,peə,1,academic
+peer,person at the same study level,Ask a peer to check your draft.,pɪə,3,academic
+debate,formal argument between two sides,I spoke for the motion in the debate.,dɪˈbeɪt,2,academic
+quiz,short informal test,There is a surprise quiz in the first period.,kwɪz,1,academic
+test,exam that checks what you remember,The unit test is for twenty marks.,test,1,academic
+mock,practice exam before the real one,The mock paper was harder than last year.,mɒk,2,academic
+oral,spoken not written,The oral exam is five minutes long.,ˈɔːrəl,2,academic
+written,done on paper not spoken,The written paper has two sections.,ˈrɪtən,1,academic
+coursework,graded work done during the term,Coursework is thirty percent of the grade.,ˈkɔːswɜːk,3,academic
+dissertation,long final research paper,The dissertation title needs approval.,ˌdɪsəˈteɪʃən,4,academic
+borrow,take a book for a short time,You can borrow two books at a time.,ˈbɒrəʊ,1,academic
+renew,keep a library book for longer,I need to renew this book today.,rɪˈnjuː,2,academic
+appendix,extra section at the end of a paper,Put the extra tables in the appendix.,əˈpendɪks,4,academic
+glossary,list of subject words and meanings,The glossary is at the back of the book.,ˈɡlɒsəri,3,academic
+footnote,small note at the bottom of a page,Add a footnote for that source.,ˈfʊtnəʊt,4,academic
+morning,early part of the day,I leave home early every morning.,ˈmɔːnɪŋ,1,daily
+evening,later part of the day,I cook dinner in the evening.,ˈiːvnɪŋ,1,daily
+night,time after evening when it is dark,The last bus leaves at night.,naɪt,1,daily
+breakfast,first meal of the day,I eat a light breakfast before the exam.,ˈbrekfəst,1,daily
+lunch,meal in the middle of the day,Let us have lunch after the class.,lʌntʃ,1,daily
+dinner,main meal in the evening,Dinner will be ready in ten minutes.,ˈdɪnə,1,daily
+snack,small food between meals,I packed a snack for the journey.,snæk,1,daily
+tea,hot drink often taken with milk,Would you like a cup of tea?,tiː,1,daily
+coffee,hot drink made from coffee beans,I need coffee before the first lecture.,ˈkɒfi,1,daily
+water,clear liquid we drink,Please drink more water in this heat.,ˈwɔːtə,1,daily
+hungry,wanting to eat,I get hungry around four o'clock.,ˈhʌŋɡri,1,daily
+thirsty,wanting to drink,I felt thirsty after the walk.,ˈθɜːsti,1,daily
+tired,needing rest after work,I feel tired after the night shift.,ˈtaɪəd,1,daily
+sleepy,wanting to sleep,I feel sleepy on the early bus.,ˈsliːpi,1,daily
+wake,stop sleeping,I wake at six for the metro.,weɪk,1,daily
+sleep,rest with your eyes closed,Try to sleep before the morning shift.,sliːp,1,daily
+shower,wash your body under falling water,I take a shower before leaving home.,ˈʃaʊə,1,daily
+clothes,things you wear,I kept my formal clothes ready.,kləʊðz,1,daily
+laundry,clothes that need washing,I will put the laundry out tonight.,ˈlɔːndri,2,daily
+iron,make clothes smooth with heat,Please iron this shirt for tomorrow.,ˈaɪən,1,daily
+neighbour,person living near you,My neighbour waters the plants when I travel.,ˈneɪbə,1,daily
+family,people you are related to,My family lives in a small town.,ˈfæməli,1,daily
+parents,your mother and father,My parents supported my job search.,ˈpeərənts,1,daily
+sibling,brother or sister,My sibling is still in college.,ˈsɪblɪŋ,2,daily
+relative,person in your wider family,A relative is visiting this weekend.,ˈrelətɪv,2,daily
+guest,person staying in your home,We have a guest from the village.,ɡest,1,daily
+friend,person you like and trust,A friend is picking me up at the station.,frend,1,daily
+roommate,person who shares your room,My roommate cooks on weekdays.,ˈruːmmeɪt,2,daily
+landlord,person you pay rent to,The landlord will visit this weekend.,ˈlændlɔːd,2,daily
+rent,money paid to live in a place,Rent is due in the first week.,rent,1,daily
+deposit,money kept as a safety amount,The deposit will come back when I move.,dɪˈpɒzɪt,2,daily
+electricity,power used for lights and fans,The electricity went off after the storm.,ɪˌlekˈtrɪsəti,2,daily
+bill,paper showing money you must pay,I paid the phone bill online.,bɪl,1,daily
+grocery,food bought for the home,I will get grocery after office.,ˈɡrəʊsəri,2,daily
+market,place to buy food and goods,The vegetable market opens at six.,ˈmɑːkɪt,1,daily
+vegetable,plant food such as beans or greens,We need one more vegetable for dinner.,ˈvedʒtəbəl,1,daily
+fruit,sweet plant food such as banana,I packed fruit for the train.,fruːt,1,daily
+rice,grain eaten as a main food,There is enough rice for tonight.,raɪs,1,daily
+bread,baked food often eaten at breakfast,The bread is still fresh today.,bred,1,daily
+spicy,having a hot strong taste,This curry is too spicy for me.,ˈspaɪsi,1,daily
+sweet,having a sugary taste,The tea is a little too sweet.,swiːt,1,daily
+salty,having a lot of salt,These snacks are too salty.,ˈsɔːlti,1,daily
+restaurant,place where you pay to eat,That restaurant is cheap and clean.,ˈrestrɒnt,2,daily
+menu,list of food you can order,The menu has a vegetarian section.,ˈmenjuː,1,daily
+order,ask for food or goods,I will order rice and dal.,ˈɔːdə,1,daily
+tip,extra money for good service,We left a small tip for the waiter.,tɪp,2,daily
+crowded,full of too many people,The metro is crowded after office hours.,ˈkraʊdɪd,2,daily
+queue,line of people waiting,There is a long queue at the counter.,kjuː,2,daily
+wait,stay until something happens,Please wait here for your token.,weɪt,1,daily
+late,after the expected time,I was late because of the rain.,leɪt,1,daily
+early,before the expected time,Come early to find a seat.,ˈɜːli,1,daily
+traffic,cars and buses on the road,Traffic is heavy near the flyover.,ˈtræfɪk,1,daily
+bus,large vehicle that carries many people,The bus stop is next to the hospital.,bʌs,1,daily
+train,railway vehicle for long trips,The train is running on time today.,treɪn,1,daily
+metro,city train that runs often,Take the metro to avoid the traffic.,ˈmetrəʊ,2,daily
+auto,three wheel taxi used in cities,An auto will be cheaper at this hour.,ˈɔːtəʊ,1,daily
+cab,car taxi you book or stop,I booked a cab to the airport.,kæb,1,daily
+walk,go on foot,I walk to the station every day.,wɔːk,1,daily
+bicycle,two wheel vehicle you pedal,I go to class on my bicycle.,ˈbaɪsɪkəl,1,daily
+helmet,hard hat that protects your head,Wear a helmet on the two wheeler.,ˈhelmɪt,2,daily
+fuel,petrol or gas for a vehicle,The fuel line at the pump is long.,ˈfjuːəl,2,daily
+station,place where trains or buses stop,I will meet you at the station.,ˈsteɪʃən,1,daily
+platform,raised area beside the tracks,The train will arrive on platform two.,ˈplætfɔːm,2,daily
+fare,money paid for a ride,The bus fare increased this month.,feə,2,daily
+pass,card that lets you travel cheaper,I renewed my monthly metro pass.,pɑːs,2,daily
+signal,light that tells traffic to stop or go,Turn left after the next signal.,ˈsɪɡnəl,2,daily
+crossing,place where you walk across a road,Use the crossing near the school.,ˈkrɒsɪŋ,2,daily
+weather,how hot wet or windy it is,The weather will stay humid this week.,ˈweðə,1,daily
+rain,water falling from the sky,Carry a bag that can take rain.,reɪn,1,daily
+humidity,amount of water in the air,The humidity makes the commute harder.,hjuːˈmɪdəti,3,daily
+sunny,with bright sun,It will be sunny after lunch.,ˈsʌni,1,daily
+cloudy,covered with clouds,The sky looks cloudy this morning.,ˈklaʊdi,1,daily
+storm,very strong wind and rain,The storm may delay the last bus.,stɔːm,1,daily
+umbrella,object that keeps rain off you,I forgot my umbrella at the shop.,ʌmˈbrelə,1,daily
+monsoon,season of heavy rain,The monsoon flooded the side road.,ˈmɒnsuːn,2,daily
+temperature,how hot or cold it is,The temperature dropped at night.,ˈtemprətʃə,2,daily
+fever,high body heat from illness,I stayed home because of a fever.,ˈfiːvə,1,daily
+cold,common illness with a blocked nose,I caught a cold in the rain.,kəʊld,1,daily
+cough,sudden noise from the throat,This cough is worse at night.,kɒf,1,daily
+medicine,pills or syrup taken when ill,Take this medicine after food.,ˈmedsən,1,daily
+pharmacy,shop that sells medicine,The pharmacy is open till ten.,ˈfɑːməsi,2,daily
+doctor,person who treats illness,The doctor asked me to rest today.,ˈdɒktə,1,daily
+hospital,place where sick people are treated,The hospital is a short auto ride.,ˈhɒspɪtəl,1,daily
+appointment,booked time to meet someone,My clinic appointment is at five.,əˈpɔɪntmənt,2,daily
+headache,pain in the head,The noise gave me a headache.,ˈhedeɪk,1,daily
+rest,stop work and relax,Please rest until the fever goes.,rest,1,daily
+exercise,activity that keeps the body fit,I do light exercise before breakfast.,ˈeksəsaɪz,2,daily
+gym,place with equipment for exercise,The hostel gym closes at nine.,dʒɪm,1,daily
+healthy,good for your body,Try a healthy snack instead of chips.,ˈhelθi,1,daily
+diet,usual food you eat,A simple diet helps during night shifts.,ˈdaɪət,2,daily
+allergy,bad body reaction to food or dust,I have a dust allergy in summer.,ˈælədʒi,2,daily
+bank,place that keeps and moves money,I have to visit the bank at lunch.,bæŋk,1,daily
+account,record of your money in a bank,My salary goes into this account.,əˈkaʊnt,2,daily
+cash,money in notes and coins,The shop takes cash and cards.,kæʃ,1,daily
+card,plastic used to pay or withdraw,I lost my card in the metro.,kɑːd,1,daily
+transfer,send money to another account,I will transfer the rent tonight.,ˈtrænsfɜː,2,daily
+withdraw,take money out of a bank,I need to withdraw cash for the trip.,wɪðˈdrɔː,2,daily
+savings,money you keep for later,I put a little into savings each month.,ˈseɪvɪŋz,2,daily
+loan,money you borrow and repay,The education loan has a low instalment.,ləʊn,2,daily
+instalment,one part of a loan payment,The bike instalment is due tomorrow.,ɪnˈstɔːlmənt,3,daily
+balance,money still in your account,Check the balance before you transfer.,ˈbæləns,2,daily
+receipt,paper that proves you paid,Keep the receipt for the deposit.,rɪˈsiːt,2,daily
+change,money returned after you pay,Please give me the change in coins.,tʃeɪndʒ,1,daily
+expensive,costing a lot of money,That paying guest room is too expensive.,ɪkˈspensɪv,2,daily
+cheap,costing little money,This canteen meal is cheap and filling.,tʃiːp,1,daily
+bargain,get a lower price by talking,You can bargain a little in that market.,ˈbɑːɡɪn,2,daily
+shop,place that sells goods,The shop next door has envelopes.,ʃɒp,1,daily
+mall,large building with many shops,The mall has a quiet food court.,mɔːl,1,daily
+size,how big or small something is,Do you have this shirt in my size?,saɪz,1,daily
+colour,red blue green and so on,I need a white shirt not this colour.,ˈkʌlə,1,daily
+fitting,trying clothes to check the size,The fitting room is at the back.,ˈfɪtɪŋ,2,daily
+return,give an item back to the shop,Can I return this if it is tight?,rɪˈtɜːn,1,daily
+exchange,give one item and take another,I want to exchange this for a larger size.,ɪksˈtʃeɪndʒ,2,daily
+refund,money given back after a return,The refund will come in three days.,ˈriːfʌnd,2,daily
+delivery,bringing goods to your address,The parcel delivery is expected tonight.,dɪˈlɪvəri,2,daily
+address,details of where you live,Please share the full address with the driver.,əˈdres,1,daily
+pincode,number that shows your postal area,Add the pincode so the parcel arrives.,ˈpɪnkəʊd,2,daily
+landmark,known place used to give directions,The landmark is the big water tank.,ˈlændmɑːk,2,daily
+direction,information about which way to go,Can you give me the direction to the stop?,dəˈrekʃən,2,daily
+lost,not knowing where you are,I got lost after the second turning.,lɒst,1,daily
+found,saw something that was missing,I found my keys under the seat.,faʊnd,1,daily
+help,do something useful for someone,Could you help me with this bag?,help,1,daily
+excuse,reason given for a problem,There is no excuse for missing the last bus.,ɪkˈskjuːs,2,daily
+sorry,word you say when you regret something,Sorry I stepped on your bag.,ˈsɒri,1,daily
+please,word you add to make a request polite,Please keep my seat for two minutes.,pliːz,1,daily
+thanks,word you say to show you are grateful,Thanks for waiting with my luggage.,θæŋks,1,daily
+welcome,reply after someone thanks you,You are welcome anytime after class.,ˈwelkəm,1,daily
+congratulations,kind words for someone's success,Congratulations on your new job.,kənˌɡrætʃəˈleɪʃənz,2,daily
+birthday,day you were born each year,We have a small birthday dinner at home.,ˈbɜːθdeɪ,1,daily
+wedding,ceremony when two people marry,The wedding is in our home town.,ˈwedɪŋ,1,daily
+festival,special day of celebration,The festival traffic will start tonight.,ˈfestɪvəl,2,daily
+holiday,day you do not work or study,The bank is closed for the holiday.,ˈhɒlədeɪ,1,daily
+weekend,last two days of the week,I will visit home this weekend.,ˌwiːkˈend,1,daily
+vacation,longer time away from work,We took a short vacation after exams.,vəˈkeɪʃən,2,daily
+trip,going somewhere and coming back,The temple trip is only one day.,trɪp,1,daily
+journey,travel from one place to another,The overnight journey was crowded.,ˈdʒɜːni,2,daily
+luggage,bags you take when you travel,Keep your luggage near your seat.,ˈlʌɡɪdʒ,2,daily
+booking,reserved ticket or room,I made the train booking last night.,ˈbʊkɪŋ,2,daily
+reservation,seat or room kept for you,The reservation is under my name.,ˌrezəˈveɪʃən,3,daily
+arrive,reach a place,What time does the bus arrive?,əˈraɪv,1,daily
+depart,leave a place,The train will depart in five minutes.,dɪˈpɑːt,2,daily
+passenger,person travelling in a vehicle,Each passenger must carry an identity card.,ˈpæsɪndʒə,2,daily
+seat,place where you sit,Is this seat free till the next stop?,siːt,1,daily
+window,glass opening in a wall or vehicle,I prefer a window seat on the bus.,ˈwɪndəʊ,1,daily
+aisle,path between rows of seats,Please keep the aisle clear for people.,aɪl,2,daily
+crowd,large group of people,A crowd was waiting at the gate.,kraʊd,1,daily
+noise,loud sound that disturbs you,The noise from the road kept me awake.,nɔɪz,1,daily
+quiet,with little or no sound,This paying guest is quiet at night.,ˈkwaɪət,1,daily
+privacy,being free from other people watching,I need a little privacy for this call.,ˈprɪvəsi,2,daily
+phone,device used to call and message,My phone battery is very low.,fəʊn,1,daily
+call,speak to someone on a phone,I will call you after I reach.,kɔːl,1,daily
+message,short written note on a phone,Send me a message when you start.,ˈmesɪdʒ,1,daily
+chat,informal talk by text or voice,We can chat after dinner.,tʃæt,1,daily
+recharge,add money or power to something,I need to recharge my phone plan.,ˌriːˈtʃɑːdʒ,2,daily
+network,service that carries phone signals,The network is weak inside the lift.,ˈnetwɜːk,2,daily
+coverage,area where a phone signal works,There is poor coverage in the basement.,ˈkʌvərɪdʒ,3,daily
+pack,set of mobile data or calls,This pack will last till month end.,pæk,2,daily
+battery,power stored in a device,Charge the battery before you leave.,ˈbætəri,1,daily
+charger,object used to add power,Can I borrow your charger for an hour?,ˈtʃɑːdʒə,1,daily
+screenshot,picture of what is on a screen,Send a screenshot of the ticket.,ˈskriːnʃɒt,3,daily
+download,save a file from the internet,Download the form before you go.,ˈdaʊnləʊd,2,daily
+upload,send a file to the internet,Please upload the photo for the pass.,ˈʌpləʊd,2,daily
+username,name you use to enter an account,I forgot the username for this app.,ˈjuːzəneɪm,2,daily
+profile,page with your basic details,Update your profile with a clear photo.,ˈprəʊfaɪl,2,daily
+post,message you put on social media,Do not post the offer letter online.,pəʊst,1,daily
+comment,short written reply under a post,I left a comment on the housing group.,ˈkɒment,2,daily
+like,show you agree with a post,You can like the notice if you are coming.,laɪk,1,daily
+forward,send a message on to someone else,Please forward the location to me.,ˈfɔːwəd,2,daily
+video,moving pictures with sound,I watched a short cooking video.,ˈvɪdiəʊ,1,daily
+photo,picture taken with a camera,The photo on the id is old.,ˈfəʊtəʊ,1,daily
+camera,device that takes photos or video,The camera on this phone is enough.,ˈkæmərə,1,daily
+internet,system that connects computers and phones,The internet is slow after nine.,ˈɪntənet,1,daily
+website,set of pages on the internet,The railway website is down right now.,ˈwebsaɪt,2,daily
+link,address that opens a page,Open the link I sent on chat.,lɪŋk,1,daily
+spam,unwanted messages sent to many people,Do not click links in spam mail.,spæm,2,daily
+code,short number used to prove it is you,The login code came on my phone.,kəʊd,1,daily
+scam,trick used to steal money,That job message looks like a scam.,skæm,2,daily
+safe,not in danger,Keep your bag in a safe place.,seɪf,1,daily
+careful,taking care to avoid problems,Be careful with your phone in the crowd.,ˈkeəfəl,1,daily
+hurry,move or act very quickly,Do not hurry on the wet stairs.,ˈhʌri,1,daily
+slowly,not quickly,Please speak slowly I missed the stop.,ˈsləʊli,1,daily
+enough,as much as you need,There is enough rice for everyone.,ɪˈnʌf,1,daily
+leftover,food remaining after a meal,I will take the leftover curry for lunch.,ˈleftəʊvə,2,daily
+fresh,newly made or recently picked,Buy fresh milk on the way home.,freʃ,1,daily
+stale,no longer fresh,This bread is stale so make toast.,steɪl,2,daily
+clean,not dirty,Keep the kitchen clean after cooking.,kliːn,1,daily
+dirty,not clean,These plates are still dirty.,ˈdɜːti,1,daily
+repair,fix something that is broken,The plumber will repair the tap tomorrow.,rɪˈpeə,2,daily
+broken,not working or in pieces,The geyser is broken again.,ˈbrəʊkən,1,daily
+leak,unwanted escape of water,There is a leak under the sink.,liːk,2,daily
+tap,handle that lets water flow,Do not leave the tap open.,tæp,1,daily
+bucket,open container for carrying water,Fill one bucket before the supply stops.,ˈbʌkɪt,1,daily
+power,electricity in a building,The power may go during the storm.,ˈpaʊə,1,daily
+outage,time when electricity stops,The outage lasted two hours last night.,ˈaʊtɪdʒ,3,daily
+inverter,device that gives power during an outage,The inverter kept the fan running.,ɪnˈvɜːtə,3,daily
+lift,box that carries people between floors,The lift is not working so use the stairs.,lɪft,1,daily
+stairs,set of steps between floors,I take the stairs to the second floor.,steəz,1,daily
+floor,level of a building,My room is on the third floor.,flɔː,1,daily
+balcony,small outdoor space on an upper floor,The clothes are drying on the balcony.,ˈbælkəni,2,daily
+kitchen,room where you cook,The kitchen tap needs a new washer.,ˈkɪtʃɪn,1,daily
+strength,quality you do especially well,My strength is staying calm under pressure.,streŋθ,1,interview
+weakness,area you still need to improve,My weakness is saying yes to extra work.,ˈwiːknəs,1,interview
+achievement,success you worked hard to reach,My biggest achievement was leading a campus project.,əˈtʃiːvmənt,2,interview
+accomplishment,result you are proud of,That cost saving was a real accomplishment.,əˈkʌmplɪʃmənt,3,interview
+ambition,strong wish to grow in your career,My ambition is to lead a support team.,æmˈbɪʃən,2,interview
+background,your education and work history,My background is in commerce and sales.,ˈbækɡraʊnd,2,interview
+introduction,short talk about who you are,I practised a one minute introduction.,ˌɪntrəˈdʌkʃən,2,interview
+qualification,exam or degree you have earned,This qualification matches the job need.,ˌkwɒlɪfɪˈkeɪʃən,2,interview
+certificate,official paper proving a skill,I have a computer certificate from college.,səˈtɪfɪkət,2,interview
+graduate,person who finished a college degree,I am a recent graduate in commerce.,ˈɡrædʒuət,2,interview
+fresher,person with little job experience,I am a fresher looking for my first role.,ˈfreʃə,2,interview
+candidate,person being considered for a job,Each candidate gets thirty minutes with the panel.,ˈkændɪdət,2,interview
+recruiter,person who finds people for jobs,The recruiter called me after shortlisting.,rɪˈkruːtə,2,interview
+panel,group of people who interview you,The panel asked about my internship.,ˈpænəl,2,interview
+vacancy,job that still needs to be filled,Is this vacancy still open this month?,ˈveɪkənsi,2,interview
+opening,available job in a company,I saw an opening in the support team.,ˈəʊpənɪŋ,2,interview
+apply,send your details for a job,I will apply before the last date.,əˈplaɪ,1,interview
+application,form or mail you send to apply,I submitted my application last week.,ˌæplɪˈkeɪʃən,2,interview
+shortlist,reduced list of possible hires,I hope they shortlist me for the next round.,ˈʃɔːtlɪst,3,interview
+hire,give someone the job,They plan to hire two people this month.,ˈhaɪə,1,interview
+salary,money paid for doing the job,The salary is discussed in the last round.,ˈsæləri,1,interview
+expectation,what you hope to receive or do,What is your salary expectation for this role?,ˌekspekˈteɪʃən,3,interview
+package,total pay and benefits offered,The package includes travel allowance.,ˈpækɪdʒ,2,interview
+negotiable,open to discussion and change,The joining date is negotiable by a week.,nɪˈɡəʊʃiəbəl,3,interview
+career,long path of jobs you want,I want a career in customer support.,kəˈrɪə,1,interview
+growth,getting better and taking more work,I chose this company for learning and growth.,ɡrəʊθ,2,interview
+opportunity,useful chance to learn or rise,This role is a good opportunity for me.,ˌɒpəˈtjuːnəti,2,interview
+contribution,useful help you gave a team,My contribution was a simple tracking sheet.,ˌkɒntrɪˈbjuːʃən,3,interview
+passion,strong interest in the work,I have a passion for helping customers.,ˈpæʃən,2,interview
+motivation,reason you want to work hard,My motivation is to support my family.,ˌməʊtɪˈveɪʃən,2,interview
+interest,subject you enjoy and follow,I have a strong interest in sales.,ˈɪntrəst,1,interview
+hobby,activity you do in free time,Reading is a hobby I still keep.,ˈhɒbi,1,interview
+reliability,being someone others can count on,Reliability is important in night shift work.,rɪˌlaɪəˈbɪləti,3,interview
+punctual,arriving at the right time,I am punctual even during heavy rain.,ˈpʌŋktʃuəl,2,interview
+flexible,ready to change plans when needed,I am flexible with weekend shifts.,ˈfleksəbəl,2,interview
+adaptable,able to adjust to new situations,I am adaptable in a fast team.,əˈdæptəbəl,3,interview
+honest,telling the truth even when hard,I try to be honest about what I know.,ˈɒnɪst,1,interview
+loyal,staying supportive of people and work,I stay loyal to my team during busy weeks.,ˈlɔɪəl,2,interview
+dedicated,giving full effort to the job,She is dedicated to finishing every ticket.,ˈdedɪkeɪtɪd,2,interview
+committed,firmly ready to do the work,I am committed to a one year stay.,kəˈmɪtɪd,2,interview
+enthusiastic,showing energy and interest,He sounded enthusiastic about the product.,ɪnˌθjuːziˈæstɪk,3,interview
+confident,sure of your ability to do it,I feel confident about the technical round.,ˈkɒnfɪdənt,2,interview
+nervous,feeling worried before speaking,I felt nervous but I still answered clearly.,ˈnɜːvəs,1,interview
+prepared,ready with facts and examples,I came prepared with two project stories.,prɪˈpeəd,1,interview
+research,careful study before you speak,I did research on your products last night.,rɪˈsɜːtʃ,2,interview
+company,business you want to join,Your company is known for fair training.,ˈkʌmpəni,1,interview
+role,set of duties in a job,This role matches my support experience.,rəʊl,1,interview
+position,the job you are applying for,I am applying for the analyst position.,pəˈzɪʃən,2,interview
+duty,task you must take care of,My main duty was answering live chats.,ˈdjuːti,1,interview
+teamwork,working well with other people,Teamwork helped us close the busy week.,ˈtiːmwɜːk,2,interview
+leadership,guiding others toward a goal,I showed leadership during the college fest.,ˈliːdəʃɪp,3,interview
+communication,sharing ideas clearly with others,Clear communication avoids repeat calls.,kəˌmjuːnɪˈkeɪʃən,2,interview
+listen,pay attention to what others say,I listen fully before I reply.,ˈlɪsən,1,interview
+explain,make your idea easy to follow,Let me explain my project in two minutes.,ɪkˈspleɪn,1,interview
+describe,tell what something is like,Please describe a time you helped a customer.,dɪˈskraɪb,1,interview
+demonstrate,show how you can do something,I can demonstrate the tool on your sample.,ˈdemənstreɪt,3,interview
+illustrate,give an example to make it clear,This story will illustrate how I stay calm.,ˈɪləstreɪt,3,interview
+highlight,point out the most important part,Let me highlight two results from that month.,ˈhaɪlaɪt,2,interview
+emphasise,give extra importance to a point,I want to emphasise my night shift readiness.,ˈemfəsaɪz,3,interview
+mention,speak about something briefly,Did I mention my weekend availability?,ˈmenʃən,1,interview
+discuss,talk about a topic with others,Can we discuss the joining date today?,dɪˈskʌs,1,interview
+convince,make someone agree with you,I had to convince the team to try a new script.,kənˈvɪns,2,interview
+persuade,talk someone into your idea,I persuaded the vendor to deliver earlier.,pəˈsweɪd,3,interview
+impress,make a strong good effect,I hope my examples impress the panel.,ɪmˈpres,2,interview
+suitable,right for this job,My hours are suitable for rotating shifts.,ˈsuːtəbəl,2,interview
+relevant,connected to the job need,This project is relevant to the role.,ˈreləvənt,2,interview
+related,connected to the same field,My course is related to this work.,rɪˈleɪtɪd,2,interview
+previous,happening in the job before,In my previous internship I handled chats.,ˈpriːviəs,2,interview
+current,happening in your job now,My current role is a sales trainee.,ˈkʌrənt,1,interview
+former,from a job you had before,My former supervisor can be a reference.,ˈfɔːmə,2,interview
+internship,short training job for students,My internship lasted three months.,ˈɪntɜːnʃɪp,2,interview
+project,piece of work with a clear goal,I led a college project on customer surveys.,ˈprɒdʒekt,1,interview
+volunteer,work given without pay,I volunteer at a local tuition class.,ˌvɒlənˈtɪə,2,interview
+freelance,work done for different buyers,I did freelance data entry last year.,ˈfriːlɑːns,3,interview
+part-time,job with fewer weekly hours,I had a part-time campus support job.,ˌpɑːt ˈtaɪm,2,interview
+full-time,job with standard weekly hours,I am looking for a full-time role.,ˌfʊl ˈtaɪm,1,interview
+contract,agreement for a fixed period,This is a one year contract role.,ˈkɒntrækt,2,interview
+permanent,job with no planned end date,I prefer a permanent position after probation.,ˈpɜːmənənt,2,interview
+temporary,job for a short period,It started as a temporary billing role.,ˈtemprəri,2,interview
+referral,recommendation from someone inside,I got a referral from a former classmate.,rɪˈfɜːrəl,3,interview
+reference,person who can speak about you,Please keep two references ready.,ˈrefrəns,2,interview
+recommendation,praise that supports your hiring,Her recommendation helped me get the call.,ˌrekəmenˈdeɪʃən,3,interview
+portfolio,collection of your best work,I brought a small portfolio of designs.,pɔːtˈfəʊliəʊ,3,interview
+sample,small piece of work you show,This sample shows how I write emails.,ˈsɑːmpəl,2,interview
+aptitude,natural ability for a type of work,The aptitude test is tomorrow morning.,ˈæptɪtjuːd,3,interview
+assessment,test of your skills,The assessment has typing and a case.,əˈsesmənt,3,interview
+screening,first check before a full interview,The screening call lasted fifteen minutes.,ˈskriːnɪŋ,3,interview
+round,one stage of the interview process,The next round is with the team lead.,raʊnd,1,interview
+technical,about job skills and tools,The technical round covers spreadsheet basics.,ˈteknɪkəl,2,interview
+behavioural,about how you act at work,They asked one behavioural question on teamwork.,bɪˈheɪvjərəl,4,interview
+situational,about what you would do,The situational question was about an angry caller.,ˌsɪtʃuˈeɪʃənəl,4,interview
+hypothetical,imagined situation for discussion,It was a hypothetical question about delay.,ˌhaɪpəˈθetɪkəl,4,interview
+situation,the setting of a past event,Let me set the situation in one line.,ˌsɪtʃuˈeɪʃən,2,interview
+task,piece of work you had to do,My task was to reduce repeat calls.,tɑːsk,1,interview
+action,step you took to solve it,The action I took was a simple checklist.,ˈækʃən,1,interview
+result,what happened after you acted,The result was fewer pending tickets.,rɪˈzʌlt,1,interview
+disagreement,different views between people,We had a disagreement on the script.,ˌdɪsəˈɡriːmənt,3,interview
+pressure,feeling of too much work or time,I work well under time pressure.,ˈpreʃə,2,interview
+stress,worry caused by difficult work,I manage stress with a short walk.,stres,2,interview
+cope,handle a difficult situation,How do you cope with night shifts?,kəʊp,2,interview
+overcome,succeed after a hard problem,I had to overcome my fear of calls.,ˌəʊvəˈkʌm,2,interview
+learn,gain a new ability,I learn quickly from live feedback.,lɜːn,1,interview
+improve,make your work better,I want to improve my spoken answers.,ɪmˈpruːv,1,interview
+develop,grow a skill over time,I want to develop leadership skills.,dɪˈveləp,2,interview
+practise,repeat something to get better,I practise answers aloud every night.,ˈpræktɪs,1,interview
+mistake,something that did not go as planned,I owned the mistake and fixed the file.,mɪˈsteɪk,1,interview
+lesson,useful thing you learned,The lesson was to confirm names twice.,ˈlesən,1,interview
+failure,time when a plan did not work,That failure taught me to revise early.,ˈfeɪljə,2,interview
+success,reaching the result you wanted,The success came after three dry runs.,səkˈses,1,interview
+proud,feeling good about your work,I am proud of my attendance record.,praʊd,1,interview
+humble,not boasting about your work,Stay humble even after a good round.,ˈhʌmbəl,2,interview
+thank,show you are grateful,I thank the panel for their time.,θæŋk,1,interview
+greet,say hello in a polite way,Smile and greet everyone as you enter.,ɡriːt,1,interview
+posture,way you sit or stand,Keep an open posture during the interview.,ˈpɒstʃə,2,interview
+tone,way your voice sounds,Keep a calm tone even if you disagree.,təʊn,1,interview
+filler,extra sound like um while speaking,I am trying to use fewer filler sounds.,ˈfɪlə,3,interview
+rephrase,say the same idea in new words,Let me rephrase that more simply.,ˌriːˈfreɪz,3,interview
+elaborate,give more detail on a point,Could you elaborate on your project role?,ɪˈlæbəreɪt,3,interview
+specify,say exactly what you mean,Please specify the tools you have used.,ˈspesɪfaɪ,3,interview
+quantify,give a number for your result,Try to quantify the time you saved.,ˈkwɒntɪfaɪ,4,interview
+figure,number that shows a result,That figure dropped after we changed the script.,ˈfɪɡə,2,interview
+rate,speed or amount of something,Our closing rate improved that month.,reɪt,2,interview
+reduced,made smaller in size or cost,We reduced waiting time by ten minutes.,rɪˈdjuːst,2,interview
+increased,made larger in size or amount,Calls increased during the festival week.,ɪnˈkriːst,2,interview
+saved,kept money or time from waste,That sheet saved the team an hour daily.,seɪvd,1,interview
+delivered,finished and handed over work,I delivered the report before the call.,dɪˈlɪvəd,2,interview
+led,guided a group of people,I led a five member campus team.,led,1,interview
+handled,dealt with a task or problem,I handled angry callers with a calm script.,ˈhændəld,2,interview
+resolved,found a way to close a problem,I resolved the billing issue the same day.,rɪˈzɒlvd,2,interview
+implemented,put a plan into real use,We implemented a simple reminder for follow ups.,ˈɪmplɪmentɪd,4,interview
+launched,started a product or project,The team launched a new help page.,lɔːntʃt,3,interview
+designed,planned how something should work,I designed a basic tracking sheet.,dɪˈzaɪnd,2,interview
+created,made something new,I created a checklist for new joiners.,kriˈeɪtɪd,1,interview
+built,made a system or process,We built a simple FAQ for the team.,bɪlt,1,interview
+tested,checked that something works,I tested the form before going live.,ˈtestɪd,1,interview
+analysed,studied data to find meaning,I analysed weekly complaint numbers.,ˈænəlaɪzd,3,interview
+identified,found the main problem,I identified the step causing delay.,aɪˈdentɪfaɪd,3,interview
+recommended,suggested a useful action,I recommended a shorter greeting script.,ˌrekəˈmendɪd,3,interview
+presented,showed work to other people,I presented the findings to my supervisor.,prɪˈzentɪd,2,interview
+facilitated,helped a group get work done,I facilitated a small campus workshop.,fəˈsɪlɪteɪtɪd,4,interview
+supervised,watched and guided other workers,I supervised two juniors during the fest.,ˈsuːpəvaɪzd,3,interview
+trained,taught someone how to do work,I trained a new intern on the tool.,treɪnd,2,interview
+coached,helped someone improve with advice,A senior coached me before the panel.,kəʊtʃt,3,interview
+motivated,helped others want to work well,My mentor motivated me to apply again.,ˈməʊtɪveɪtɪd,3,interview
+inspired,filled others with energy to try,Her story inspired me to keep practising.,ɪnˈspaɪəd,2,interview
+culture,way people behave in a company,I like a culture of helping new joiners.,ˈkʌltʃə,2,interview
+values,beliefs that guide how you work,Honesty is one of my core values.,ˈvæljuːz,2,interview
+ethics,rules about right and fair action,Work ethics matter more than speed alone.,ˈeθɪks,3,interview
+integrity,doing the right thing even unseen,Integrity means reporting the extra cash.,ɪnˈteɡrəti,4,interview
+respect,treating others with care,I treat every caller with respect.,rɪˈspekt,1,interview
+diversity,mix of different kinds of people,Diversity in a team brings more ideas.,daɪˈvɜːsəti,3,interview
+inclusion,making everyone feel they belong,Inclusion means new people get a buddy.,ɪnˈkluːʒən,4,interview
+environment,the place and feel of work,I want a calm learning environment.,ɪnˈvaɪrənmənt,2,interview
+fit,being a good match for the team,I think I am a good fit for nights.,fɪt,1,interview
+long-term,planned for a long time,I am looking for a long-term role.,ˌlɒŋ ˈtɜːm,2,interview
+short-term,planned for a near time,My short-term goal is to join a team.,ˌʃɔːt ˈtɜːm,2,interview
+plan,steps you want to follow,My plan is to grow into a team lead.,plæn,1,interview
+vision,picture of where you want to go,Their vision of fair work attracted me.,ˈvɪʒən,3,interview
+mission,main purpose of the company,Your mission to help small shops matches me.,ˈmɪʃən,2,interview
+reason,why you want this job,My reason is the learning and the shift.,ˈriːzən,1,interview
+join,start working with a company,I can join within thirty days.,dʒɔɪn,1,interview
+start,begin the new job,I can start after my final exam.,stɑːt,1,interview
+immediately,without waiting,I can join immediately after the offer.,ɪˈmiːdiətli,2,interview
+currently,at this time,I am currently finishing my degree.,ˈkʌrəntli,2,interview
+recently,a short time ago,I recently completed a sales internship.,ˈriːsəntli,2,interview
+previously,at an earlier time,I previously worked in a campus store.,ˈpriːviəsli,3,interview
+besides,in addition to that,Besides support I can help with billing.,bɪˈsaɪdz,2,interview
+however,showing a different side,I am new however I learn very fast.,haʊˈevə,2,interview
+therefore,for that reason,The queue grew therefore I stayed back.,ˈðeəfɔː,3,interview
+overall,looking at everything together,Overall the internship taught me patience.,ˌəʊvərˈɔːl,2,interview
+specifically,in a more exact way,Specifically I handled billing queries.,spəˈsɪfɪkli,3,interview
+honestly,speaking in a truthful way,Honestly I still get nervous on stage.,ˈɒnɪstli,2,interview
+personally,from my own view,Personally I prefer morning shifts.,ˈpɜːsənəli,2,interview
+ideally,in the best possible case,Ideally I would like to grow in sales.,aɪˈdɪəli,3,interview
+definitely,without any doubt,I can definitely work on weekends.,ˈdefɪnətli,2,interview
+certainly,yes with no doubt,I can certainly relocate if needed.,ˈsɜːtənli,2,interview
+fluent,able to speak easily and clearly,I am fluent in two languages.,ˈfluːənt,2,interview
+pronunciation,how you say the sounds of words,I am improving my pronunciation daily.,prəˌnʌnsiˈeɪʃən,3,interview
+articulate,able to express ideas clearly,She gave an articulate answer on teamwork.,ɑːˈtɪkjələt,4,interview
+clear,easy to understand,Keep your first sentence clear and short.,klɪə,1,interview
+polite,showing good manners in speech,Stay polite even if the question is hard.,pəˈlaɪt,1,interview
+professional,behaving in a serious work way,Keep a professional tone on the call.,prəˈfeʃənəl,2,interview
+formal,using careful official language,Use formal language with the panel.,ˈfɔːməl,2,interview
+casual,relaxed everyday way of speaking,Keep answers warm but not too casual.,ˈkæʒuəl,2,interview
+attire,clothes you wear for work,Wear simple formal attire for the round.,əˈtaɪə,3,interview
+appearance,how you look to other people,A neat appearance shows you take care.,əˈpɪərəns,2,interview
+smile,happy look on your face,A small smile helps you sound warmer.,smaɪl,1,interview
+handshake,greeting by holding someone's hand,Give a firm handshake if they offer one.,ˈhændʃeɪk,2,interview
+eye-contact,looking at someone while you speak,Keep gentle eye-contact with the panel.,ˈaɪ ˌkɒntækt,2,interview
+body-language,messages shown by face and posture,Open body-language makes you look ready.,ˈbɒdi ˌlæŋɡwɪdʒ,3,interview
+impression,feeling others get about you,A calm greeting makes a good impression.,ɪmˈpreʃən,2,interview
+self-aware,knowing your strengths and limits,I am self-aware about my weak formulas.,ˌself əˈweə,4,interview
+calm,not showing panic,I stay calm when the queue is long.,kɑːm,1,interview
+patient,able to wait without getting angry,A support role needs a patient person.,ˈpeɪʃənt,1,interview
+resilient,able to recover after a setback,I stayed resilient after the first rejection.,rɪˈzɪliənt,4,interview
+resourceful,good at finding a useful way,I am resourceful when the system is down.,rɪˈsɔːsfəl,3,interview
+willing,ready to do something,I am willing to work rotating shifts.,ˈwɪlɪŋ,1,interview
+eager,wanting to start with energy,I am eager to learn the product fast.,ˈiːɡə,2,interview
+keen,very interested in doing something,I am keen to join the night team.,kiːn,2,interview
+organised,keeping work and time in order,I stay organised with a daily list.,ˈɔːɡənaɪzd,2,interview
