@@ -3,7 +3,8 @@ ByoU — an AI speaking coach for people who freeze up in English
 
 Practise speaking English for 5 minutes a day. Private, gentle, never harsh.
 
-Live app → · built solo, end to end, from prompt to production
+Live app → · built solo, end to end, from prompt to production.
+App Link: https://bey-u.vercel.app/
 
 </div>
 Why this exists
