@@ -750,7 +750,8 @@ export function patchLiveTranscript() {
   const el = $("practice-live-text");
   if (!el) return false;
   const combined = [store.practice.transcript, store.practice.liveText].filter(Boolean).join(" ");
-  el.textContent = combined || (store.practice.micState === "listening" ? "Listening..." : "");
+  el.textContent = combined
+    || (store.practice.hearingVoice ? "Hearing you…" : store.practice.micState === "listening" ? "Listening… speak, then tap the mic to stop." : "");
   return true;
 }
 
@@ -822,7 +823,7 @@ export function renderPractice() {
     } else if (store.practice.micState === "processing") {
       live += `<div class="flex items-center gap-2"><div class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:0ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:120ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:240ms"></span></div><span class="text-xs text-ink-400">Coach is thinking...</span></div>`;
     } else {
-      live += `<p class="text-sm text-ink-400 italic">Your words will appear here as you speak.</p>`;
+      live += `<p class="text-sm text-ink-400 italic">${store.practice.micState === "listening" ? "Speak now — I'll write your words when you tap stop." : "Your words will appear here as you speak."}</p>`;
     }
     live += `</div>`;
   }

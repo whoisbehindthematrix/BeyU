@@ -15,12 +15,13 @@ function json(body: unknown, status = 200) {
 }
 
 function fileName(audio: File) {
+  const name = (audio.name || "").toLowerCase();
   const type = audio.type || "";
-  if (type.includes("mp4") || type.includes("m4a") || type.includes("aac")) return "answer.m4a";
-  if (type.includes("mpeg") || type.includes("mp3")) return "answer.mp3";
-  if (type.includes("wav")) return "answer.wav";
-  if (type.includes("ogg")) return "answer.ogg";
-  return "answer.webm";
+  if (name.endsWith(".wav") || type.includes("wav")) return "answer.wav";
+  if (type.includes("mp4") || type.includes("m4a") || type.includes("aac") || name.endsWith(".m4a")) return "answer.m4a";
+  if (type.includes("mpeg") || type.includes("mp3") || name.endsWith(".mp3")) return "answer.mp3";
+  if (type.includes("ogg") || name.endsWith(".ogg")) return "answer.ogg";
+  return name.endsWith(".webm") ? "answer.webm" : "answer.wav";
 }
 
 function transcriptOf(data: Record<string, unknown> | null | undefined) {
