@@ -115,7 +115,7 @@ export async function resolveTranscript(blob, webSpeechText) {
     track("typed_fallback_used");
     return { transcript: "", engine: "typed" };
   }
-  return { transcript: "", engine: "web_speech" };
+  return { transcript: "", engine: "web_speech", silenceTimeout: !!store.practice.silenceTimeout };
 }
 
 export async function uploadAnswerAudio(blob, userId, sessionId, questionId) {
@@ -195,8 +195,18 @@ export function stopTimer() {
 
 export function startTimer() {
   store.practice.elapsedSec = 0;
+  store.practice.lastSpeechAt = Date.now();
   store.practice.timer = setInterval(() => {
     store.practice.elapsedSec += 1;
+    if (store.practice.micState === "listening" && store.practice.listeningFlag) {
+      const quietMs = Date.now() - (store.practice.lastSpeechAt || Date.now());
+      if (quietMs >= 8000) {
+        const spoke = (store.practice.transcriptRef || store.practice.liveText || "").trim();
+        store.practice.silenceTimeout = !spoke;
+        stopListening();
+        return;
+      }
+    }
     patchRecordingTimer();
   }, 1000);
 }
@@ -222,6 +232,7 @@ export function startListening() {
   store.practice.listeningFlag = true;
   store.practice.feedback = null;
   store.practice.audioBlob = null;
+  store.practice.silenceTimeout = false;
   startTimer();
   renderPractice();
   recordingStart = startRecording().catch(() => {});
@@ -232,6 +243,7 @@ export function startListening() {
         store.practice.transcript = store.practice.transcriptRef;
         store.practice.liveText = "";
       } else store.practice.liveText = result.transcript;
+      store.practice.lastSpeechAt = Date.now();
       patchLiveTranscript();
     },
     (err) => {
@@ -258,15 +270,21 @@ export function startListening() {
 }
 
 export async function stopListening() {
+  if (store.practice.micState === "processing") return null;
   store.practice.listeningFlag = false;
   speechController.stopListening();
   stopTimer();
-  track("recording_ended", { duration_sec: store.practice.elapsedSec });
+  track("recording_ended", { duration_sec: store.practice.elapsedSec, silence_timeout: !!store.practice.silenceTimeout });
   store.practice.micState = "processing";
   renderPractice();
   const webSpeechText = store.practice.transcriptRef || store.practice.liveText;
   const blob = await stopRecordingSafe();
   store.practice.audioBlob = blob;
+  if (store.practice.silenceTimeout && !String(webSpeechText || "").trim()) {
+    const result = { transcript: "", engine: "web_speech", silenceTimeout: true };
+    submitAnswer(result);
+    return result;
+  }
   const result = await resolveTranscript(blob, webSpeechText);
   if (result.engine === "typed") {
     store.practice.typingMode = true;

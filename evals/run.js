@@ -17,6 +17,7 @@ const CHECKS = [
   { id: "praise_overlap", label: "praise overlaps transcript", need: "≥90%", hard: true },
   { id: "resay_len", label: "resay_sentence 8–14 words", need: "≥90%", hard: true },
   { id: "upgrade_fresh", label: "one_upgrade not in recent_upgrades", need: "100%", hard: true },
+  { id: "silence_hint", label: "empty speech returns hint", need: "100%", hard: true },
   { id: "p95", label: "p95 latency", need: "<3000ms", hard: true },
 ];
 
@@ -110,9 +111,12 @@ async function callFeedback(row) {
     body: JSON.stringify({
       transcript: row.transcript,
       question: row.question,
+      hint: row.hint ?? "",
       level: row.level,
       target_words: row.target_words ?? [],
       recent_upgrades: row.recent_upgrades ?? [],
+      input_mode: row.input_mode || (row.guardrail === "silence" ? "spoken" : "spoken"),
+      silence_timeout: row.guardrail === "silence",
     }),
     signal: AbortSignal.timeout(15000),
   });
@@ -127,6 +131,49 @@ async function callFeedback(row) {
   return { ok: res.ok, latency, raw, data };
 }
 
+async function warmup() {
+  console.error("Warmup…");
+  try {
+    await callFeedback({
+      transcript: "",
+      question: "warmup",
+      hint: "Start with I would say and add one detail.",
+      level: "beginner",
+      guardrail: "silence",
+    });
+    await callFeedback({
+      transcript: "I am from Pune and I like the food there.",
+      question: "Tell me about your hometown.",
+      level: "beginner",
+      target_words: [],
+      recent_upgrades: [],
+    });
+  } catch (err) {
+    console.error(`warmup skipped: ${err.message}`);
+  }
+}
+
+function failReasons(s) {
+  const why = [];
+  if (!s.valid) why.push("json");
+  if (s.banned) why.push("banned");
+  if (!s.overlap) why.push("overlap");
+  if (!s.resayOk) why.push("resay");
+  if (!s.fresh) why.push("upgrade");
+  if (!s.hintOk) why.push("hint");
+  return why.join(",");
+}
+
+function hintReturned(row, out) {
+  const hint = String(row.hint || "").trim().toLowerCase();
+  if (!hint) return true;
+  const hay = `${out?.one_upgrade || ""} ${out?.could_have_said || ""}`.toLowerCase();
+  const hintWords = hint.match(/[a-z0-9']+/g)?.filter((w) => w.length >= 4) ?? [];
+  if (!hintWords.length) return hay.includes(hint);
+  const hits = hintWords.filter((w) => hay.includes(w));
+  return hits.length >= Math.min(3, hintWords.length);
+}
+
 function scoreCase(row, result) {
   const out = result.data;
   const valid = !!(out && typeof out === "object"
@@ -137,9 +184,10 @@ function scoreCase(row, result) {
   const fields = valid ? [out.praise, out.one_upgrade, out.resay_sentence] : [result.raw];
   const banned = fields.some((s) => BANNED.test(s || ""));
 
+  const emptyTranscript = !String(row.transcript || "").trim();
   const transcriptSet = new Set(contentWords(row.transcript));
   const praiseSet = new Set(contentWords(valid ? out.praise : ""));
-  const overlap = [...praiseSet].some((w) => transcriptSet.has(w));
+  const overlap = emptyTranscript ? true : [...praiseSet].some((w) => transcriptSet.has(w));
 
   const resayWords = valid ? wordCount(out.resay_sentence) : 0;
   const resayOk = resayWords >= 8 && resayWords <= 14;
@@ -147,8 +195,10 @@ function scoreCase(row, result) {
   const recents = (row.recent_upgrades ?? []).map((s) => String(s).trim().toLowerCase()).filter(Boolean);
   const upgrade = valid ? String(out.one_upgrade).trim().toLowerCase() : "";
   const fresh = !upgrade || !recents.includes(upgrade);
+  const hintOk = !row.hint || (valid && hintReturned(row, out));
+  const silence = row.guardrail === "silence" || (emptyTranscript && row.hint);
 
-  return { valid, banned, overlap, resayOk, fresh, latency: result.latency, out };
+  return { valid, banned, overlap, resayOk, fresh, hintOk, silence, skipOverlap: emptyTranscript, latency: result.latency, out };
 }
 
 async function main() {
@@ -160,6 +210,7 @@ async function main() {
   }
 
   console.error(`Calling ${FEEDBACK_URL}  (${cases.length} cases)`);
+  await warmup();
   const scored = [];
   for (let i = 0; i < cases.length; i++) {
     const row = cases[i];
@@ -173,21 +224,29 @@ async function main() {
         overlap: false,
         resayOk: false,
         fresh: false,
+        hintOk: false,
+        silence: row.guardrail === "silence",
+        skipOverlap: !String(row.transcript || "").trim(),
         latency: 15000,
         error: err.message,
       });
     }
     const s = scored[i];
-    const mark = s.valid && !s.banned && s.overlap && s.resayOk && s.fresh ? "ok" : "fail";
-    console.error(`  ${i + 1}/${cases.length}  ${mark}  ${s.latency}ms${s.error ? `  ${s.error}` : ""}`);
+    const mark = s.valid && !s.banned && s.overlap && s.resayOk && s.fresh && s.hintOk ? "ok" : "fail";
+    const extra = mark === "fail"
+      ? `  ${failReasons(s)}${s.out?.praise ? `  praise=${JSON.stringify(s.out.praise)}` : ""}${s.error ? `  ${s.error}` : ""}`
+      : (s.error ? `  ${s.error}` : "");
+    console.error(`  ${i + 1}/${cases.length}  ${mark}  ${s.latency}ms${extra}`);
   }
 
   const n = scored.length;
   const validPct = pct(scored.filter((s) => s.valid).length, n);
   const bannedCount = scored.filter((s) => s.banned).length;
-  const overlapPct = pct(scored.filter((s) => s.overlap).length, n);
+  const overlapPct = pct(scored.filter((s) => !s.skipOverlap && s.overlap).length, scored.filter((s) => !s.skipOverlap).length);
   const resayPct = pct(scored.filter((s) => s.resayOk).length, n);
   const freshPct = pct(scored.filter((s) => s.fresh).length, n);
+  const silenceCases = scored.filter((s) => s.silence);
+  const silencePct = pct(silenceCases.filter((s) => s.valid && s.hintOk).length, silenceCases.length);
   const latencyP95 = p95(scored.map((s) => s.latency));
 
   const results = {
@@ -196,6 +255,7 @@ async function main() {
     praise_overlap: { got: `${overlapPct.toFixed(0)}%`, pass: overlapPct >= 90 },
     resay_len: { got: `${resayPct.toFixed(0)}%`, pass: resayPct >= 90 },
     upgrade_fresh: { got: `${freshPct.toFixed(0)}%`, pass: freshPct >= 100 },
+    silence_hint: { got: silenceCases.length ? `${silencePct.toFixed(0)}%` : "n/a", pass: !silenceCases.length || silencePct >= 100 },
     p95: { got: `${Math.round(latencyP95)}ms`, pass: latencyP95 < 3000 },
   };
 

@@ -150,6 +150,35 @@ function handleReportSend() {
   return true;
 }
 
+function advancePracticePrompt() {
+  const questions = practiceQuestions();
+  const totalPrompts = questions.length || 1;
+  store.practice.completedCount += 1;
+  if (store.practice.promptIdx < totalPrompts - 1) {
+    store.practice.promptIdx += 1;
+    resetForNext();
+    renderPractice();
+    const next = questions[store.practice.promptIdx % questions.length];
+    track("question_shown", {
+      q_id: store.practice.questionIds[store.practice.promptIdx] ?? next?.id ?? null,
+      position: store.practice.promptIdx + 1,
+    });
+  } else {
+    store.practice.showMood = true;
+    renderPractice();
+  }
+}
+
+function goHomeFromDigest(e) {
+  if (!e.target.closest("[data-act=digest-home]")) return;
+  refreshHomeData().catch((err) => {
+    console.error(err);
+    store.overlay = null;
+    store.tab = "home";
+    route();
+  });
+}
+
 function bind() {
   $("auth-google").onclick = () => { signInWithGoogle(); };
   $("auth-email-form").onsubmit = async (e) => {
@@ -259,21 +288,7 @@ function bind() {
       store.practice.resaying = true;
       speechController.speak(better);
       if (!store.practice.typingMode) startListening();
-    } else if (act === "next-prompt") {
-      const totalPrompts = questions.length || 1;
-      store.practice.completedCount += 1;
-      if (store.practice.promptIdx < totalPrompts - 1) {
-        store.practice.promptIdx += 1;
-        resetForNext();
-        renderPractice();
-        const next = questions[store.practice.promptIdx % questions.length];
-        track("question_shown", {
-          q_id: store.practice.questionIds[store.practice.promptIdx] ?? next?.id ?? null,
-          position: store.practice.promptIdx + 1,
-        });
-      }
-      else { store.practice.showMood = true; renderPractice(); }
-    }
+    } else if (act === "next-prompt") advancePracticePrompt();
   });
   $("practice-bottom").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
@@ -289,6 +304,7 @@ function bind() {
       store.practice.typingMode = true; renderPractice();
     } else if (act === "switch-mic") { store.practice.typingMode = false; renderPractice(); }
     else if (act === "typed-send") handleTypedSubmit();
+    else if (act === "next-prompt") advancePracticePrompt();
   });
   $("practice-mood").addEventListener("click", (e) => {
     const helpfulBtn = e.target.closest("[data-act=helpful]");
@@ -378,16 +394,8 @@ function bind() {
     else if (act === "report-send") { if (handleReportSend()) renderRewards(); }
   });
 
-  $("digest-scroll").addEventListener("click", (e) => {
-    if (e.target.closest("[data-act=digest-home]")) {
-      refreshHomeData().catch((err) => {
-        console.error(err);
-        store.overlay = null;
-        store.tab = "home";
-        route();
-      });
-    }
-  });
+  $("digest-scroll").addEventListener("click", goHomeFromDigest);
+  $("digest-bottom").addEventListener("click", goHomeFromDigest);
   $("feedback-log-back").onclick = () => {
     store.overlay = null;
     store.tab = store.feedbackLogFrom === "rewards" ? "rewards" : "home";

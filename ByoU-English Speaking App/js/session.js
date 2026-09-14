@@ -162,21 +162,52 @@ async function fetchFeedbackContext(questionId) {
   return { level, target_words, recent_upgrades };
 }
 
-async function requestAiFeedback(transcript, inputMode) {
+const DEFAULT_HINT = "Take your time. Start with 'I would say...' and build from there.";
+
+function clipResayFromHint(hint) {
+  const words = String(hint || "").trim().split(/\s+/).filter(Boolean);
+  if (words.length >= 8 && words.length <= 14) return words.join(" ");
+  if (words.length > 14) return words.slice(0, 14).join(" ");
+  const pad = "Start with I would say then add one detail.".split(/\s+/);
+  return [...words, ...pad].slice(0, 8).join(" ");
+}
+
+function hintFeedback(hint) {
+  const text = String(hint || "").trim() || DEFAULT_HINT;
+  return {
+    praise: "You opened the mic — that already counts.",
+    one_upgrade: text,
+    could_have_said: text,
+    resay_sentence: clipResayFromHint(text),
+    used_target_words: [],
+    confidence_score: 2,
+    prompt_version: "v5",
+  };
+}
+
+async function requestAiFeedback(transcript, inputMode, extra = {}) {
   const questions = practiceQuestions();
   const prompt = questions[store.practice.promptIdx % questions.length];
   const questionId = store.practice.questionIds[store.practice.promptIdx] ?? null;
+  const hint = prompt?.hint || DEFAULT_HINT;
+  const input_mode = inputMode === "typed" ? "typed" : "spoken";
+  const emptySpoken = input_mode === "spoken" && !String(transcript || "").trim();
+  if (emptySpoken) {
+    store.practice.showHint = true;
+    return hintFeedback(hint);
+  }
   try {
     const { level, target_words, recent_upgrades } = await fetchFeedbackContext(questionId);
     const question = prompt?.text ?? "";
-    const input_mode = inputMode === "typed" ? "typed" : "spoken";
     const body = {
       transcript,
       question,
+      hint,
       level,
       target_words: input_mode === "typed" ? [] : target_words,
       recent_upgrades,
       input_mode,
+      silence_timeout: !!extra.silenceTimeout,
     };
     console.log("FEEDBACK PAYLOAD:", JSON.stringify({ transcript, question, level, target_words: body.target_words, input_mode }));
     const { data, error } = await supabase.functions.invoke("feedback", { body });
@@ -800,6 +831,8 @@ export const store = {
     sttEngine: null,
     emptySttCount: 0,
     aiFeedback: null,
+    lastSpeechAt: 0,
+    silenceTimeout: false,
   },
   flash: { idx: 0, flipped: false, learned: 0, done: false, exitDir: null, cards: null, drill: "idle", retry: [], dealtOn: null, shownIds: [], loadError: null, nudge: false, spokenCount: 0 },
 };
@@ -820,6 +853,8 @@ export async function saveDisplayName(name) {
 
 export function practiceQuestions() {
   const hasCourseQs = store.practice.courseQuestions && store.practice.courseQuestions.length > 0;
+  const lesson = store.auth.user?.courseId ? getCourseDay(store.auth.user.courseId, currentCourseDay(store.courseDayOverride)) : null;
+  const phraseHint = (lesson?.phrases || []).filter(Boolean).join(" ");
   if (hasCourseQs) {
     return store.practice.courseQuestions.map((q, i) => {
       if (typeof q === "string") {
@@ -827,7 +862,7 @@ export function practiceQuestions() {
           id: `cq-${i}`,
           text: q,
           difficulty: "easy",
-          hint: "Take your time. Start with 'I would say...' and build from there.",
+          hint: phraseHint || DEFAULT_HINT,
           idealKeywords: [],
         };
       }
@@ -835,7 +870,7 @@ export function practiceQuestions() {
         id: q.id ?? `cq-${i}`,
         text: q.text || q.prompt || "",
         difficulty: "easy",
-        hint: q.hint || "Take your time. Start with 'I would say...' and build from there.",
+        hint: q.hint || phraseHint || DEFAULT_HINT,
         idealKeywords: [],
       };
     });
@@ -847,7 +882,7 @@ export function practiceQuestions() {
         id: `cq-${i}`,
         text: q,
         difficulty: "easy",
-        hint: "Take your time. Start with 'I would say...' and build from there.",
+        hint: phraseHint || DEFAULT_HINT,
         idealKeywords: [],
       }));
     }
@@ -864,6 +899,8 @@ export function resetForNext() {
   store.practice.showHint = false;
   store.practice.typedText = "";
   store.practice.elapsedSec = 0;
+  store.practice.silenceTimeout = false;
+  store.practice.lastSpeechAt = 0;
   stopTimer();
 }
 
@@ -1028,7 +1065,7 @@ export function submitAnswer(textOrResult) {
   store.practice.micState = "processing";
   renderPractice();
   store.practice.transcript = raw;
-  requestAiFeedback(raw, engine)
+  requestAiFeedback(raw, engine, { silenceTimeout: fromLadder && textOrResult.silenceTimeout })
     .then((payload) => {
       showFeedback(payload, raw, started);
     })
