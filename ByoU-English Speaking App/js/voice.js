@@ -1,6 +1,7 @@
 import { store } from "./session.js";
 import { track } from "./track.js";
 import { supabase } from "./supabase.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 let renderPractice = () => {};
 let submitAnswer = () => {};
@@ -11,21 +12,63 @@ let mediaRecorder = null;
 let chunks = [];
 let recorderMime = "audio/webm";
 let recordingStart = Promise.resolve();
+let recAudioCtx = null;
+let recAnalyser = null;
+let recTimeData = null;
 
 function pickRecorderMime() {
   if (typeof MediaRecorder === "undefined") return "";
+  if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) return "audio/webm;codecs=opus";
   if (MediaRecorder.isTypeSupported("audio/webm")) return "audio/webm";
   if (MediaRecorder.isTypeSupported("audio/mp4")) return "audio/mp4";
+  if (MediaRecorder.isTypeSupported("audio/aac")) return "audio/aac";
   return "";
+}
+
+function attachLevelMeter(stream) {
+  try {
+    recAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = recAudioCtx.createMediaStreamSource(stream);
+    recAnalyser = recAudioCtx.createAnalyser();
+    recAnalyser.fftSize = 512;
+    src.connect(recAnalyser);
+    recTimeData = new Uint8Array(recAnalyser.fftSize);
+    recAudioCtx.resume?.();
+  } catch {
+    recAudioCtx = null;
+    recAnalyser = null;
+    recTimeData = null;
+  }
+}
+
+function recordingIsLoud() {
+  if (!recAnalyser || !recTimeData) return false;
+  recAnalyser.getByteTimeDomainData(recTimeData);
+  let sum = 0;
+  for (let i = 0; i < recTimeData.length; i++) {
+    const v = (recTimeData[i] - 128) / 128;
+    sum += v * v;
+  }
+  return Math.sqrt(sum / recTimeData.length) > 0.035;
+}
+
+function releaseLevelMeter() {
+  try { recAudioCtx?.close(); } catch { /* ignore */ }
+  recAudioCtx = null;
+  recAnalyser = null;
+  recTimeData = null;
 }
 
 function releaseTracks(rec) {
   rec?.stream?.getTracks().forEach((t) => t.stop());
+  releaseLevelMeter();
 }
 
 export async function startRecording() {
   if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") return;
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+  });
   try {
     chunks = [];
     recorderMime = pickRecorderMime();
@@ -34,7 +77,8 @@ export async function startRecording() {
       : new MediaRecorder(stream);
     recorderMime = mediaRecorder.mimeType || recorderMime || "audio/webm";
     mediaRecorder.ondataavailable = (e) => { if (e.data?.size) chunks.push(e.data); };
-    mediaRecorder.start();
+    attachLevelMeter(stream);
+    mediaRecorder.start(250);
   } catch (err) {
     stream.getTracks().forEach((t) => t.stop());
     mediaRecorder = null;
@@ -46,16 +90,23 @@ export function stopRecording() {
   return new Promise((resolve) => {
     const rec = mediaRecorder;
     const mime = rec?.mimeType || recorderMime || "audio/webm";
-    if (!rec || rec.state === "inactive") {
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      const blob = new Blob(chunks, { type: mime.split(";")[0] || mime });
       releaseTracks(rec);
       mediaRecorder = null;
-      resolve(new Blob(chunks, { type: mime }));
+      resolve(blob);
+    };
+    if (!rec || rec.state === "inactive") {
+      finish();
       return;
     }
-    rec.onstop = () => resolve(new Blob(chunks, { type: mime }));
-    try { rec.stop(); } catch { /* already stopped */ }
-    rec.stream.getTracks().forEach((t) => t.stop());
-    mediaRecorder = null;
+    rec.onstop = () => finish();
+    try { rec.requestData(); } catch { /* ignore */ }
+    try { rec.stop(); } catch { finish(); return; }
+    setTimeout(finish, 2000);
   });
 }
 
@@ -66,7 +117,7 @@ function stopRecordingSafe() {
     .catch(() => new Blob([], { type: recorderMime || "audio/webm" }));
 }
 
-const SARVAM_TIMEOUT_MS = 4000;
+const SARVAM_TIMEOUT_MS = 15000;
 
 function withTimeout(promise, ms) {
   let timer;
@@ -79,15 +130,30 @@ function withTimeout(promise, ms) {
 async function transcribeWithSarvam(blob) {
   if (!blob?.size || navigator.onLine === false) return "";
   const fd = new FormData();
-  const ext = blob.type && blob.type.includes("mp4") ? "mp4" : "webm";
+  const type = blob.type || "";
+  const ext = type.includes("mp4") || type.includes("m4a") || type.includes("aac")
+    ? "m4a"
+    : type.includes("mpeg") || type.includes("mp3")
+      ? "mp3"
+      : "webm";
   fd.append("file", blob, `answer.${ext}`);
   try {
-    const { data, error } = await withTimeout(
-      supabase.functions.invoke("stt", { body: fd }),
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token || SUPABASE_ANON_KEY;
+    const res = await withTimeout(
+      fetch(`${SUPABASE_URL}/functions/v1/stt`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
+        body: fd,
+      }),
       SARVAM_TIMEOUT_MS,
     );
-    if (error) return "";
-    return String(data?.transcript ?? "").trim();
+    if (!res.ok) return "";
+    const data = await res.json();
+    return String(data?.transcript || data?.translated_text || "").trim();
   } catch {
     return "";
   }
@@ -111,10 +177,6 @@ export async function resolveTranscript(blob, webSpeechText) {
   }
 
   store.practice.emptySttCount = (store.practice.emptySttCount || 0) + 1;
-  if (store.practice.emptySttCount >= 2) {
-    track("typed_fallback_used");
-    return { transcript: "", engine: "typed" };
-  }
   return { transcript: "", engine: "web_speech", silenceTimeout: !!store.practice.silenceTimeout };
 }
 
@@ -140,6 +202,7 @@ export class SpeechController {
     this.recognition = null;
     this.synth = null;
     this.supported = false;
+    this.keepAlive = false;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SR) {
       this.recognition = new SR();
@@ -153,23 +216,42 @@ export class SpeechController {
   isSpeechRecognitionSupported() { return this.supported; }
   startListening(onResult, onError, onEnd, onStart) {
     if (!this.recognition) { onError("unsupported"); return; }
+    this.keepAlive = true;
     this.recognition.onresult = (event) => {
       let interim = "";
       let final = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) final += transcript;
+        if (event.results[i].isFinal) final += transcript + " ";
         else interim += transcript;
       }
       if (final) onResult({ transcript: final, isFinal: true });
       else if (interim) onResult({ transcript: interim, isFinal: false });
     };
-    this.recognition.onerror = (event) => onError(event.error || "error");
-    this.recognition.onend = () => onEnd();
+    this.recognition.onerror = (event) => {
+      const err = event.error || "error";
+      if (err === "aborted" || err === "no-speech") return;
+      if (this.keepAlive && (err === "network" || err === "audio-capture")) {
+        try { this.recognition.start(); } catch { /* ignore */ }
+        return;
+      }
+      onError(err);
+    };
+    this.recognition.onend = () => {
+      if (!this.keepAlive) {
+        onEnd();
+        return;
+      }
+      setTimeout(() => {
+        if (!this.keepAlive) return;
+        try { this.recognition.start(); } catch { /* ignore */ }
+      }, 80);
+    };
     this.recognition.onstart = () => { if (onStart) onStart(); };
     try { this.recognition.start(); } catch { /* already started */ }
   }
   stopListening() {
+    this.keepAlive = false;
     if (this.recognition) { try { this.recognition.stop(); } catch { /* ignore */ } }
   }
   speak(text, onEnd) {
@@ -199,10 +281,11 @@ export function startTimer() {
   store.practice.timer = setInterval(() => {
     store.practice.elapsedSec += 1;
     if (store.practice.micState === "listening" && store.practice.listeningFlag) {
+      if (recordingIsLoud()) store.practice.lastSpeechAt = Date.now();
       const quietMs = Date.now() - (store.practice.lastSpeechAt || Date.now());
       if (quietMs >= 8000) {
         const spoke = (store.practice.transcriptRef || store.practice.liveText || "").trim();
-        store.practice.silenceTimeout = !spoke;
+        store.practice.silenceTimeout = !spoke && !recordingIsLoud();
         stopListening();
         return;
       }
@@ -218,13 +301,7 @@ export function formatTime(sec) {
 }
 
 export function startListening() {
-  if (!speechController.isSpeechRecognitionSupported()) {
-    track("mic_permission", { result: "no_hw" });
-    track("typed_fallback_used");
-    store.practice.typingMode = true;
-    renderPractice();
-    return;
-  }
+  store.practice.sttFailed = false;
   store.practice.transcript = "";
   store.practice.liveText = "";
   store.practice.transcriptRef = "";
@@ -235,7 +312,13 @@ export function startListening() {
   store.practice.silenceTimeout = false;
   startTimer();
   renderPractice();
-  recordingStart = startRecording().catch(() => {});
+  recordingStart = startRecording().catch((err) => {
+    console.error(err);
+    track("mic_permission", { result: "blocked" });
+  });
+  if (!speechController.isSpeechRecognitionSupported()) {
+    return;
+  }
   speechController.startListening(
     (result) => {
       if (result.isFinal) {
@@ -250,18 +333,16 @@ export function startListening() {
       if (err === "aborted") return;
       if (err === "not-allowed" || err === "service-not-allowed") {
         track("mic_permission", { result: "blocked" });
-        track("typed_fallback_used");
         store.practice.typingMode = true;
+        store.practice.listeningFlag = false;
+        store.practice.micState = "idle";
+        stopTimer();
+        renderPractice();
+        stopRecordingSafe();
+        return;
       }
-      store.practice.micState = "idle";
-      store.practice.listeningFlag = false;
-      stopTimer();
-      renderPractice();
-      stopRecordingSafe();
     },
-    () => {
-      if (store.practice.listeningFlag) stopListening();
-    },
+    () => {},
     () => {
       track("mic_permission", { result: "granted" });
       track("recording_started");
@@ -277,17 +358,17 @@ export async function stopListening() {
   track("recording_ended", { duration_sec: store.practice.elapsedSec, silence_timeout: !!store.practice.silenceTimeout });
   store.practice.micState = "processing";
   renderPractice();
-  const webSpeechText = store.practice.transcriptRef || store.practice.liveText;
+  const webSpeechText = `${store.practice.transcriptRef || ""} ${store.practice.liveText || ""}`.trim();
   const blob = await stopRecordingSafe();
   store.practice.audioBlob = blob;
-  if (store.practice.silenceTimeout && !String(webSpeechText || "").trim()) {
+  if (store.practice.silenceTimeout && !webSpeechText && !(blob && blob.size > 800)) {
     const result = { transcript: "", engine: "web_speech", silenceTimeout: true };
     submitAnswer(result);
     return result;
   }
   const result = await resolveTranscript(blob, webSpeechText);
-  if (result.engine === "typed") {
-    store.practice.typingMode = true;
+  if (!String(result.transcript || "").trim() && !result.silenceTimeout) {
+    store.practice.sttFailed = true;
     store.practice.micState = "idle";
     renderPractice();
     return result;
