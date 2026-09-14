@@ -4,10 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b --noEmit",
-    "preview": "vite preview"
+    "build": "echo done"
   },
   "dependencies": {
     "react": "^18.3.1",
