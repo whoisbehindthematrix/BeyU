@@ -1,5 +1,5 @@
 {
-  "buildCommand": "echo done",
+  "buildCommand": "node scripts/write-config.mjs",
   "outputDirectory": ".",
   "installCommand": "npm install"
 }
