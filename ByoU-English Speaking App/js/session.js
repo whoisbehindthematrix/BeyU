@@ -192,9 +192,12 @@ async function requestAiFeedback(transcript, inputMode, extra = {}) {
   const hint = prompt?.hint || DEFAULT_HINT;
   const input_mode = inputMode === "typed" ? "typed" : "spoken";
   const emptySpoken = input_mode === "spoken" && !String(transcript || "").trim();
-  if (emptySpoken) {
+  if (emptySpoken && extra.silenceTimeout) {
     store.practice.showHint = true;
     return hintFeedback(hint);
+  }
+  if (emptySpoken) {
+    return SAFE_FEEDBACK;
   }
   try {
     const { level, target_words, recent_upgrades } = await fetchFeedbackContext(questionId);
@@ -684,7 +687,7 @@ function applyHydratedProgress(h) {
     points: h.totalPoints ?? 0,
     completedDays,
     courseDay,
-    seenTour: h.seenTour ?? false,
+    seenTour: !!(store.progress.seenTour || h.seenTour),
     lastPracticeDate: h.lastActiveDate ?? store.progress.lastPracticeDate,
     practiceDays: h.practiceDays ?? store.progress.practiceDays,
     weeklyStartDay: mondayOfWeek(store.progress.simDateOffset),
@@ -833,6 +836,7 @@ export const store = {
     aiFeedback: null,
     lastSpeechAt: 0,
     silenceTimeout: false,
+    sttFailed: false,
   },
   flash: { idx: 0, flipped: false, learned: 0, done: false, exitDir: null, cards: null, drill: "idle", retry: [], dealtOn: null, shownIds: [], loadError: null, nudge: false, spokenCount: 0 },
 };
@@ -900,6 +904,7 @@ export function resetForNext() {
   store.practice.typedText = "";
   store.practice.elapsedSec = 0;
   store.practice.silenceTimeout = false;
+  store.practice.sttFailed = false;
   store.practice.lastSpeechAt = 0;
   stopTimer();
 }
@@ -926,6 +931,7 @@ export function startPractice({ fromTab = false, courseDay = null } = {}) {
   store.practice.audioBlob = null;
   store.practice.sttEngine = null;
   store.practice.emptySttCount = 0;
+  store.practice.sttFailed = false;
   store.practice.aiFeedback = null;
   store.feedback.helpful = null;
   stopTimer();
@@ -1127,17 +1133,35 @@ export function handleLogout() {
 }
 
 export async function handleCourseSelect(courseId) {
-  if (!store.auth.user) return;
-  track("course_selected", { course_id: courseId });
-  const { error } = await updateProfile({ course_id: dbCourseId(courseId) });
-  if (error) {
-    console.error(error);
-    return;
+  const picked = courseId || store.selectedCourseId;
+  if (!store.auth.user || !picked) return;
+
+  const btn = document.getElementById("course-start");
+  const msg = document.getElementById("course-start-msg");
+  const original = btn?.innerHTML;
+  if (btn) btn.disabled = true;
+  if (msg) {
+    msg.classList.remove("hidden");
+    msg.textContent = "Starting…";
   }
-  store.auth = { ...store.auth, user: { ...store.auth.user, courseId } };
-  store.progress = { ...store.progress, courseDay: 1, completedDays: [], dayScores: {} };
-  store.overlay = null;
-  route();
+
+  try {
+    track("course_selected", { course_id: picked });
+    const { error } = await updateProfile({ course_id: dbCourseId(picked) });
+    if (error) throw error;
+    store.auth = { ...store.auth, user: { ...store.auth.user, courseId: picked } };
+    store.progress = { ...store.progress, courseDay: 1, completedDays: [], dayScores: {}, seenTour: true };
+    store.overlay = null;
+    store.tab = "home";
+    route();
+  } catch (err) {
+    console.error(err);
+    if (msg) msg.textContent = err.message || "Couldn't save that course. Try again.";
+    if (btn) {
+      btn.disabled = false;
+      if (original) btn.innerHTML = original;
+    }
+  }
 }
 
 export async function handleSelectPlan(plan) {

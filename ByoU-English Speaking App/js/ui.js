@@ -67,24 +67,37 @@ export function showScreen(name) {
     const practice = document.querySelector('[data-screen="practice"]');
     if (practice && !practice.classList.contains("hidden")) return;
   }
-  document.querySelectorAll("[data-screen]").forEach((el) => el.classList.add("hidden"));
-  const el = document.querySelector(`[data-screen="${name}"]`);
-  if (el) el.classList.remove("hidden");
+  const screens = document.querySelectorAll("[data-screen]");
+  let shown = null;
+  screens.forEach((el) => {
+    const on = el.getAttribute("data-screen") === name;
+    el.classList.toggle("hidden", !on);
+    if (on) shown = el;
+  });
+  if (!shown && screens.length) {
+    const fallback = document.querySelector('[data-screen="welcome"]') || screens[0];
+    fallback.classList.remove("hidden");
+  }
 }
 
 export function showTabNav(show, active) {
   const nav = $("tabnav");
+  if (!nav) return;
   if (!show) { nav.classList.add("hidden"); return; }
   nav.classList.remove("hidden");
   nav.querySelectorAll("[data-tab]").forEach((btn) => {
     const on = btn.getAttribute("data-tab") === active;
     const icon = btn.querySelector("[data-tab-icon]");
     const label = btn.querySelector("span");
-    icon.setAttribute("stroke-width", on ? "2.5" : "2");
-    icon.classList.toggle("text-brand-500", on);
-    icon.classList.toggle("text-ink-400", !on);
-    label.classList.toggle("text-brand-500", on);
-    label.classList.toggle("text-ink-400", !on);
+    if (icon) {
+      icon.setAttribute("stroke-width", on ? "2.5" : "2");
+      icon.classList.toggle("text-brand-500", on);
+      icon.classList.toggle("text-ink-400", !on);
+    }
+    if (label) {
+      label.classList.toggle("text-brand-500", on);
+      label.classList.toggle("text-ink-400", !on);
+    }
     let dot = btn.querySelector(".tab-dot");
     if (on && !dot) {
       dot = document.createElement("div");
@@ -96,14 +109,34 @@ export function showTabNav(show, active) {
 
 export function setOfflineBanner() {
   const b = $("offline-banner");
+  if (!b) return;
   if (!navigator.onLine) b.classList.remove("hidden");
   else b.classList.add("hidden");
 }
 
 export function route() {
+  try {
+    routeToScreen();
+  } catch (err) {
+    console.error("route failed", err);
+    const fallback = !store.auth.user
+      ? (store.authScreen || "welcome")
+      : (!store.auth.user.courseId ? "courseChooser" : "home");
+    showTabNav(fallback === "home", "home");
+    showScreen(fallback);
+    if (fallback === "home") {
+      try { renderHome(); } catch (e) { console.error(e); }
+    }
+    if (fallback === "courseChooser") {
+      try { renderCourseChooser(); } catch (e) { console.error(e); }
+    }
+  }
+}
+
+function routeToScreen() {
   if (!store.auth.user) {
     showTabNav(false);
-    showScreen(store.authScreen);
+    showScreen(store.authScreen || "welcome");
     return;
   }
   if (!store.progress.seenTour) { showTabNav(false); showScreen("tour"); renderTour(); return; }
@@ -116,18 +149,18 @@ export function route() {
   if (store.overlay === "progress") { showTabNav(false); showScreen("progress"); renderProgress(); return; }
   if (store.overlay === "plans") { showTabNav(false); showScreen("plans"); renderPlans(); return; }
   if (store.tab === "practice") { showTabNav(false); showScreen("practice"); return; }
-  showTabNav(true, store.tab);
-  if (store.tab === "home") {
+  showTabNav(true, store.tab || "home");
+  if (store.tab === "rewards") { showScreen("rewards"); renderRewards(); }
+  else if (store.tab === "profile") { showScreen("profile"); renderProfile(); }
+  else {
     showScreen("home");
     setOfflineBanner();
     resetFlashIfNewDay();
     renderHome();
     refreshProgressFromDb().then(() => {
       if (store.tab === "home" && !store.overlay) renderHome();
-    });
+    }).catch((err) => console.error(err));
   }
-  else if (store.tab === "rewards") { showScreen("rewards"); renderRewards(); }
-  else if (store.tab === "profile") { showScreen("profile"); renderProfile(); }
 }
 export function getGreeting() {
   const h = new Date().getHours();
@@ -137,24 +170,31 @@ export function getGreeting() {
 }
 
 export function firstNameOf(user) {
-  const displayName = (user.name && user.name !== "You") ? user.name.split(" ")[0] : user.email.split("@")[0].charAt(0).toUpperCase() + user.email.split("@")[0].slice(1);
-  return displayName;
+  const name = String(user?.name || "").trim();
+  if (name && name !== "You") return name.split(" ")[0];
+  const local = String(user?.email || "").split("@")[0];
+  if (local) return local.charAt(0).toUpperCase() + local.slice(1);
+  return "there";
 }
 export function renderHome() {
+  const scroll = $("home-scroll");
+  if (!scroll) return;
   const user = store.auth.user;
   const firstName = firstNameOf(user);
-  const courseId = user.courseId;
+  const courseId = user?.courseId;
   const course = courseId ? COURSES[courseId] : null;
   const todayLesson = courseId ? getCourseDay(courseId, store.progress.courseDay) : null;
-  const dayDone = store.progress.completedDays.includes(store.progress.courseDay);
+  const completedDays = Array.isArray(store.progress.completedDays) ? store.progress.completedDays : [];
+  const dayDone = completedDays.includes(store.progress.courseDay);
   const locked = isDayLocked(store.progress.courseDay);
   const weeklyDays = weekPracticeCount(store.progress.practiceDays, store.progress.simDateOffset);
   const weeklyPct = Math.min(100, Math.round((weeklyDays / APP_CONFIG.weeklyGoalDays) * 100));
-  const coursePct = Math.round((store.progress.completedDays.length / 30) * 100);
+  const coursePct = Math.round((completedDays.length / 30) * 100);
   const size = 72, stroke = 8, radius = (size - stroke) / 2, circ = 2 * Math.PI * radius;
   const offset = circ - (weeklyPct / 100) * circ;
   const ringLabel = weeklyDays > 0 ? `${weeklyDays}/${APP_CONFIG.weeklyGoalDays}` : "";
   const ringSub = weeklyDays > 0 ? "days" : "";
+  const questionCount = Array.isArray(todayLesson?.questions) ? todayLesson.questions.length : 0;
 
   let hero = "";
   if (course && todayLesson) {
@@ -183,7 +223,7 @@ export function renderHome() {
           <div class="relative">
             <p class="text-xs font-semibold uppercase tracking-wide text-white/70">${coursePct === 0 ? "Day 1 of 30 — let’s begin" : `Day ${store.progress.courseDay} of 30`}</p>
             <h2 class="mt-1.5 text-lg font-bold leading-snug">${todayLesson.title}</h2>
-            <p class="mt-1 text-sm text-white/70">${todayLesson.questions.length} questions · ~5 min</p>
+            <p class="mt-1 text-sm text-white/70">${questionCount} questions · ~5 min</p>
             ${cta}
           </div>
         </div>
@@ -218,7 +258,8 @@ export function renderHome() {
       </div>
     </button>`).join("");
 
-  $("home-scroll").innerHTML = `
+  try {
+    scroll.innerHTML = `
     <div class="flex items-center justify-between px-5 pt-6 pb-3">
       <div>
         <p class="text-sm font-medium text-ink-600">${getGreeting()},</p>
@@ -282,10 +323,18 @@ export function renderHome() {
       </div>
       ${reportFooterHtml()}
     </div>`;
+  } catch (err) {
+    console.error(err);
+    scroll.innerHTML = `<div class="px-5 pt-10">
+      <h1 class="text-xl font-extrabold text-ink-900">Welcome back</h1>
+      <p class="mt-2 text-sm text-ink-600">Home couldn't load just now. Start a lesson from Practice.</p>
+    </div>`;
+  }
 }
 
 export function renderTour() {
-  const current = ONBOARDING_TOUR[store.tourStep];
+  const current = ONBOARDING_TOUR[store.tourStep] || ONBOARDING_TOUR[0];
+  if (!current) return;
   const iconName = { home: "home", mic: "mic", feedback: "feedback", trophy: "trophy" }[current.icon] || "home";
   $("tour-icon").innerHTML = svg(iconName, 44);
   $("tour-title").textContent = current.title;
@@ -821,9 +870,10 @@ export function renderPractice() {
     if (store.practice.typingMode) {
       inner += `<div class="space-y-3"><div class="flex gap-2"><input id="typed-answer" type="text" value="${store.practice.typedText.replace(/"/g, "&quot;")}" placeholder="Type your answer here..." class="flex-1 rounded-xl border border-ink-200 bg-surface-1 px-4 py-3 text-sm text-ink-900 outline-none placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" /><button data-act="typed-send" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500 text-white shadow-popAccent transition-all active:scale-95 disabled:bg-ink-200 disabled:text-ink-400 disabled:shadow-none">${svg("send", 20)}</button></div><button data-act="switch-mic" class="mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400">${svg("mic", 13)} Switch to mic</button></div>`;
     } else {
-      inner += `<div><div class="flex items-center justify-center mb-4"><div class="relative">${store.practice.micState === "listening" ? `<div class="absolute inset-0 rounded-full bg-accent-500/30 animate-pulse-ring"></div><div class="absolute inset-0 rounded-full bg-accent-500/20 animate-pulse-ring" style="animation-delay:0.5s"></div>` : ""}<button data-act="mic" ${store.practice.micState === "processing" ? "disabled" : ""} class="relative flex h-24 w-24 items-center justify-center rounded-full shadow-popAccent transition-all active:scale-95 ${store.practice.micState === "processing" ? "bg-ink-200 text-ink-400" : "bg-accent-500 text-white"}">${store.practice.micState === "processing" ? `<div class="flex items-center gap-1"><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:120ms"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:240ms"></span></div>` : store.practice.micState === "listening" ? `<div class="flex items-center gap-1 h-8">${[0,1,2,3,4].map((i) => `<span class="w-1 rounded-full bg-white animate-wave" style="animation-delay:${i * 120}ms;height:100%"></span>`).join("")}</div>` : svg("mic", 32)}</button></div></div>
+      inner += `<div><div class="flex items-center justify-center mb-4"><div class="relative">${store.practice.micState === "listening" ? `<div class="absolute inset-0 rounded-full bg-accent-500/30 animate-pulse-ring"></div><div class="absolute inset-0 rounded-full bg-accent-500/20 animate-pulse-ring" style="animation-delay:0.5s"></div>` : ""}<button data-act="mic" ${store.practice.micState === "processing" ? "disabled" : ""} style="touch-action:manipulation" class="relative flex h-24 w-24 items-center justify-center rounded-full shadow-popAccent transition-all active:scale-95 ${store.practice.micState === "processing" ? "bg-ink-200 text-ink-400" : "bg-accent-500 text-white"}">${store.practice.micState === "processing" ? `<div class="flex items-center gap-1"><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:120ms"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:240ms"></span></div>` : store.practice.micState === "listening" ? `<div class="flex items-center gap-1 h-8">${[0,1,2,3,4].map((i) => `<span class="w-1 rounded-full bg-white animate-wave" style="animation-delay:${i * 120}ms;height:100%"></span>`).join("")}</div>` : svg("mic", 32)}</button></div></div>
         <p class="text-center text-sm font-semibold text-ink-600">${store.practice.micState === "idle" ? "Tap and answer out loud" : store.practice.micState === "listening" ? "I'm listening... tap to stop" : "Coach is thinking..."}</p>
-        <button data-act="type-instead" class="mt-3 mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400 hover:text-ink-600">${svg("keyboard", 13)} Type instead</button></div>`;
+        ${store.practice.sttFailed && store.practice.micState === "idle" ? `<p class="mt-2 text-center text-xs text-amber-600">Couldn't catch that. Tap the mic and try again, a little closer.</p>` : ""}
+        ${store.practice.micState === "idle" ? `<button data-act="type-instead" class="mt-3 mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400 hover:text-ink-600">${svg("keyboard", 13)} Type instead</button>` : ""}</div>`;
     }
     bottom.innerHTML = inner;
     const typed = $("typed-answer");

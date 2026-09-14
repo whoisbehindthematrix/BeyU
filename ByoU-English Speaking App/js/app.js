@@ -61,7 +61,7 @@ import {
   showScreen,
   showTabNav,
 } from "./ui.js";
-import { signInWithGoogle, signInWithEmail, onAuthChange, loadBootState } from "./auth.js";
+import { signInWithGoogle, signInWithEmail, onAuthChange, loadBootState, consumeAuthRedirect } from "./auth.js";
 import { submitFeedback } from "./feedback.js";
 import { track } from "./track.js";
 
@@ -180,7 +180,17 @@ function goHomeFromDigest(e) {
 }
 
 function bind() {
-  $("auth-google").onclick = () => { signInWithGoogle(); };
+  $("auth-google").onclick = async () => {
+    const msg = $("auth-message");
+    msg.classList.remove("hidden");
+    msg.textContent = "Opening Google…";
+    const { error } = await signInWithGoogle();
+    if (!error) return;
+    const raw = error.message || "";
+    msg.textContent = /provider is not enabled/i.test(raw)
+      ? "This site is pointing at a Supabase project where Google login is off. In Vercel, set SUPABASE_URL to https://qgotpjylwhtgutgubwfe.supabase.co and the matching anon key."
+      : (raw || "Google sign-in failed. Try email, or check the Google provider in Supabase.");
+  };
   $("auth-email-form").onsubmit = async (e) => {
     e.preventDefault();
     const email = $("auth-email").value.trim();
@@ -205,7 +215,7 @@ function bind() {
   };
   $("tour-skip").onclick = $("tour-skip-x").onclick = () => { markTourSeen().then(() => route()); };
 
-  $("course-start").onclick = () => handleCourseSelect(store.selectedCourseId);
+  $("course-start").onclick = () => handleCourseSelect(store.selectedCourseId).catch((err) => console.error(err));
   $("course-list").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act=pick-course]");
     if (!btn) return;
@@ -290,6 +300,7 @@ function bind() {
       if (!store.practice.typingMode) startListening();
     } else if (act === "next-prompt") advancePracticePrompt();
   });
+  let ignoreTypeInsteadUntil = 0;
   $("practice-bottom").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
@@ -297,9 +308,13 @@ function bind() {
     if (act === "hint") { store.practice.showHint = true; renderPractice(); }
     else if (act === "mic") {
       if (store.practice.micState === "idle") startListening();
-      else if (store.practice.micState === "listening") stopListening();
+      else if (store.practice.micState === "listening") {
+        ignoreTypeInsteadUntil = Date.now() + 800;
+        stopListening();
+      }
     } else if (act === "type-instead") {
-      if (store.practice.micState === "listening") { speechController.stopListening(); stopTimer(); store.practice.micState = "idle"; stopRecording().catch(() => {}); }
+      if (Date.now() < ignoreTypeInsteadUntil) return;
+      if (store.practice.micState !== "idle") return;
       track("typed_fallback_used");
       store.practice.typingMode = true; renderPractice();
     } else if (act === "switch-mic") { store.practice.typingMode = false; renderPractice(); }
@@ -534,28 +549,58 @@ function showOAuthError(oauthError) {
   history.replaceState({}, "", location.pathname);
 }
 
-async function startApp() {
+function showAuthStatus(text) {
+  showTabNav(false);
+  showScreen("auth");
+  const msg = $("auth-message");
+  if (!msg) return;
+  msg.classList.remove("hidden");
+  msg.textContent = text;
+}
+
+function clearOAuthParams() {
+  const path = location.pathname.endsWith("/") || location.pathname.endsWith(".html")
+    ? location.pathname
+    : `${location.pathname}/`;
+  history.replaceState({}, "", path);
+}
+
+async function bootFromSession() {
   const boot = await loadBootState();
-  if (!boot.session && pendingOAuthFromUrl()) return;
-
   applyBoot(boot);
-
   if (!boot.session) {
-    const oauthError = oauthErrorFromUrl();
-    if (oauthError) {
-      showOAuthError(oauthError);
-      return;
-    }
     store.authScreen = store.authScreen || "welcome";
-    route();
-    return;
   }
-
   route();
 }
 
+async function startApp() {
+  const oauthError = oauthErrorFromUrl();
+  if (oauthError) {
+    showOAuthError(oauthError);
+    return;
+  }
+
+  if (pendingOAuthFromUrl()) {
+    showAuthStatus("Signing you in…");
+    const session = await consumeAuthRedirect();
+    clearOAuthParams();
+    if (!session) {
+      showOAuthError("Google sign-in didn't finish. Try Continue with Google again.");
+      return;
+    }
+    await bootFromSession();
+    return;
+  }
+
+  await bootFromSession();
+}
+
 onAuthChange((event, session) => {
-  if (event === "INITIAL_SESSION") return;
+  if (event === "INITIAL_SESSION") {
+    if (session?.user && !store.auth.user) bootFromSession();
+    return;
+  }
 
   if (event === "SIGNED_OUT" || !session?.user) {
     applyBoot({ session: null, profile: null, todayDone: false, maxDay: 0, maxCompletedDay: 0, courseId: null });
@@ -569,14 +614,8 @@ onAuthChange((event, session) => {
       || session.user.identities?.[0]?.provider
       || "email";
     track("login_success", { provider });
-    if (pendingOAuthFromUrl()) {
-      const path = location.pathname.endsWith("/") ? location.pathname : `${location.pathname}/`;
-      history.replaceState({}, "", path);
-    }
-    loadBootState().then((boot) => {
-      applyBoot(boot);
-      route();
-    });
+    if (pendingOAuthFromUrl()) clearOAuthParams();
+    bootFromSession();
   }
 });
 

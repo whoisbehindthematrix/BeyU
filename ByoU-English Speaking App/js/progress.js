@@ -145,10 +145,15 @@ export async function hydrateUserState() {
 }
 
 export async function updateProfile(patch) {
-  const { data, error } = await supabase.auth.getUser();
-  const userId = data?.user?.id;
-  if (!userId) return { data: null, error: error || { message: "Not signed in" } };
-  return supabase.from("profiles").update(patch).eq("id", userId).select().maybeSingle();
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userId = sessionData?.session?.user?.id;
+  if (!userId) return { data: null, error: { message: "Not signed in" } };
+
+  const updated = await supabase.from("profiles").update(patch).eq("id", userId).select("id").maybeSingle();
+  if (updated.error) return updated;
+  if (updated.data) return updated;
+
+  return supabase.from("profiles").upsert({ id: userId, ...patch }, { onConflict: "id" }).select("id").maybeSingle();
 }
 
 export async function loadMyProgress(courseId) {

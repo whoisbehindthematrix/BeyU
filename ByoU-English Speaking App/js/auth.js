@@ -44,10 +44,13 @@ function authRedirectTo() {
 }
 
 export async function signInWithGoogle() {
-  return await supabase.auth.signInWithOAuth({
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
-    options: { redirectTo: authRedirectTo() },
+    options: { redirectTo: authRedirectTo(), skipBrowserRedirect: true },
   });
+  if (error) return { data, error };
+  if (data?.url) window.location.assign(data.url);
+  return { data, error };
 }
 
 export async function signInWithEmail(email) {
@@ -63,6 +66,46 @@ export async function signOut() {
 
 export async function getUser() {
   return await supabase.auth.getUser();
+}
+
+export async function waitForSession(timeoutMs = 8000) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    const { data } = await supabase.auth.getSession();
+    if (data?.session?.user) return data.session;
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  }
+  return null;
+}
+
+function authHashParams() {
+  const raw = window.location.hash.startsWith("#")
+    ? window.location.hash.slice(1)
+    : window.location.hash;
+  return new URLSearchParams(raw);
+}
+
+export async function consumeAuthRedirect() {
+  const hash = authHashParams();
+  const accessToken = hash.get("access_token");
+  const refreshToken = hash.get("refresh_token");
+  if (accessToken && refreshToken) {
+    const { data, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+    if (error) console.error(error);
+    if (data?.session) return data.session;
+  }
+
+  const code = new URLSearchParams(window.location.search).get("code");
+  if (code) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) console.error(error);
+    if (data?.session) return data.session;
+  }
+
+  return waitForSession(4000);
 }
 
 export function onAuthChange(callback) {
