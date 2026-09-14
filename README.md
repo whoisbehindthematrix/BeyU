@@ -9,22 +9,23 @@ App Link: https://bey-u.vercel.app/
 </div>
 Why this exists
 
-Millions of people in India can read and write English perfectly well but freeze the moment they have to speak — in an interview, on a call, in a room full of strangers. The blocker isn't grammar. It's the fear of being corrected.
+/nMillions of people in India can read and write English perfectly well but freeze the moment they have to speak — in an interview, on a call, /nin a room full of strangers. The blocker isn't grammar. It's the fear of being corrected.
 
-ByoU is a mobile-first web app that removes that fear. You get a question, you speak your answer, and an AI coach replies with one thing you did well and one small upgrade — framed as encouragement, never criticism. Do it for five minutes, build a streak, come back tomorrow. The entire product is designed around a single metric: did the learner want to speak again the next day?
+/ByoU is a mobile-first web app that removes that fear. You get a question, you speak your answer, and an AI coach replies with one thing you did well and one small upgrade — framed as encouragement, never criticism. Do it for five minutes, build a streak, come back tomorrow. The entire product is designed around a single metric: did the learner want to speak again the next day?
 
-I designed, built, and shipped this on my own — product thinking, curriculum, UX, database, AI pipeline, guardrails, evals, and deployment.
+/n I designed, built, and shipped this on my own — product thinking, curriculum, UX, database, AI pipeline, guardrails, evals, and deployment.
+/n
+/n What it does
+n
+/n 28+ days of structured curriculum across three tracks — Interview Prep, Everyday Conversation, and a combined bundle — organised into weekly themes (introducing yourself, talking about your work, the classic questions, staying calm under pressure).
+/n Speak or type your answer. Voice is transcribed; typed answers are treated as the real answer, never as failed speech.
+/n AI feedback in seconds — specific praise quoting the learner's own words, one concrete upgrade, and a natural rewrite of what they could have said, plus a short line to say aloud right away.
+/n A ~4,000-word vocabulary system with daily flashcards drawn from interview, academic, and daily-life word lists.
+/n Streaks, points, and a gentle daily digest to build the habit without pressure.
+/n Google & email sign-in, per-user progress, and privacy by default.
+/n/n How it's built
 
-What it does
-28+ days of structured curriculum across three tracks — Interview Prep, Everyday Conversation, and a combined bundle — organised into weekly themes (introducing yourself, talking about your work, the classic questions, staying calm under pressure).
-Speak or type your answer. Voice is transcribed; typed answers are treated as the real answer, never as failed speech.
-AI feedback in seconds — specific praise quoting the learner's own words, one concrete upgrade, and a natural rewrite of what they could have said, plus a short line to say aloud right away.
-A ~4,000-word vocabulary system with daily flashcards drawn from interview, academic, and daily-life word lists.
-Streaks, points, and a gentle daily digest to build the habit without pressure.
-Google & email sign-in, per-user progress, and privacy by default.
-How it's built
-
-ByoU is deliberately a no-build, plain-HTML frontend talking to a Supabase backend, with all AI and secrets isolated in Edge Functions. That architecture was a design decision, not a limitation: it keeps the browser dumb, makes the security model trivial to reason about, and means the whole thing deploys as static files.
+/n ByoU is deliberately a no-build, plain-HTML frontend talking to a Supabase backend, with all AI and secrets isolated in Edge Functions. That architecture was a design decision, not a limitation: it keeps the browser dumb, makes the security model trivial to reason about, and means the whole thing deploys as static files.
 
 Browser (static HTML/JS/Tailwind)
         │  only ever talks to Supabase — never to an AI vendor directly
