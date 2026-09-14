@@ -265,7 +265,7 @@ function bind() {
     else { store.tab = t; store.overlay = null; route(); }
   });
 
-  $("practice-exit").onclick = () => { stopTimer(); speechController.stopListening(); stopRecording().catch(() => {}); practiceExit(); };
+  $("practice-exit").onclick = () => { stopTimer(); stopRecording().catch(() => {}); practiceExit(); };
   $("practice-skip").onclick = () => {
     const questions = practiceQuestions();
     const totalPrompts = questions.length || 1;
