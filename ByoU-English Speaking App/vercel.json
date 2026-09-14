@@ -1,5 +1,10 @@
 {
   "buildCommand": "node scripts/write-config.mjs",
   "outputDirectory": ".",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "functions": {
+    "api/transcribe.js": {
+      "maxDuration": 30
+    }
+  }
 }

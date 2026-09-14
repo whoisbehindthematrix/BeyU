@@ -136,8 +136,29 @@ function clipResayFromHint(hint: string) {
   return [...words, ...pad].slice(0, 8).join(" ");
 }
 
-function hintReply(hint: string) {
-  const text = String(hint || "").trim() || "Take your time. Start with I would say and build from there.";
+function hintFitsQuestion(hint: string, question: string) {
+  const qWords = new Set(String(question || "").toLowerCase().match(/[a-z]{4,}/g) || []);
+  const hWords = String(hint || "").toLowerCase().match(/[a-z]{4,}/g) || [];
+  if (!qWords.size || !hWords.length) return false;
+  return hWords.some((w) => qWords.has(w));
+}
+
+function starterForQuestion(question: string, hint: string) {
+  const q = String(question || "").trim();
+  const h = String(hint || "").trim();
+  if (h && hintFitsQuestion(h, q)) return h;
+  const lower = q.toLowerCase();
+  if (lower.includes("rather") || (lower.includes("work from home") && lower.includes("office"))) {
+    return "I'd rather ___ because ___.";
+  }
+  if (lower.includes("strength")) return "My biggest strength is ___. For example, ___.";
+  if (lower.includes("mistake") || lower.includes("learned from")) return "I made a mistake when ___. I learned ___.";
+  if (q) return `Start with “I would say”, then answer: ${q.replace(/\?+$/, "")}.`;
+  return "Take your time. Start with I would say and build from there.";
+}
+
+function hintReply(question: string, hint: string) {
+  const text = starterForQuestion(question, hint);
   return {
     praise: "You opened the mic — that already counts.",
     one_upgrade: text,
@@ -168,8 +189,8 @@ Deno.serve(async (req) => {
 
   const spokenEmpty = !typed && !clean.trim();
   if (spokenEmpty) {
-    console.log("silence/empty spoken — returning question hint");
-    return respond(hintReply(String(hint || "")));
+    console.log("silence/empty spoken — no placeholder coaching");
+    return respond(SAFE);
   }
 
   const inputNote = typed

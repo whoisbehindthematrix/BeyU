@@ -18,7 +18,7 @@ import {
   resetFlashIfNewDay,
   refreshProgressFromDb,
 } from "./session.js";
-import { formatTime, handleTypedSubmit, speechController } from "./voice.js";
+import { formatTime, handleTypedSubmit, startRecording, stopRecording, transcribeAudio } from "./voice.js";
 import { loadMyProgress } from "./progress.js";
 import { FLASH_SET_SIZE, countSpokenWords, getDueWords, markSpoken, shuffleWords } from "./vocab.js";
 
@@ -750,8 +750,7 @@ export function patchLiveTranscript() {
   const el = $("practice-live-text");
   if (!el) return false;
   const combined = [store.practice.transcript, store.practice.liveText].filter(Boolean).join(" ");
-  el.textContent = combined
-    || (store.practice.hearingVoice ? "Hearing you…" : store.practice.micState === "listening" ? "Listening… speak, then tap the mic to stop." : "");
+  el.textContent = combined || "";
   return true;
 }
 
@@ -823,7 +822,7 @@ export function renderPractice() {
     } else if (store.practice.micState === "processing") {
       live += `<div class="flex items-center gap-2"><div class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:0ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:120ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:240ms"></span></div><span class="text-xs text-ink-400">Coach is thinking...</span></div>`;
     } else {
-      live += `<p class="text-sm text-ink-400 italic">${store.practice.micState === "listening" ? "Speak now — I'll write your words when you tap stop." : "Your words will appear here as you speak."}</p>`;
+      live += `<p class="text-sm text-ink-400 italic">Your words will appear here as you speak.</p>`;
     }
     live += `</div>`;
   }
@@ -873,7 +872,7 @@ export function renderPractice() {
     } else {
       inner += `<div><div class="flex items-center justify-center mb-4"><div class="relative">${store.practice.micState === "listening" ? `<div class="absolute inset-0 rounded-full bg-accent-500/30 animate-pulse-ring"></div><div class="absolute inset-0 rounded-full bg-accent-500/20 animate-pulse-ring" style="animation-delay:0.5s"></div>` : ""}<button data-act="mic" ${store.practice.micState === "processing" ? "disabled" : ""} style="touch-action:manipulation" class="relative flex h-24 w-24 items-center justify-center rounded-full shadow-popAccent transition-all active:scale-95 ${store.practice.micState === "processing" ? "bg-ink-200 text-ink-400" : "bg-accent-500 text-white"}">${store.practice.micState === "processing" ? `<div class="flex items-center gap-1"><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:120ms"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:240ms"></span></div>` : store.practice.micState === "listening" ? `<div class="flex items-center gap-1 h-8">${[0,1,2,3,4].map((i) => `<span class="w-1 rounded-full bg-white animate-wave" style="animation-delay:${i * 120}ms;height:100%"></span>`).join("")}</div>` : svg("mic", 32)}</button></div></div>
         <p class="text-center text-sm font-semibold text-ink-600">${store.practice.micState === "idle" ? "Tap and answer out loud" : store.practice.micState === "listening" ? "I'm listening... tap to stop" : "Coach is thinking..."}</p>
-        ${store.practice.sttFailed && store.practice.micState === "idle" ? `<p class="mt-2 text-center text-xs text-amber-600">Couldn't catch that. Tap the mic and try again, a little closer.</p>` : ""}
+        ${store.practice.sttFailed && store.practice.micState === "idle" ? `<p class="mt-2 text-center text-xs text-amber-600">Couldn't hear that — tap to try again</p>` : ""}
         ${store.practice.micState === "idle" ? `<button data-act="type-instead" class="mt-3 mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400 hover:text-ink-600">${svg("keyboard", 13)} Type instead</button>` : ""}</div>`;
     }
     bottom.innerHTML = inner;
@@ -914,7 +913,7 @@ function clearFlashDrillTimers() {
 export function resetFlashDrill() {
   flashDrillGen += 1;
   clearFlashDrillTimers();
-  speechController.stopListening();
+  stopRecording().catch(() => {});
   flashSpoken = "";
   flashInterim = "";
   store.flash.drill = "idle";
@@ -926,11 +925,18 @@ function heardTarget(transcript, word) {
   return String(transcript || "").toLowerCase().includes(needle);
 }
 
-function finishFlashListen(gen) {
+async function finishFlashListen(gen) {
   if (gen !== flashDrillGen) return;
-  speechController.stopListening();
   if (flashListenTimer) { clearTimeout(flashListenTimer); flashListenTimer = null; }
-  const spoken = `${flashSpoken} ${flashInterim}`.trim();
+  let spoken = "";
+  try {
+    const blob = await stopRecording();
+    if (gen !== flashDrillGen) return;
+    spoken = await transcribeAudio(blob);
+  } catch {
+    spoken = "";
+  }
+  if (gen !== flashDrillGen) return;
   const word = flashDeck()[store.flash.idx]?.word;
   if (heardTarget(spoken, word)) {
     store.flash.drill = "got_it";
@@ -949,34 +955,24 @@ function finishFlashListen(gen) {
 export function startFlashListen() {
   const gen = ++flashDrillGen;
   clearFlashDrillTimers();
-  speechController.stopListening();
+  stopRecording().catch(() => {});
   flashSpoken = "";
   flashInterim = "";
   store.flash.flipped = false;
   store.flash.drill = "listen";
   renderFlashcard();
 
-  if (!speechController.isSpeechRecognitionSupported()) {
+  startRecording().then(() => {
+    if (gen !== flashDrillGen) {
+      stopRecording().catch(() => {});
+      return;
+    }
+    flashListenTimer = setTimeout(() => finishFlashListen(gen), 4000);
+  }).catch(() => {
+    if (gen !== flashDrillGen) return;
     store.flash.drill = "try_again";
     renderFlashcard();
-    return;
-  }
-
-  speechController.startListening(
-    (result) => {
-      if (gen !== flashDrillGen) return;
-      if (result.isFinal) flashSpoken += `${result.transcript || ""} `;
-      else flashInterim = result.transcript || "";
-    },
-    (err) => {
-      if (gen !== flashDrillGen) return;
-      if (err === "aborted") return;
-      finishFlashListen(gen);
-    },
-    () => {},
-  );
-
-  flashListenTimer = setTimeout(() => finishFlashListen(gen), 4000);
+  });
 }
 
 export async function loadFlashDeck() {

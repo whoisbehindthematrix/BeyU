@@ -164,6 +164,39 @@ async function fetchFeedbackContext(questionId) {
 
 const DEFAULT_HINT = "Take your time. Start with 'I would say...' and build from there.";
 
+function questionWords(text) {
+  return new Set(String(text || "").toLowerCase().match(/[a-z]{4,}/g) || []);
+}
+
+function hintFitsQuestion(hint, question) {
+  const qWords = questionWords(question);
+  const hWords = String(hint || "").toLowerCase().match(/[a-z]{4,}/g) || [];
+  if (!qWords.size || !hWords.length) return false;
+  return hWords.some((w) => qWords.has(w));
+}
+
+function scaffoldHint(question) {
+  const q = String(question || "").trim();
+  const lower = q.toLowerCase();
+  if (lower.includes("rather") || (lower.includes("work from home") && lower.includes("office"))) {
+    return "I'd rather ___ because ___.";
+  }
+  if (lower.includes("strength")) return "My biggest strength is ___. For example, ___.";
+  if (lower.includes("mistake") || lower.includes("learned from")) return "I made a mistake when ___. I learned ___.";
+  if (lower.includes("about yourself")) return "I'm ___. I completed ___ in ___.";
+  if (lower.startsWith("why")) return "Because ___. That matters to me because ___.";
+  if (!q) return DEFAULT_HINT;
+  return `Start with “I would say”, then answer: ${q.replace(/\?+$/, "")}.`;
+}
+
+function hintForQuestion(question, explicitHint, phraseHint) {
+  const explicit = String(explicitHint || "").trim();
+  if (explicit && hintFitsQuestion(explicit, question)) return explicit;
+  const phrase = String(phraseHint || "").trim();
+  if (phrase && hintFitsQuestion(phrase, question)) return phrase;
+  return scaffoldHint(question);
+}
+
 function clipResayFromHint(hint) {
   const words = String(hint || "").trim().split(/\s+/).filter(Boolean);
   if (words.length >= 8 && words.length <= 14) return words.join(" ");
@@ -189,15 +222,11 @@ async function requestAiFeedback(transcript, inputMode, extra = {}) {
   const questions = practiceQuestions();
   const prompt = questions[store.practice.promptIdx % questions.length];
   const questionId = store.practice.questionIds[store.practice.promptIdx] ?? null;
-  const hint = prompt?.hint || DEFAULT_HINT;
+  const hint = hintForQuestion(prompt?.text, prompt?.hint, "");
   const input_mode = inputMode === "typed" ? "typed" : "spoken";
   const emptySpoken = input_mode === "spoken" && !String(transcript || "").trim();
-  if (emptySpoken && extra.silenceTimeout) {
-    store.practice.showHint = true;
-    return hintFeedback(hint);
-  }
   if (emptySpoken) {
-    return SAFE_FEEDBACK;
+    throw new Error("empty_spoken");
   }
   try {
     const { level, target_words, recent_upgrades } = await fetchFeedbackContext(questionId);
@@ -867,15 +896,16 @@ export function practiceQuestions() {
           id: `cq-${i}`,
           text: q,
           difficulty: "easy",
-          hint: phraseHint || DEFAULT_HINT,
+          hint: hintForQuestion(q, "", phraseHint),
           idealKeywords: [],
         };
       }
+      const text = q.text || q.prompt || "";
       return {
         id: q.id ?? `cq-${i}`,
-        text: q.text || q.prompt || "",
+        text,
         difficulty: "easy",
-        hint: q.hint || phraseHint || DEFAULT_HINT,
+        hint: hintForQuestion(text, q.hint, phraseHint),
         idealKeywords: [],
       };
     });
@@ -887,7 +917,7 @@ export function practiceQuestions() {
         id: `cq-${i}`,
         text: q,
         difficulty: "easy",
-        hint: phraseHint || DEFAULT_HINT,
+        hint: hintForQuestion(q, "", phraseHint),
         idealKeywords: [],
       }));
     }
@@ -1063,7 +1093,14 @@ export function submitAnswer(textOrResult) {
   const raw = fromLadder ? String(textOrResult.transcript || "") : String(textOrResult || "");
   const engine = fromLadder && textOrResult.engine
     ? textOrResult.engine
-    : (store.practice.typingMode ? "typed" : "web_speech");
+    : (store.practice.typingMode ? "typed" : "sarvam");
+  if (engine !== "typed" && !raw.trim()) {
+    store.practice.sttFailed = true;
+    store.practice.micState = "idle";
+    store.practice.transcript = "";
+    renderPractice();
+    return;
+  }
   store.practice.sttEngine = engine;
   track("stt_result", { engine, empty: !raw.trim(), chars: raw.length });
   if (store.practice.resaying) {
@@ -1075,11 +1112,31 @@ export function submitAnswer(textOrResult) {
   store.practice.transcript = raw;
   requestAiFeedback(raw, engine, { silenceTimeout: fromLadder && textOrResult.silenceTimeout })
     .then((payload) => {
+      if (isBlankTemplate(payload)) {
+        store.practice.sttFailed = true;
+        store.practice.feedback = null;
+        store.practice.aiFeedback = null;
+        store.practice.micState = "idle";
+        renderPractice();
+        return;
+      }
       showFeedback(payload, raw, started);
     })
     .catch(() => {
+      if (engine !== "typed") {
+        store.practice.sttFailed = true;
+        store.practice.feedback = null;
+        store.practice.micState = "idle";
+        renderPractice();
+        return;
+      }
       showFeedback(SAFE_FEEDBACK, raw, started);
     });
+}
+
+function isBlankTemplate(payload) {
+  const blob = `${payload?.one_upgrade || ""} ${payload?.could_have_said || ""} ${payload?.resay_sentence || ""}`;
+  return /_{3,}/.test(blob);
 }
 
 function showFeedback(payload, transcript, started) {
