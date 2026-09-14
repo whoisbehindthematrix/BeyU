@@ -1,4 +1,5 @@
 // Verify field names against Sarvam's current docs before first run — API shapes change.
+export {};
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
