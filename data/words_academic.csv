@@ -1,0 +1,201 @@
+word,meaning,example,ipa,level,category
+lecture,talk given by a teacher to a class,The lecture on statistics is at ten.,ˈlektʃə,2,academic
+semester,half of an academic year,This semester ends next month.,sɪˈmestə,2,academic
+assignment,work a teacher asks you to finish,The assignment is due this week.,əˈsaɪnmənt,2,academic
+exam,formal test of what you know,My last exam is next week.,ɪɡˈzæm,1,academic
+syllabus,list of topics in a course,Check the syllabus before you start reading.,ˈsɪləbəs,3,academic
+campus,land and buildings of a college,The library is at the back of campus.,ˈkæmpəs,2,academic
+faculty,teachers in a college department,The faculty will post the timetable today.,ˈfækəlti,3,academic
+hostel,student housing on or near campus,The hostel mess closes at nine.,ˈhɒstel,2,academic
+scholarship,money given to help you study,I applied for a merit scholarship.,ˈskɒləʃɪp,3,academic
+thesis,long research paper for a degree,My thesis is on small shop sales.,ˈθiːsɪs,4,academic
+tutorial,small class for extra help,The tutorial will cover last week's sums.,tjuːˈtɔːriəl,3,academic
+laboratory,room used for scientific tests,We have laboratory work this week.,ləˈbɒrətri,3,academic
+experiment,test done to learn something,The experiment failed on the first try.,ɪkˈsperɪmənt,3,academic
+hypothesis,idea you test in research,Our hypothesis was only partly right.,haɪˈpɒθəsɪs,4,academic
+theory,set of ideas that explain something,This theory is easier with a diagram.,ˈθɪəri,3,academic
+study,spend time learning a subject,I study for two hours after class.,ˈstʌdi,1,academic
+revise,go over work again before a test,I will revise the formulas tonight.,rɪˈvaɪz,2,academic
+teacher,person who helps you learn,My teacher explained the graph twice.,ˈtiːtʃə,1,academic
+student,person who is learning,Each student must carry the id card.,ˈstjuːdənt,1,academic
+classmate,person in the same class as you,A classmate shared the lecture notes.,ˈklɑːsmeɪt,1,academic
+notes,short written points from a class,I missed the notes from yesterday.,nəʊts,1,academic
+revision,time spent going over work again,Morning revision helps before the viva.,rɪˈvɪʒən,2,academic
+marks,points scored in a test,I need ten more marks to pass.,mɑːks,1,academic
+grade,letter or number for your result,A better grade needs more practice tests.,ɡreɪd,1,academic
+degree,qualification from a university,I will finish my degree this year.,dɪˈɡriː,2,academic
+diploma,course certificate below a degree,I did a diploma in computer skills.,dɪˈpləʊmə,2,academic
+bachelor,first university degree,I have a bachelor degree in commerce.,ˈbætʃələ,3,academic
+master,higher degree after a bachelor,I plan a master degree after work.,ˈmɑːstə,3,academic
+doctorate,highest university research degree,A doctorate takes several years of research.,ˈdɒktərət,4,academic
+curriculum,full set of courses in a programme,The new curriculum includes spoken practice.,kəˈrɪkjələm,4,academic
+module,one unit inside a larger course,This module has two internal tests.,ˈmɒdjuːl,3,academic
+credit,point you earn for finishing a course,I still need four credits this year.,ˈkredɪt,3,academic
+attendance,record of being present in class,Seventy five percent attendance is required.,əˈtendəns,2,academic
+practical,class where you do the work yourself,The chemistry practical is in the lab.,ˈpræktɪkəl,2,academic
+viva,oral exam where you answer questions,My viva is with two examiners.,ˈvaɪvə,3,academic
+lecturer,college teacher who gives lectures,The lecturer posted extra reading.,ˈlektʃərə,2,academic
+tutor,person who gives extra teaching,A tutor is helping me with accounts.,ˈtjuːtə,2,academic
+principal,head of a school or college,The principal will sign the bonafide letter.,ˈprɪnsəpəl,2,academic
+library,place where you borrow books,The library is quiet after lunch.,ˈlaɪbrəri,1,academic
+textbook,main book used for a course,The textbook has the sample papers.,ˈtekstbʊk,2,academic
+chapter,one main part of a book,Read chapter four before the class.,ˈtʃæptə,1,academic
+paragraph,group of sentences on one idea,Write one paragraph on the graph.,ˈpærəɡrɑːf,2,academic
+essay,short piece of writing on a topic,The essay should be about three pages.,ˈeseɪ,2,academic
+article,piece of writing in a paper or journal,We must read one article this week.,ˈɑːtɪkəl,2,academic
+journal,magazine of research papers,This journal is available in the library.,ˈdʒɜːnəl,3,academic
+paper,written exam or research article,The accounts paper is in the morning.,ˈpeɪpə,1,academic
+citation,note that shows where an idea came from,Add a citation for every number you use.,saɪˈteɪʃən,4,academic
+bibliography,list of books and papers you used,Put the bibliography on the last page.,ˌbɪbliˈɒɡrəfi,4,academic
+plagiarism,using someone's words as your own,Plagiarism can cancel your assignment marks.,ˈpleɪdʒərɪzəm,4,academic
+outline,simple plan of what you will write,Make an outline before the essay.,ˈaʊtlaɪn,2,academic
+abstract,short summary at the start of a paper,The abstract should be under two hundred words.,ˈæbstrækt,4,academic
+conclusion,final part that closes your argument,The conclusion should answer the question.,kənˈkluːʒən,3,academic
+argument,reasoned point you try to prove,Give one clear argument in each paragraph.,ˈɑːɡjəmənt,3,academic
+evidence,facts that support your point,Use evidence from the table not guesses.,ˈevɪdəns,3,academic
+analysis,careful study of parts and meaning,Your analysis of the graph is clear.,əˈnæləsɪs,3,academic
+summary,short version of the main points,Write a summary in five lines.,ˈsʌməri,2,academic
+paraphrase,say the same idea in new words,Paraphrase the definition do not copy it.,ˈpærəfreɪz,4,academic
+definition,exact meaning of a word or idea,Learn the definition not only the formula.,ˌdefɪˈnɪʃən,2,academic
+concept,main idea in a subject,This concept will come in the viva.,ˈkɒnsept,2,academic
+principle,basic rule that something follows,The first principle is to show your working.,ˈprɪnsəpəl,3,academic
+formula,rule written with symbols,Keep the formula sheet for last minute revision.,ˈfɔːmjələ,2,academic
+equation,math sentence that two sides are equal,Solve the equation step by step.,ɪˈkweɪʒən,3,academic
+calculate,find a number using maths,Calculate the average of these five marks.,ˈkælkjəleɪt,2,academic
+graph,drawing that shows numbers as lines,Label both axes on the graph.,ɡrɑːf,2,academic
+chart,picture that shows numbers clearly,The pie chart shows subject-wise marks.,tʃɑːt,2,academic
+table,numbers arranged in rows and columns,Copy the table from the question paper.,ˈteɪbəl,1,academic
+diagram,simple drawing that explains something,Draw a diagram of the circuit.,ˈdaɪəɡræm,2,academic
+axis,line used as a scale on a graph,Write the units on each axis.,ˈæksɪs,3,academic
+variable,value that can change in a problem,Name the variable you are measuring.,ˈveəriəbəl,3,academic
+statistics,subject that studies numbers and chance,Statistics is useful for survey work.,stəˈtɪstɪks,3,academic
+percentage,amount out of one hundred,What percentage of the class passed?,pəˈsentɪdʒ,2,academic
+ratio,comparison of two amounts,Simplify the ratio before you answer.,ˈreɪʃiəʊ,3,academic
+estimate,sensible guess of a number,Estimate the answer before you calculate.,ˈestɪmət,2,academic
+compare,say how two things are similar,Compare the two methods in one paragraph.,kəmˈpeə,2,academic
+contrast,say how two things are different,Contrast last year's result with this one.,ˈkɒntrɑːst,3,academic
+evaluate,judge how good something is,Evaluate the method not only the answer.,ɪˈvæljueɪt,3,academic
+critique,careful judgment of a piece of work,Write a short critique of the article.,krɪˈtiːk,4,academic
+interpret,explain what something means,Interpret the graph in two sentences.,ɪnˈtɜːprɪt,3,academic
+infer,reach an idea from the given facts,What can you infer from this table?,ɪnˈfɜː,4,academic
+conclude,reach a final judgment,What do you conclude from the experiment?,kənˈkluːd,3,academic
+prove,show that something is true,Prove the identity using the first method.,pruːv,3,academic
+method,ordered way of doing something,Show the method not only the final number.,ˈmeθəd,2,academic
+approach,way you choose to solve a problem,A slower approach may be more accurate.,əˈprəʊtʃ,3,academic
+technique,practical skill used to do something,This technique saves time in long sums.,tekˈniːk,3,academic
+strategy,plan for how you will study or answer,My exam strategy is easy questions first.,ˈstrætədʒi,3,academic
+objective,clear result you want to reach,The objective of this lab is measurement.,əbˈdʒektɪv,3,academic
+aim,what you hope to do,The aim of this unit is basic algebra.,eɪm,1,academic
+purpose,reason something is done,The purpose of the test is to check basics.,ˈpɜːpəs,2,academic
+topic,subject of a class or paper,Pick a topic you can explain simply.,ˈtɒpɪk,1,academic
+theme,main idea that runs through a text,The theme of the poem is hope.,θiːm,2,academic
+subject,area of study such as maths,Commerce is my main subject.,ˈsʌbdʒɪkt,1,academic
+major,main field of study in college,My major is computer applications.,ˈmeɪdʒə,2,academic
+minor,second smaller field of study,I took economics as a minor.,ˈmaɪnə,3,academic
+elective,optional course you can choose,I chose a spoken language elective.,ɪˈlektɪv,3,academic
+core,required course everyone must take,Accounts is a core paper this year.,kɔː,2,academic
+foundation,first course that builds basic knowledge,The foundation class starts next week.,faʊnˈdeɪʃən,3,academic
+advanced,at a higher and harder level,This is an advanced module in tax.,ədˈvɑːnst,3,academic
+basic,at the simple starting level,I still need basic algebra practice.,ˈbeɪsɪk,1,academic
+beginner,person just starting to learn,This spoken class is for beginners.,bɪˈɡɪnə,1,academic
+intermediate,level between beginner and advanced,I am intermediate in spreadsheet skills.,ˌɪntəˈmiːdiət,3,academic
+proficient,able to do something well,I am proficient in two languages.,prəˈfɪʃənt,4,academic
+literacy,ability to read and write,Digital literacy is part of the course.,ˈlɪtərəsi,3,academic
+numeracy,ability to work with numbers,Numeracy is tested in the entrance paper.,ˈnjuːmərəsi,4,academic
+comprehension,ability to understand a text,The comprehension passage is on page two.,ˌkɒmprɪˈhenʃən,3,academic
+term,word with a special subject meaning,Learn the term before you use it.,tɜːm,2,academic
+phrase,small group of words,Underline the key phrase in the question.,freɪz,2,academic
+sentence,group of words with a full meaning,Write the answer in a full sentence.,ˈsentəns,1,academic
+spelling,way letters are put in a word,Check the spelling of technical words.,ˈspelɪŋ,1,academic
+fluency,ease and flow when you speak,Daily practice improved my fluency.,ˈfluːənsi,3,academic
+listening,skill of understanding spoken language,The listening test uses short audio clips.,ˈlɪsənɪŋ,2,academic
+speaking,skill of talking in a language,The speaking test is a short conversation.,ˈspiːkɪŋ,1,academic
+reading,skill of understanding written text,Reading the question twice saves marks.,ˈriːdɪŋ,1,academic
+writing,skill of putting ideas in words,Writing needs a clear first sentence.,ˈraɪtɪŋ,1,academic
+translation,changing words from one language to another,Do not depend on word by word translation.,trænzˈleɪʃən,3,academic
+language,system of words people use to speak,The language of the class is not local.,ˈlæŋɡwɪdʒ,1,academic
+literature,stories poems and plays studied in class,This literature paper has two unseen poems.,ˈlɪtrətʃə,3,academic
+science,study of the natural world,I took science in the twelfth year.,ˈsaɪəns,1,academic
+commerce,study of business and accounts,Commerce students have an accounts paper.,ˈkɒmɜːs,2,academic
+arts,study of humanities and social subjects,She moved from arts to a media course.,ɑːts,2,academic
+engineering,study of how to design and build,He is in the second year of engineering.,ˌendʒɪˈnɪərɪŋ,2,academic
+management,study of how organisations are run,I want a management course after this degree.,ˈmænɪdʒmənt,2,academic
+computer,machine used to store and process data,The computer lab is booked till four.,kəmˈpjuːtə,1,academic
+mathematics,study of numbers and shapes,Mathematics is my strongest paper.,ˌmæθəˈmætɪks,2,academic
+physics,study of matter energy and motion,The physics numericals need more practice.,ˈfɪzɪks,2,academic
+chemistry,study of substances and how they change,Chemistry has a long practical record.,ˈkemɪstri,2,academic
+biology,study of living things,Biology diagrams must be labelled clearly.,baɪˈɒlədʒi,2,academic
+history,study of the past,This history chapter is on trade routes.,ˈhɪstri,1,academic
+geography,study of places land and climate,Geography map work is this week.,dʒiˈɒɡrəfi,2,academic
+economics,study of money work and markets,Economics helps in bank exam prep.,ˌiːkəˈnɒmɪks,3,academic
+accounting,keeping and checking money records,Accounting entries must always balance.,əˈkaʊntɪŋ,3,academic
+psychology,study of how people think and feel,Psychology is an elective this semester.,saɪˈkɒlədʒi,3,academic
+law,study of rules a society follows,She wants to study law after graduation.,lɔː,2,academic
+medical,related to health and treatment,The medical entrance is highly competitive.,ˈmedɪkəl,2,academic
+architecture,study of designing buildings,Architecture students have a studio class.,ˈɑːkɪtektʃə,3,academic
+design,plan for how something should look,The design assignment needs three sketches.,dɪˈzaɪn,2,academic
+lab,short name for a laboratory,Meet me outside the computer lab.,læb,1,academic
+specimen,sample used for study or tests,Handle the specimen with care.,ˈspesɪmən,4,academic
+microscope,tool that makes small things look large,Clean the microscope after the practical.,ˈmaɪkrəskəʊp,3,academic
+observation,something you notice during a test,Write one observation for each trial.,ˌɒbzəˈveɪʃən,3,academic
+finding,result you discover in a study,The main finding is in paragraph three.,ˈfaɪndɪŋ,3,academic
+seminar,class where students discuss a topic,I have to present in tomorrow's seminar.,ˈsemɪnɑː,3,academic
+webinar,seminar held on the internet,The webinar link will come on mail.,ˈwebɪnɑː,3,academic
+online,done through the internet,The extra class is online tonight.,ˌɒnˈlaɪn,1,academic
+offline,done in person not on the internet,The test will be offline in the hall.,ˌɒfˈlaɪn,2,academic
+distance,study done away from the campus,I did one distance course last year.,ˈdɪstəns,2,academic
+correspondence,study done by post or online materials,The correspondence course has weekend contact classes.,ˌkɒrəˈspɒndəns,4,academic
+enrolment,act of joining a course,Enrolment closes at the end of this week.,ɪnˈrəʊlmənt,3,academic
+admission,being accepted into a college,Admission lists will be on the notice board.,ədˈmɪʃən,2,academic
+entrance,exam used to get into a course,The entrance form is still open.,ˈentrəns,2,academic
+cut-off,minimum marks needed to get in,The cut-off rose by two marks.,ˈkʌt ɒf,3,academic
+merit,high marks that win a seat or award,Seats are given on merit this year.,ˈmerɪt,3,academic
+rank,your place in an ordered list of scores,My rank is enough for the local college.,ræŋk,2,academic
+counselling,session where seats and courses are allotted,Counselling is in the main hall tomorrow.,ˈkaʊnsəlɪŋ,3,academic
+stream,group of subjects you choose in school,I took the commerce stream after tenth.,striːm,2,academic
+board,body that sets school exams,The board result will come next month.,bɔːd,2,academic
+university,institution that grants degrees,The university posted the revaluation dates.,ˌjuːnɪˈvɜːsəti,2,academic
+college,place for higher study after school,My college is a twenty minute bus ride.,ˈkɒlɪdʒ,1,academic
+school,place for study before college,I still visit my school teachers.,skuːl,1,academic
+classroom,room where a class is held,The classroom fan is not working.,ˈklɑːsruːm,1,academic
+blackboard,dark board a teacher writes on,Copy the sums from the blackboard.,ˈblækbɔːd,2,academic
+projector,machine that shows slides on a wall,The projector is not connecting today.,prəˈdʒektə,3,academic
+slide,one screen in a class presentation,Keep one idea on each slide.,slaɪd,2,academic
+handout,paper given to the class,The handout has the practice questions.,ˈhændaʊt,2,academic
+photocopy,paper copy of a document,Please take a photocopy of the hall ticket.,ˈfəʊtəʊkɒpi,2,academic
+stationery,pens paper and other class supplies,The stationery shop is near the gate.,ˈsteɪʃənri,2,academic
+backpack,bag worn on your back,My backpack is too heavy today.,ˈbækpæk,1,academic
+timetable,plan of classes by day and time,The new timetable starts next week.,ˈtaɪmteɪbəl,2,academic
+period,one class session in the day,The third period is cancelled.,ˈpɪəriəd,1,academic
+break,short rest between classes,Meet me in the canteen at break.,breɪk,1,academic
+recess,longer break in the school day,Recess is twenty minutes after noon.,rɪˈses,2,academic
+canteen,place on campus that sells food,The canteen is full after the lecture.,kænˈtiːn,2,academic
+mess,dining hall in a hostel,Hostel mess food is simple but filling.,mes,2,academic
+senior,student in a higher year,A senior shared last year's papers.,ˈsiːniə,2,academic
+junior,student in a lower year,I will help a junior with the lab record.,ˈdʒuːniə,2,academic
+batch,group of students from the same year,Our batch has the exam on the same day.,bætʃ,2,academic
+alumni,people who studied at the college before,Alumni came to talk about first jobs.,ˈæljənaɪ,4,academic
+convocation,ceremony where degrees are given,Convocation is in the main auditorium.,ˌkɒnvəˈkeɪʃən,4,academic
+medal,prize given for a top result,She won a medal for the highest marks.,ˈmedəl,2,academic
+distinction,very high pass in an exam,He passed the paper with distinction.,dɪˈstɪŋkʃən,3,academic
+qualify,reach the marks needed to go further,I need forty to qualify for the next paper.,ˈkwɒlɪfaɪ,2,academic
+reappear,take an exam again after not passing,I will reappear for accounts in the next term.,ˌriːəˈpɪə,3,academic
+supplementary,extra exam given after the main one,The supplementary form is at the office.,ˌsʌplɪˈmentəri,4,academic
+arrear,paper you still have to pass,I have one arrear from last semester.,əˈrɪə,3,academic
+present,in class and marked as attending,Mark me present I reached after the bell.,ˈprezənt,1,academic
+group,set of students working together,Our group meets after the last period.,ɡruːp,1,academic
+pair,two students working together,Work in a pair for this experiment.,peə,1,academic
+peer,person at the same study level,Ask a peer to check your draft.,pɪə,3,academic
+debate,formal argument between two sides,I spoke for the motion in the debate.,dɪˈbeɪt,2,academic
+quiz,short informal test,There is a surprise quiz in the first period.,kwɪz,1,academic
+test,exam that checks what you remember,The unit test is for twenty marks.,test,1,academic
+mock,practice exam before the real one,The mock paper was harder than last year.,mɒk,2,academic
+oral,spoken not written,The oral exam is five minutes long.,ˈɔːrəl,2,academic
+written,done on paper not spoken,The written paper has two sections.,ˈrɪtən,1,academic
+coursework,graded work done during the term,Coursework is thirty percent of the grade.,ˈkɔːswɜːk,3,academic
+dissertation,long final research paper,The dissertation title needs approval.,ˌdɪsəˈteɪʃən,4,academic
+borrow,take a book for a short time,You can borrow two books at a time.,ˈbɒrəʊ,1,academic
+renew,keep a library book for longer,I need to renew this book today.,rɪˈnjuː,2,academic
+appendix,extra section at the end of a paper,Put the extra tables in the appendix.,əˈpendɪks,4,academic
+glossary,list of subject words and meanings,The glossary is at the back of the book.,ˈɡlɒsəri,3,academic
+footnote,small note at the bottom of a page,Add a footnote for that source.,ˈfʊtnəʊt,4,academic
