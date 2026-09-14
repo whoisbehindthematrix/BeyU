@@ -591,8 +591,8 @@ export function showDailyDigest(data) {
       <div class="flex gap-1">${bar}</div>
       <p class="mt-2 text-sm font-bold text-ink-900">Day ${filled} of 7${d.weekInProgress ? ` · ${escapeHtml(d.weekInProgress)}` : ""}</p>
       <p class="mt-0.5 text-xs text-ink-600">${escapeHtml(d.weekCaption || "")}</p>
-    </div>
-    <button data-act="digest-home" class="tap-target mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-pop hover:bg-brand-600 active:scale-[0.98]">Back to home ${svg("chevronRight", 16)}</button>`;
+    </div>`;
+  $("digest-bottom").innerHTML = `<button data-act="digest-home" class="tap-target inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-pop hover:bg-brand-600 active:scale-[0.98]">Back to home ${svg("chevronRight", 16)}</button>`;
 }
 
 function formatFeedbackDate(iso) {
@@ -790,7 +790,6 @@ export function renderPractice() {
         ${store.practice.sttEngine === "typed" || store.practice.typingMode ? "" : `<button data-act="rerecord" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent-500/10 px-3 py-2 text-sm font-medium text-accent-500 transition-transform active:scale-95">${svg("rotate", 15)} Re-record (10s)</button>`}
       </div>
       ${store.practice.transcript ? `<div class="rounded-2xl bg-surface-0 p-4 shadow-soft"><p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-400">You said</p><p class="text-sm italic leading-relaxed text-ink-600">&ldquo;${store.practice.transcript}&rdquo;</p></div>` : ""}
-      <button data-act="next-prompt" class="tap-target inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 bg-brand-500 text-white shadow-pop hover:bg-brand-600 active:scale-[0.98] w-full mt-2">${store.practice.promptIdx < totalPrompts - 1 ? "Next question" : "See your results"} ${svg("chevronRight", 16)}</button>
     </div>`;
   }
 
@@ -808,7 +807,12 @@ export function renderPractice() {
   if (isRecording || hasAnyText) patchLiveTranscript();
 
   const bottom = $("practice-bottom");
-  if (!store.practice.feedback && !store.practice.showMood) {
+  if (store.practice.feedback) {
+    bottom.classList.remove("hidden");
+    bottom.innerHTML = `<button data-act="next-prompt" class="tap-target inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-pop hover:bg-brand-600 active:scale-[0.98]">${store.practice.promptIdx < totalPrompts - 1 ? "Next question" : "See your results"} ${svg("chevronRight", 16)}</button>`;
+    return;
+  }
+  if (!store.practice.showMood) {
     bottom.classList.remove("hidden");
     let inner = "";
     if (!store.practice.showHint && !hasAnyText && store.practice.micState === "idle" && !store.practice.typingMode) {

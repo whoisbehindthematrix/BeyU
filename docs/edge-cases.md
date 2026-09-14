@@ -8,7 +8,7 @@ Status is judged against `supabase/functions/feedback/index.ts` (plus the `v1.tx
 
 | # | Input | Expected behaviour | Status | Reason |
 | --- | --- | --- | --- | --- |
-| 1 | Empty transcript | praise attempt, model answer as resay | 🔲 | Empty strings still go to Claude; only a v1 RULES line asks the model to praise the attempt. |
+| 1 | Empty transcript | praise attempt, return the question hint | ✅ | Empty spoken input skips Claude and returns `hintReply(hint)`. |
 | 2 | 2-word answer ("yes sir") | encourage longer | 🔲 | No word-count check; same prompt-only rule as #1 (under 5 words). |
 | 3 | Answer in Hindi/Hinglish | praise, resay in English, no scolding | 🔲 | No language detection; prompt only says Indian English is valid. |
 | 4 | Mic picks up background TV | model should not treat noise as the answer | 🔲 | No noise vs speech check; transcript is forwarded as-is. |
@@ -22,3 +22,4 @@ Status is judged against `supabase/functions/feedback/index.ts` (plus the `v1.tx
 | 12 | Claude API 529 overloaded | SAFE default, don't block session | ✅ | Empty/non-JSON body fails parse, retries once, then returns SAFE. |
 | 13 | User asks a question back ("what should I say?") | resay gives a starter | 🔲 | No code path; only the generic off-topic prompt rule. |
 | 14 | Same tip 3 sessions in a row | recent_upgrades grounding prevents | 🔲 | `recent_upgrades` are interpolated into the prompt, but a repeated `one_upgrade` is not rejected. |
+| 15 | Mic open, no speech for 8s | auto-stop mic, reply with question hint | ✅ | Client silence timer 8s; empty spoken + hint canned in `feedback` and `hintFeedback()`. |
