@@ -749,20 +749,38 @@ export function spawnConfetti(container) {
 export function patchLiveTranscript() {
   const el = $("practice-live-text");
   if (!el) return false;
-  const combined = [store.practice.transcript, store.practice.liveText].filter(Boolean).join(" ");
-  el.textContent = combined || "";
+  const spoken = String(store.practice.liveText || store.practice.transcript || "").trim();
+  if (store.practice.micState === "listening") {
+    if (spoken) {
+      el.className = "text-sm leading-relaxed text-ink-700";
+      el.textContent = spoken;
+    } else {
+      el.className = "text-sm text-ink-400 italic";
+      el.textContent = "Your words will appear here as you speak.";
+    }
+    return true;
+  }
+  el.className = "text-sm leading-relaxed text-ink-700";
+  el.textContent = spoken;
+  return true;
+}
+
+export function patchMicStatus() {
+  const el = $("practice-mic-status");
+  if (!el || store.practice.micState !== "listening") return false;
+  const time = formatTime(store.practice.elapsedSec);
+  el.textContent = store.practice.hearingVoice ? `Hearing you…  ${time}` : `Recording  ${time}`;
   return true;
 }
 
 export function patchRecordingTimer() {
   const el = $("practice-rec-time");
-  if (!el) return false;
-  el.textContent = formatTime(store.practice.elapsedSec);
-  return true;
+  if (el) el.textContent = formatTime(store.practice.elapsedSec);
+  return patchMicStatus();
 }
 
 export function renderPractice() {
-  if (store.practice.micState === "listening" && $("practice-live-text")) {
+  if (store.practice.micState === "listening" && $("practice-live-text") && $("practice-mic-status")) {
     patchLiveTranscript();
     patchRecordingTimer();
     return;
@@ -814,29 +832,26 @@ export function renderPractice() {
   let live = "";
   if (!store.practice.feedback) {
     live = `<div class="mt-4 ml-11 rounded-2xl bg-surface-0 px-4 py-4 shadow-soft min-h-[100px] animate-fade-in">`;
-    if (isRecording) {
-      live += `<div class="mb-3 flex items-center justify-between"><div class="flex items-center gap-1.5"><div class="flex items-center gap-0.5 h-5">${[0,1,2,3,4].map((i) => `<span class="w-1 rounded-full bg-accent-500 animate-wave" style="animation-delay:${i * 100}ms;height:100%"></span>`).join("")}</div><span class="ml-1.5 text-xs font-semibold text-accent-500">Recording</span></div><span id="practice-rec-time" class="rounded-md bg-ink-100 px-2 py-0.5 text-xs font-mono font-semibold text-ink-600">${formatTime(store.practice.elapsedSec)}</span></div>`;
-    }
-    if (hasAnyText || isRecording) {
-      live += `<p class="text-sm leading-relaxed text-ink-700"><span id="practice-live-text"></span>${isRecording ? `<span class="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-brand-500 align-middle"></span>` : ""}</p>`;
-    } else if (store.practice.micState === "processing") {
+    if (store.practice.micState === "processing") {
       live += `<div class="flex items-center gap-2"><div class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:0ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:120ms"></span><span class="h-2 w-2 rounded-full bg-ink-300 animate-bounce" style="animation-delay:240ms"></span></div><span class="text-xs text-ink-400">Coach is thinking...</span></div>`;
     } else {
-      live += `<p class="text-sm text-ink-400 italic">Your words will appear here as you speak.</p>`;
+      live += `<p><span id="practice-live-text" class="${hasAnyText ? "text-sm leading-relaxed text-ink-700" : "text-sm text-ink-400 italic"}">${hasAnyText ? "" : "Your words will appear here as you speak."}</span>${isRecording ? `<span class="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-brand-500 align-middle"></span>` : ""}</p>`;
     }
     live += `</div>`;
   }
 
   let fb = "";
   if (store.practice.feedback) {
+    const retry = !!store.practice.feedbackFailed;
+    const retryBtn = `<button data-act="retry-feedback" type="button" class="mt-2 text-sm font-semibold text-brand-500">Tap to try again</button>`;
     fb = `<div class="mt-5 space-y-3 animate-slide-up">
-      <div class="rounded-2xl bg-success-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-success-500/15 text-success-600">${svg("check", 16)}</div><p class="text-sm font-bold text-ink-900">What worked</p></div><p class="mt-2 text-sm leading-relaxed text-ink-700">${store.practice.feedback[0].body}</p></div>
-      <div class="rounded-2xl bg-amber-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/15 text-amber-500">${svg("trending", 16)}</div><p class="text-sm font-bold text-ink-900">One upgrade</p></div><p class="mt-2 text-sm leading-relaxed text-ink-700">${store.practice.feedback[1].body}</p></div>
-      <div class="rounded-2xl bg-brand-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500">${svg("message", 16)}</div><p class="text-sm font-bold text-ink-900">You could have said</p></div><p class="mt-2 text-sm italic leading-relaxed text-ink-800">&ldquo;${escapeHtml(store.practice.feedback[2].body)}&rdquo;</p>
-        <button data-act="say-rewrite" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-brand-500/10 px-3 py-2 text-sm font-medium text-brand-500 transition-transform active:scale-95">${svg("volume", 15)} Hear it</button>
+      <div class="rounded-2xl bg-success-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-success-500/15 text-success-600">${svg("check", 16)}</div><p class="text-sm font-bold text-ink-900">What worked</p></div>${retry ? retryBtn : `<p class="mt-2 text-sm leading-relaxed text-ink-700">${store.practice.feedback[0].body}</p>`}</div>
+      <div class="rounded-2xl bg-amber-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/15 text-amber-500">${svg("trending", 16)}</div><p class="text-sm font-bold text-ink-900">One upgrade</p></div>${retry ? retryBtn : `<p class="mt-2 text-sm leading-relaxed text-ink-700">${store.practice.feedback[1].body}</p>`}</div>
+      <div class="rounded-2xl bg-brand-500/8 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500">${svg("message", 16)}</div><p class="text-sm font-bold text-ink-900">You could have said</p></div>${retry ? retryBtn : `<p class="mt-2 text-sm italic leading-relaxed text-ink-800">&ldquo;${escapeHtml(store.practice.feedback[2].body)}&rdquo;</p>
+        <button data-act="say-rewrite" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-brand-500/10 px-3 py-2 text-sm font-medium text-brand-500 transition-transform active:scale-95">${svg("volume", 15)} Hear it</button>`}
       </div>
-      <div class="rounded-2xl bg-surface-0 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500">${svg("repeat", 16)}</div><p class="text-sm font-bold text-ink-900">${store.practice.sttEngine === "typed" || store.practice.typingMode ? "Try saying this out loud" : "Say it once more"}</p></div><p class="mt-2 text-sm leading-relaxed text-ink-600">${store.practice.feedback[3].body}</p>
-        ${store.practice.sttEngine === "typed" || store.practice.typingMode ? "" : `<button data-act="rerecord" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent-500/10 px-3 py-2 text-sm font-medium text-accent-500 transition-transform active:scale-95">${svg("rotate", 15)} Re-record (10s)</button>`}
+      <div class="rounded-2xl bg-surface-0 p-4 shadow-soft"><div class="flex items-center gap-2"><div class="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-50 text-brand-500">${svg("repeat", 16)}</div><p class="text-sm font-bold text-ink-900">${store.practice.sttEngine === "typed" || store.practice.typingMode ? "Try saying this out loud" : "Say it once more"}</p></div>${retry ? retryBtn : `<p class="mt-2 text-sm leading-relaxed text-ink-600">${store.practice.feedback[3].body}</p>
+        ${store.practice.sttEngine === "typed" || store.practice.typingMode ? "" : `<button data-act="rerecord" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent-500/10 px-3 py-2 text-sm font-medium text-accent-500 transition-transform active:scale-95">${svg("rotate", 15)} Re-record (10s)</button>`}`}
       </div>
       ${store.practice.transcript ? `<div class="rounded-2xl bg-surface-0 p-4 shadow-soft"><p class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-400">You said</p><p class="text-sm italic leading-relaxed text-ink-600">&ldquo;${store.practice.transcript}&rdquo;</p></div>` : ""}
     </div>`;
@@ -871,7 +886,8 @@ export function renderPractice() {
       inner += `<div class="space-y-3"><div class="flex gap-2"><input id="typed-answer" type="text" value="${store.practice.typedText.replace(/"/g, "&quot;")}" placeholder="Type your answer here..." class="flex-1 rounded-xl border border-ink-200 bg-surface-1 px-4 py-3 text-sm text-ink-900 outline-none placeholder:text-ink-400 focus:border-brand-400 focus:ring-4 focus:ring-brand-50" /><button data-act="typed-send" class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500 text-white shadow-popAccent transition-all active:scale-95 disabled:bg-ink-200 disabled:text-ink-400 disabled:shadow-none">${svg("send", 20)}</button></div><button data-act="switch-mic" class="mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400">${svg("mic", 13)} Switch to mic</button></div>`;
     } else {
       inner += `<div><div class="flex items-center justify-center mb-4"><div class="relative">${store.practice.micState === "listening" ? `<div class="absolute inset-0 rounded-full bg-accent-500/30 animate-pulse-ring"></div><div class="absolute inset-0 rounded-full bg-accent-500/20 animate-pulse-ring" style="animation-delay:0.5s"></div>` : ""}<button data-act="mic" ${store.practice.micState === "processing" ? "disabled" : ""} style="touch-action:manipulation" class="relative flex h-24 w-24 items-center justify-center rounded-full shadow-popAccent transition-all active:scale-95 ${store.practice.micState === "processing" ? "bg-ink-200 text-ink-400" : "bg-accent-500 text-white"}">${store.practice.micState === "processing" ? `<div class="flex items-center gap-1"><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:120ms"></span><span class="h-2.5 w-2.5 rounded-full bg-ink-400 animate-bounce" style="animation-delay:240ms"></span></div>` : store.practice.micState === "listening" ? `<div class="flex items-center gap-1 h-8">${[0,1,2,3,4].map((i) => `<span class="w-1 rounded-full bg-white animate-wave" style="animation-delay:${i * 120}ms;height:100%"></span>`).join("")}</div>` : svg("mic", 32)}</button></div></div>
-        <p class="text-center text-sm font-semibold text-ink-600">${store.practice.micState === "idle" ? "Tap and answer out loud" : store.practice.micState === "listening" ? "I'm listening... tap to stop" : "Coach is thinking..."}</p>
+        <p id="practice-mic-status" class="text-center text-sm font-semibold ${store.practice.micState === "listening" ? "text-accent-500" : "text-ink-600"}">${store.practice.micState === "idle" ? "Tap and answer out loud" : store.practice.micState === "listening" ? (store.practice.hearingVoice ? `Hearing you…  ${formatTime(store.practice.elapsedSec)}` : `Recording  ${formatTime(store.practice.elapsedSec)}`) : "Coach is thinking..."}</p>
+        ${store.practice.micState === "listening" ? `<p class="mt-1 text-center text-xs text-ink-500">Tap the orange button to stop</p>` : ""}
         ${store.practice.sttFailed && store.practice.micState === "idle" ? `<p class="mt-2 text-center text-xs text-amber-600">Couldn't hear that — tap to try again</p>` : ""}
         ${store.practice.micState === "idle" ? `<button data-act="type-instead" class="mt-3 mx-auto flex items-center gap-1.5 text-xs font-medium text-ink-400 hover:text-ink-600">${svg("keyboard", 13)} Type instead</button>` : ""}</div>`;
     }

@@ -27,6 +27,7 @@ import {
   startListening,
   stopListening,
   stopRecording,
+  stopSpeechRecognition,
   stopTimer,
   handleTypedSubmit,
   wireVoice,
@@ -265,7 +266,7 @@ function bind() {
     else { store.tab = t; store.overlay = null; route(); }
   });
 
-  $("practice-exit").onclick = () => { stopTimer(); stopRecording().catch(() => {}); practiceExit(); };
+  $("practice-exit").onclick = () => { stopSpeechRecognition(); stopTimer(); stopRecording().catch(() => {}); practiceExit(); };
   $("practice-skip").onclick = () => {
     const questions = practiceQuestions();
     const totalPrompts = questions.length || 1;
@@ -290,7 +291,10 @@ function bind() {
     const questions = practiceQuestions();
     const prompt = questions[store.practice.promptIdx % questions.length];
     if (act === "replay") speechController.speak(prompt.text);
-    else if (act === "say-rewrite") {
+    else if (act === "mic") {
+      if (store.practice.micState === "listening") stopListening();
+    } else if (act === "say-rewrite") {
+      if (store.practice.feedbackFailed) return;
       const rewrite = store.practice.feedback?.[2]?.body || store.practice.aiFeedback?.could_have_said || "";
       if (rewrite) speechController.speak(rewrite);
     } else if (act === "rerecord") {
@@ -298,6 +302,8 @@ function bind() {
       store.practice.resaying = true;
       speechController.speak(better);
       if (!store.practice.typingMode) startListening();
+    } else if (act === "retry-feedback") {
+      submitAnswer({ transcript: store.practice.transcript, engine: store.practice.sttEngine || "web_speech" });
     } else if (act === "next-prompt") advancePracticePrompt();
   });
   let ignoreTypeInsteadUntil = 0;
