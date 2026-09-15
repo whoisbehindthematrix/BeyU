@@ -221,35 +221,27 @@ function hintFeedback(hint) {
 async function requestAiFeedback(transcript, inputMode, extra = {}) {
   const questions = practiceQuestions();
   const prompt = questions[store.practice.promptIdx % questions.length];
-  const questionId = store.practice.questionIds[store.practice.promptIdx] ?? null;
-  const hint = hintForQuestion(prompt?.text, prompt?.hint, "");
-  const input_mode = inputMode === "typed" ? "typed" : "spoken";
-  const emptySpoken = input_mode === "spoken" && !String(transcript || "").trim();
-  if (emptySpoken) {
-    throw new Error("empty_spoken");
-  }
-  try {
-    const { level, target_words, recent_upgrades } = await fetchFeedbackContext(questionId);
-    const question = prompt?.text ?? "";
-    const body = {
-      transcript,
-      question,
-      hint,
-      level,
-      target_words: input_mode === "typed" ? [] : target_words,
-      recent_upgrades,
-      input_mode,
-      silence_timeout: !!extra.silenceTimeout,
-    };
-    console.log("FEEDBACK PAYLOAD:", JSON.stringify({ transcript, question, level, target_words: body.target_words, input_mode }));
-    const { data, error } = await supabase.functions.invoke("feedback", { body });
-    console.log("feedback invoke result", { data, error });
-    if (error || !isFeedbackPayload(data)) throw error || new Error("empty feedback");
-    return data;
-  } catch (err) {
-    console.error("requestAiFeedback failed", err);
-    return SAFE_FEEDBACK;
-  }
+  const emptySpoken = inputMode !== "typed" && !String(transcript || "").trim();
+  if (emptySpoken) throw new Error("empty_spoken");
+  const question = prompt?.text ?? "";
+  const res = await fetch("/api/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question, transcript: String(transcript || "") }),
+  });
+  if (!res.ok) throw new Error("feedback_failed");
+  const data = await res.json();
+  const mapped = {
+    praise: String(data.whatWorked || "").trim(),
+    one_upgrade: String(data.oneUpgrade || "").trim(),
+    could_have_said: String(data.youCouldHaveSaid || "").trim(),
+    resay_sentence: String(data.sayItOnceMore || "").trim(),
+    used_target_words: [],
+    confidence_score: null,
+    prompt_version: "v7",
+  };
+  if (!isFeedbackPayload(mapped)) throw new Error("invalid_feedback");
+  return mapped;
 }
 
 export async function startSession(courseDayId, confidenceBefore) {
@@ -866,6 +858,7 @@ export const store = {
     lastSpeechAt: 0,
     silenceTimeout: false,
     sttFailed: false,
+    feedbackFailed: false,
     hearingVoice: false,
   },
   flash: { idx: 0, flipped: false, learned: 0, done: false, exitDir: null, cards: null, drill: "idle", retry: [], dealtOn: null, shownIds: [], loadError: null, nudge: false, spokenCount: 0 },
@@ -928,6 +921,7 @@ export function practiceQuestions() {
 export function resetForNext() {
   store.practice.feedback = null;
   store.practice.aiFeedback = null;
+  store.practice.feedbackFailed = false;
   store.practice.transcript = "";
   store.practice.liveText = "";
   store.practice.transcriptRef = "";
@@ -950,6 +944,7 @@ export function startPractice({ fromTab = false, courseDay = null } = {}) {
   store.practice.transcript = "";
   store.practice.liveText = "";
   store.practice.feedback = null;
+  store.practice.feedbackFailed = false;
   store.practice.showHint = false;
   store.practice.showMood = false;
   store.practice.completedCount = 0;
@@ -1112,25 +1107,22 @@ export function submitAnswer(textOrResult) {
   store.practice.transcript = raw;
   requestAiFeedback(raw, engine, { silenceTimeout: fromLadder && textOrResult.silenceTimeout })
     .then((payload) => {
-      if (isBlankTemplate(payload)) {
-        store.practice.sttFailed = true;
-        store.practice.feedback = null;
-        store.practice.aiFeedback = null;
-        store.practice.micState = "idle";
-        renderPractice();
-        return;
-      }
+      if (isBlankTemplate(payload)) throw new Error("blank_template");
+      store.practice.feedbackFailed = false;
       showFeedback(payload, raw, started);
     })
-    .catch(() => {
-      if (engine !== "typed") {
-        store.practice.sttFailed = true;
-        store.practice.feedback = null;
-        store.practice.micState = "idle";
-        renderPractice();
-        return;
-      }
-      showFeedback(SAFE_FEEDBACK, raw, started);
+    .catch((err) => {
+      console.error("requestAiFeedback failed", err);
+      store.practice.feedbackFailed = true;
+      store.practice.aiFeedback = null;
+      store.practice.micState = "idle";
+      store.practice.feedback = [
+        { id: "worked", icon: "worked", title: "What worked", body: "Tap to try again", tone: "positive" },
+        { id: "upgrade", icon: "upgrade", title: "One upgrade", body: "Tap to try again", tone: "tip" },
+        { id: "rewrite", icon: "rewrite", title: "You could have said", body: "Tap to try again", tone: "rewrite" },
+        { id: "drill", icon: "drill", title: "Say it once more", body: "Tap to try again", tone: "drill" },
+      ];
+      renderPractice();
     });
 }
 
@@ -1140,6 +1132,7 @@ function isBlankTemplate(payload) {
 }
 
 function showFeedback(payload, transcript, started) {
+  store.practice.feedbackFailed = false;
   store.practice.aiFeedback = payload;
   store.practice.feedback = toFeedbackChunks(payload);
   store.practice.micState = "idle";

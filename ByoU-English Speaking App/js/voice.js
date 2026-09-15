@@ -190,6 +190,56 @@ function stopRecordingSafe() {
     .catch(() => new Blob([], { type: recorderMime || "audio/webm" }));
 }
 
+function snapshotBlob() {
+  const wav = wavFromPcm();
+  if (wav && wav.size >= 1800) return wav;
+  const mime = mediaRecorder?.mimeType || recorderMime || "audio/webm";
+  const recorded = new Blob(chunks, { type: mime.split(";")[0] || mime });
+  return recorded.size >= 1500 ? recorded : wav;
+}
+
+let liveCapGen = 0;
+let liveCapTimer = null;
+let liveCapKick = null;
+let liveCapBusy = false;
+
+function stopLiveCaptions() {
+  liveCapGen += 1;
+  liveCapBusy = false;
+  if (liveCapTimer) { clearInterval(liveCapTimer); liveCapTimer = null; }
+  if (liveCapKick) { clearTimeout(liveCapKick); liveCapKick = null; }
+}
+
+function startLiveCaptions() {
+  stopLiveCaptions();
+  const gen = ++liveCapGen;
+  const tick = async () => {
+    if (gen !== liveCapGen || store.practice.micState !== "listening") return;
+    if (liveCapBusy) return;
+    const blob = snapshotBlob();
+    if (!blob?.size || blob.size < 1800) return;
+    liveCapBusy = true;
+    try {
+      let text = "";
+      try { text = await transcribeViaVercel(blob); } catch { /* ignore */ }
+      if (!text) {
+        try { text = await transcribeViaSupabase(blob); } catch { /* ignore */ }
+      }
+      if (gen !== liveCapGen) return;
+      if (text) {
+        store.practice.liveText = text;
+        store.practice.transcriptRef = text;
+        store.practice.hearingVoice = true;
+        patchLiveTranscript();
+      }
+    } finally {
+      if (gen === liveCapGen) liveCapBusy = false;
+    }
+  };
+  liveCapKick = setTimeout(tick, 1400);
+  liveCapTimer = setInterval(tick, 2000);
+}
+
 function fileFor(blob) {
   const mime = blob.type || recorderMime || "audio/webm";
   return { mime, filename: `answer.${extForMime(mime)}` };
@@ -277,11 +327,70 @@ export function stopTimer() {
   if (store.practice.timer) { clearInterval(store.practice.timer); store.practice.timer = null; }
 }
 
+const SpeechRecognitionAPI = typeof window !== "undefined"
+  ? (window.SpeechRecognition || window.webkitSpeechRecognition)
+  : null;
+
+let recognition = null;
+let isRecording = false;
+let speechFinal = "";
+
+function updateTranscript(final, interim) {
+  if (final) speechFinal += final;
+  const display = `${speechFinal}${speechFinal && interim ? " " : ""}${interim}`.replace(/\s+/g, " ").trim();
+  store.practice.liveText = display;
+  store.practice.transcriptRef = String(speechFinal || display).trim();
+  if (display) store.practice.hearingVoice = true;
+  patchLiveTranscript();
+  patchRecordingTimer();
+}
+
+function getRecognition() {
+  if (!SpeechRecognitionAPI) return null;
+  if (recognition) return recognition;
+  recognition = new SpeechRecognitionAPI();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-IN";
+  recognition.onresult = (event) => {
+    let interim = "";
+    let final = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const chunk = event.results[i][0].transcript;
+      if (event.results[i].isFinal) final += chunk;
+      else interim += chunk;
+    }
+    updateTranscript(final, interim);
+  };
+  recognition.onspeechstart = () => {
+    store.practice.hearingVoice = true;
+    patchRecordingTimer();
+  };
+  recognition.onerror = (e) => {
+    console.log("SPEECH ERROR:", e.error);
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") isRecording = false;
+  };
+  recognition.onend = () => {
+    if (isRecording) {
+      try { recognition.start(); } catch (err) {
+        console.log("SPEECH ERROR:", err?.message || err);
+      }
+    }
+  };
+  return recognition;
+}
+
+export function stopSpeechRecognition() {
+  isRecording = false;
+  try { recognition?.stop(); } catch { /* ignore */ }
+}
+
 export function startTimer() {
   store.practice.elapsedSec = 0;
   store.practice.timer = setInterval(() => {
     store.practice.elapsedSec += 1;
     patchRecordingTimer();
+    patchLiveTranscript();
   }, 1000);
 }
 
@@ -292,16 +401,28 @@ export function formatTime(sec) {
 }
 
 function failHearRetry() {
+  stopSpeechRecognition();
+  stopLiveCaptions();
   store.practice.sttFailed = true;
   store.practice.listeningFlag = false;
   store.practice.micState = "idle";
   store.practice.transcript = "";
   store.practice.liveText = "";
   store.practice.transcriptRef = "";
+  store.practice.hearingVoice = false;
   renderPractice();
 }
 
 export function startListening() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    store.practice.typingMode = true;
+    store.practice.micState = "idle";
+    store.practice.listeningFlag = false;
+    renderPractice();
+    return;
+  }
+
   store.practice.sttFailed = false;
   store.practice.transcript = "";
   store.practice.liveText = "";
@@ -312,7 +433,15 @@ export function startListening() {
   store.practice.feedback = null;
   store.practice.audioBlob = null;
   store.practice.silenceTimeout = false;
+  speechFinal = "";
   try { speechController.synth?.cancel(); } catch { /* ignore */ }
+
+  getRecognition();
+  isRecording = true;
+  try { recognition.start(); } catch (err) {
+    console.log("SPEECH ERROR:", err?.message || err);
+  }
+
   recordingStart = startRecording();
   startTimer();
   renderPractice();
@@ -322,6 +451,7 @@ export function startListening() {
     const blocked = err?.name === "NotAllowedError" || err?.name === "NotFoundError" || err?.name === "SecurityError";
     store.practice.listeningFlag = false;
     stopTimer();
+    stopSpeechRecognition();
     if (blocked) {
       store.practice.typingMode = true;
       store.practice.micState = "idle";
@@ -334,15 +464,26 @@ export function startListening() {
 
 export async function stopListening() {
   if (store.practice.micState === "processing") return null;
+  isRecording = false;
+  try { recognition?.stop(); } catch { /* ignore */ }
   store.practice.listeningFlag = false;
+  stopLiveCaptions();
   stopTimer();
   track("recording_ended", { duration_sec: store.practice.elapsedSec });
   store.practice.micState = "processing";
   renderPractice();
+  const live = String(store.practice.transcriptRef || store.practice.liveText || "").trim();
   await Promise.resolve(recordingStart).catch(() => {});
   await new Promise((resolve) => setTimeout(resolve, 350));
   const blob = await stopRecordingSafe();
   store.practice.audioBlob = blob;
+  if (live) {
+    store.practice.emptySttCount = 0;
+    const result = { transcript: live, engine: "web_speech" };
+    track("stt_result", { engine: "web_speech", empty: false, chars: live.length });
+    submitAnswer(result);
+    return result;
+  }
   try {
     const transcript = await transcribeAudio(blob);
     store.practice.emptySttCount = 0;
@@ -352,9 +493,9 @@ export async function stopListening() {
     return result;
   } catch (err) {
     console.error(err);
-    track("stt_result", { engine: "sarvam", empty: true, chars: 0 });
+    track("stt_result", { engine: "web_speech", empty: true, chars: 0 });
     failHearRetry();
-    return { transcript: "", engine: "sarvam" };
+    return { transcript: "", engine: "web_speech" };
   }
 }
 
